@@ -1,0 +1,330 @@
+  <div class="card" *ngIf="selected.length >= 0">
+    <div class="card-header">
+    <!--<h5>ปริ้นต์ข้อมูลคำสั่งซื้อ</h5>-->
+        <div class="form-group-sm">
+            <div class="col-12 col-md-12 col-sm-12">
+                <div class="row">
+                    <div class="col-6 col-md-6 col-sm-6">
+                        <div class="text-sm-left">
+                            <!--<button type="button"-->
+                                    <!--(click)="onBack();"-->
+                                    <!--class="btn btn-sm btn-out-dashed btn-dark">-->
+                                <!--ย้อนกลับ-->
+                            <!--</button>-->
+                            <!--&nbsp;-->
+                            <!--<input class="input-group-sm" type="file" (change)="onFileChange($event)" multiple="false">-->
+                            <!--<input class="input-group-sm" type="file"-->
+                                   <!--accept=".xls,.xlsx"-->
+                                   <!--multiple="false"-->
+                                   <!--(change)="onFileChange($event)">-->
+                            <!--&nbsp;-->
+                            <p *ngIf="countTelsAll > 0">
+                                เบอร์โทร์ที่พบทั้งหมด {{countTelsAll}} เบอร์ |
+                                เลขที่พัสดุที่พบ {{dataTelsTrackTrue}} รายการ |
+                                ไม่พบ {{countTelsFalse}} รายการ
+                                &nbsp;&nbsp;
+                                <button class="badge btn btn-sm bg-success"
+                                        *ngIf="confirmTrue"
+                                        (click)="updateTracking(dataFilter);"
+                                        type="button">
+                                    ยืนยันการอัพเดทข้อมูล
+                                </button>
+                            </p>
+                            <p *ngIf="countTelsAll > 0">
+                                พบเลขที่ติดตามที่คำสั่งซื้อทั้งหมด(มีแล้ว) {{newTrackTrue}} รายการ |
+                            ยังไม่มีเลขที่ติดตามที่คำสั่งซื้อจำนวน(ไม่พบ) {{newTrackFalse}} รายการ
+                            &nbsp;&nbsp;
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-sm-6">
+                        <div class="text-sm-right">
+                            <button type="button"
+                                    (click)="onBack();"
+                                    class="btn btn-sm btn-dark ripple light">
+                                ย้อนกลับ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="selected.length >= 0">
+    <div class="card-block form-group">
+        <!--<div class="m-l-10 checkbox-fade border-checkbox-label">-->
+            <!--<label>-->
+                <!--<input type="checkbox"-->
+                       <!--id="checkbox"-->
+                       <!--name="checkbox"-->
+                       <!--checked>-->
+                <!--<span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>-->
+                <!--<span class="text-inverse">ไม่บันทึกทึก Tracking ซ้ำที่มีแล้ว</span>-->
+            <!--</label>-->
+        <!--</div>-->
+        <p> ช่วงวันที่ {{rangeDateStr}} | เลขที่พัสดุที่พบ {{orders.length}} รายการ
+        </p>
+      <label>
+        FileImport :&nbsp;&nbsp;
+      </label>
+        <!--<input type="file" (change)="onFileChange($event)" multiple="false">-->
+        <input type="file" [accept]="'.xls,.xlsx'" (change)="onFileChange($event)" multiple="false">
+        <p *ngIf="countTelsAll > 0">
+            เบอร์โทร์ที่พบทั้งหมด {{countTelsAll}} เบอร์ ||
+            เลขที่พัสดุที่พบ {{dataTelsTrackTrue}} รายการ ||
+            ไม่พบ {{countTelsFalse}} รายการ
+            &nbsp;&nbsp;
+            <button class="badge btn btn-sm bg-success"
+                    *ngIf="confirmTrue"
+                    (click)="updateTracking(dataFilter);"
+                    type="button">
+                ยืนยันการอัพเดทข้อมูล
+            </button>
+        </p>
+        <p *ngIf="countTelsFalse > 0" class="text-danger">ข้อมูลที่ไม่พบ {{countTelsFalse}} ได้แก่ :</p>
+        <p><b class="text-print">{{dataTelFalse}}</b></p>
+        <div class="container" [hidden]="true">
+            <div class="fixed-row">
+                <table onscroll="true" class="sjs-table scroll-horz scroll-vertical"
+                       style="border-style:dashed;" border="1">
+                    <tr *ngFor="let fl of dataFilter; let i = index;">
+                        <td> No. {{i+1}} </td>
+                        <td width="220">
+                            คำสั่งซื้อ :<br>
+                            ยอดทเงินี่ต้องชำระ :<br>
+                            รูปแบบการชำระเงิน :<br>
+                            เบอร์ลูกค้า :<br>
+                            การติดตาม1 (Tracking) :<br>
+                            การติดตาม2 (Tracking) :<br>
+                        </td>
+                        <td width="220" style="border-style:dashed;" class="text-print">
+                            {{fl.orderODId}}<br>
+                            {{fl.orderTotal}}<br>
+                            {{fl.payment.method}}<br>
+                            {{fl.customer.orderCustomerTel}}<br>
+                            [ {{fl.orderTracking}} ]<br>
+                            [ {{fl.delivery.orderTracking}}] <br>
+                        </td>
+                        <td width="250">
+                            <b class="bg-success">{{fl.tel}} || {{fl.tracking}}</b>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="table-responsive" [hidden]="true">
+                <table width="1080" class="sjs-table table-hover table-scroll-vertical"
+                       style="border-style:dashed;" border="1">
+                    <tr *ngFor="let row of data">
+                        <td *ngFor="let val of row" style="border-style:dashed;">
+                            {{val}}
+                        </td>
+                    </tr>
+                </table>
+        </div>
+
+        <table class="light table-striped" style="border-style:dashed;" border="1" [hidden]="true">
+            <tr *ngFor="let dt of orders">
+                <td class="text-center" style="border-style:dashed;">
+                    {{dt.orderODId}}
+                </td>
+                <td class="text-center" style="border-style:dashed;">
+                    {{dt.customer.orderCustomerTel}}
+                </td>
+                <td class="text-right" style="border-style:dashed;">
+                    {{dt.orderTotal}}
+                </td>
+                <td width="100" class="text-right" style="border-style:dashed;">
+                    {{dt.orderTracking}}
+                </td>
+                <td width="100" class="text-right" style="border-style:dashed;">
+                    {{dt.delivery.orderTracking}}
+                </td>
+                <td width="60" class="text-center"> ==>> </td>
+                <td width="100" class="text-right" style="border-style:dashed;">
+                    <b class="bg-success" *ngIf="dt.tracking"> {{dt.tel}}</b>
+                </td>
+                <td width="100" class="text-success" style="border-style:dashed;">
+                    <b>{{dt.tracking}}</b>
+                </td>
+            </tr>
+        </table>
+  </div>
+      <!--<button (click)="export();">Export!</button>-->
+</div>
+
+
+  <!-- ngx-datatable start -->
+  <!-- ngx-datatable start -->
+  <div *ngIf="dataFilter.length > 1" class="row">
+      <div class="col-sm-12 col-md-12 col-xl-12">
+          <app-card [title]="'ข้อมูลที่ค้นพบ'"
+                    [blockClass]="'tab-icon'" [cardOptionBlock]="true">
+              <div class="row">
+                  <div class="col-md-6 col-xl-6 text-left">
+                      <div ngbDropdown class="btn-group dropdown-split-inverse">
+                          <button type="button" class="btn btn-sm btn-inverse light">
+                              <i class="icofont icofont-exchange"></i>อัพเดทหมายเลขติดตาม
+                          </button>
+                          <button ngbDropdownToggle type="button"
+                                  class="btn btn-sm btn-inverse dropdown-toggle-split light">
+                              <span class="sr-only">Toggle primary</span>
+                          </button>
+                          <div ngbDropdownMenu>
+                              <button class="dropdown-item ripple light"
+                                      [disabled]="selected.length < 1"
+                                      (click)="updateTracking(selected);">
+                                  <i class="fa fa-upload">&nbsp;อัพเดทข้อมูลหมายเลขติดตาม</i>
+                                  <span *ngIf="selected.length > 0"
+                                        class="badge badge-inverse-success text-right">
+                                  {{selected.length}}
+                                  </span>
+                              </button>
+                          </div>
+                      </div>
+                      <div class="m-l-10 checkbox-fade border-checkbox-label">
+                      <label>
+                              <input type="checkbox"
+                                     id="checkbox"
+                                     name="checkbox"
+                                     checked>
+                              <span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>
+                              <span class="text-inverse">ต้องการบันทึกทึก Tracking ซ้ำที่มีแล้ว</span>
+                          </label>
+                      </div>
+                  </div>
+
+                  <div class="col-md-6 col-xl-6 text-right">
+                      <div style="text-align: right;">
+                          <label class="input-group-sm">แสดง
+                              <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                  <option [ngValue]="50">50</option>
+                                  <option [ngValue]="100">100</option>
+                                  <option [ngValue]="250">250</option>
+                                  <option [ngValue]="500">500</option>
+                              </select>
+                              แถว
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              <div class="table-responsive-sm">
+                  <ngx-datatable
+                          class="data-table text-center"
+                          [rows]="dataFilter"
+                          [columnMode]="'force'"
+                          [scrollbarH]="true"
+                          [headerHeight]="50"
+                          [rowHeight]="45"
+                          [limit]="100"
+                          [footerHeight]="30"
+                          [selected]="selected"
+                          (select)='onSelect($event)'
+                          (activate)="onActivate($event)"
+                          [selectionType]="'checkbox'">
+                      <!--<ngx-datatable-column name="SKU" prop="userCodename" [width]="120">-->
+                      <!--<ng-template let-value="value" ngx-datatable-cell-template>-->
+                      <!--<p class="text-left">{{value}}</p>-->
+                      <!--</ng-template>-->
+                      <!--</ngx-datatable-column>-->
+                      <ngx-datatable-column [width]="50" [sortable]="false"
+                                            [canAutoResize]="false" [draggable]="false"
+                                            [resizeable]="false">
+                          <ng-template class="datatable-checkbox"
+                                       ngx-datatable-header-template let-value="value"
+                                       let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                              <div class="checkbox-fade datatable-header-cell-label
+                          border-checkbox-group border-checkbox-group-default">
+                                  <label>
+                                      <input type="checkbox"
+                                             [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                                      <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                                  </label>
+                              </div>
+                          </ng-template>
+                          <ng-template class="datatable-checkbox"
+                                       ngx-datatable-cell-template let-value="value"
+                                       let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                              <div class="checkbox-fade datatable-header-cell-label
+                          border-checkbox-group border-checkbox-group-default">
+                                  <label>
+                                      <input type="checkbox"
+                                             [checked]="isSelected"
+                                             (change)="onCheckboxChangeFn($event)">
+                                      <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                                  </label>
+                              </div>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                          <ng-template let-value="value" ngx-datatable-cell-template>
+                              <label class="text-left text-print"
+                                 placement="auto" container="body"
+                                 ngbTooltip="{{value}}">
+                                  {{value}}
+                              </label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="เบอร์โทรลูกค้า" prop="customer.orderCustomerTel">
+                          <ng-template let-value="value" ngx-datatable-cell-template>
+                              <label class="text-left">{{value}}</label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="ยอดทเงินี่ต้องชำระ" prop="orderTotal">
+                          <ng-template let-value="value" ngx-datatable-cell-template>
+                              <label class="text-center">{{value|currency: '฿ '}}</label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="รูปแบบการชำระเงิน" prop="payment.method">
+                          <ng-template let-value="value" ngx-datatable-cell-template>
+                              <label class="text-center">{{value|uppercase}}</label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="การติดตามของระบบ" prop="orderTracking">
+                          <ng-template let-value="value" ngx-datatable-cell-template>
+                              <label class="text-center">{{value}}</label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="เบอร์(Kerry)" prop="tel">
+                          <ng-template let-value="value" ngx-datatable-cell-template
+                                       class="text-center text-delivery">
+                              <label class="label badge-deliverys" placement="top" container="body">
+                                  {{value}}
+                              </label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="การติดตาม(Kerry)" prop="tracking">
+                          <ng-template let-value="value" ngx-datatable-cell-template
+                                       class="text-center">
+                              <label class="label badge-deliverys" placement="top" container="body">
+                                  {{value}}
+                              </label>
+                          </ng-template>
+                      </ngx-datatable-column>
+                      <!--<ngx-datatable-column name="ค่าส่งรวม" prop="usersDelivery">-->
+                          <!--<ng-template let-value="value" ngx-datatable-cell-template class="text-center">-->
+                              <!--<p placement="top" container="body">-->
+                                  <!--{{value|currency:'฿ '}}-->
+                              <!--</p>-->
+                          <!--</ng-template>-->
+                      <!--</ngx-datatable-column>-->
+                  </ngx-datatable>
+              </div>
+              <div class="row">
+                  <div class='col-sm-12 selected-column text-left'>
+                      <!--<br><b>ทั้งหมด </b>{{reportSumODTotal}} <b>ออเดอร์</b>-->
+                      <!--| <b>ยอดรวมทั้งสิ้น</b> {{reportSumPPATotal|currency:'฿ '}} <b>บาท</b>-->
+                      <!--| <b>ค่าคอมมิสชั่นรวมทั้งสิ้น</b> {{reportSumCommTotal|currency:'฿ '}} <b>บาท</b>-->
+                  </div>
+              </div>
+          </app-card>
+      </div>
+  </div>
+  <!-- ngx-datatable start -->
+  <!-- ngx-datatable start -->

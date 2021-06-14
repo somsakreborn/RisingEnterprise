@@ -1,0 +1,398 @@
+<div class="card">
+  <div class="card-header">
+    <h5>หมวดหมู่สินค้า</h5>
+    <button type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+            placement="top" ngbTooltip="เพิ่มหมวดหมู่สินค้า"
+            (click)="categoryFormModal.show('categoryModal'); fetchCounter(); setDateNow(); resetFile('add');">
+      <i class="icofont icofont-plus m-r-5"></i>
+      เพิ่มหมวดหมู่สินค้า
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="table-content crm-table">
+      <div class="project-table">
+        <div id="crm-contact" class="dt-responsive">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              <div>
+                <label class="label-control">แสดง
+                  <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                    <option [ngValue]="100">100</option>
+                  </select>
+                  แถว
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+              <div style="text-align: right;">
+                <label class="input-group-sm">ค้นหา:
+                  <input type="search"
+                         [(ngModel)]="filterQuery"
+                         class="form-control input-sm full-data-search"
+                         placement="top" ngbTooltip="ค้นหาข้อมูลหมวดหมู่สินค้า"
+                         placeholder="Search name">
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive-sm">
+            <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                   [mfData]="categorys | dataFilterCategory : filterQuery"
+                   #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage"
+                   [(mfSortBy)]="sortBy"
+                   [(mfSortOrder)]="sortOrder">
+              <thead class="thead-light">
+              <tr>
+                <th>
+                  <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryCTId">รหัสหมวดหมู่</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryName">ชื่อหมวดหมู่</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryCTOrder">จำนวนสินค้า</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryStatus">สถานะ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryCreated">วันที่อัพเดท</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter>Action</mfDefaultSorter>
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of mf.data; let i = index;">
+                <td>#{{item.index}}</td>
+                <!--<td class="text-center"><img [src]="item.categoryImage"></td>-->
+                <td>
+                  <label class="label label-inverse-primary text-info"
+                           placement="top" ngbTooltip="{{item.categoryCTId}}">
+                  {{item.categoryCTId}}
+                  </label>
+                </td>
+                <td class="text-sm-left">
+                  <label class="label bg-primary"
+                         placement="top" ngbTooltip="{{item.categoryName}}">
+                  {{item.categoryName}}
+                  </label>
+                </td>
+                <td *ngIf="item.categoryStatus">
+                  <label class="label label-success" placement="top" ngbTooltip="123">123</label>
+                </td>
+                <td *ngIf="!item.categoryStatus">
+                  <label class="label label-inverse-danger" placement="top" ngbTooltip="0">0</label>
+                </td>
+                <td *ngIf="item.categoryStatus">
+                  <label class="label bg-lime-green" placement="top" ngbTooltip="เปิดใช้งาน">เปิดใช้งาน</label>
+                </td>
+                <td *ngIf="!item.categoryStatus">
+                  <label class="label label-inverse-danger" placement="top" ngbTooltip="ปิดใช้งาน">ปิดใช้งาน</label>
+                </td>
+                <td>
+                  <label class="label bg-info"
+                         placement="top" ngbTooltip="{{item.categoryLastupdate}}">
+                    <i class="fa fa-calendar" aria-hidden="true"> </i>
+                  {{item.categoryLastupdate}}
+                  </label>
+                </td>
+                <!--<td>{{item.categoryCreated | date: 'dd-MM-yyyy'}}</td>-->
+                <td class="action-icon">
+                  <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                     (click)="viewCategory(item); modalDefault.show();resetFile();"><i
+                          class="fa fa-book"></i></a>
+                  <a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"
+                     (click)="editCategory(item);modalDefault.show();resetFile();"><i
+                          class="fa fa-edit"></i></a>
+                  <a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"
+                     (click)="deleteCategory(item)"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="8">
+                  <mfBootstrapPaginator
+                          class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Category Start Model -->
+<app-modal-animation [modalID]="'categoryModal'" [modalClass]="'md-effect-7'" #categoryFormModal>
+  <h3 class="f-26 bg-primary">เพิ่มหมวดหมู่สินค้า</h3>
+  <div class="text-center modal-body">
+
+    <!--// Start insert data  //-->
+    <form (ngSubmit)="onSubmit(categoryForm); categoryForm.reset()" #categoryForm="ngForm" autocomplete="off">
+
+      <!--<div class="form-group">-->
+        <!--<div class="col-sm-12 col-12 col-md-12 text-center">-->
+          <!--<img [src]="imageUrl">-->
+        <!--</div>-->
+        <!--<hr>-->
+        <!--<div class="input-group">-->
+          <!--<label class="input-group-text file">เพิ่มหมวดหมู่รูปภาพ : </label>-->
+          <!--<input type="file"-->
+                 <!--#Image accept="image/*"-->
+                 <!--ngModel-->
+                 <!--name="categoryImage"-->
+                 <!--class="form-control file"-->
+                 <!--(change)="handleFileInputAdd($event.target.files)">-->
+        <!--</div>-->
+      <!--</div>-->
+      <br>
+      <div class="form-group">
+      <div class="input-group">
+      <label class="input-group-text file">หมายเลขหมวดหมู่ : </label>
+      <input type="text"
+            [readonly]="true"
+            [(ngModel)]="categoryCTId"
+            value="{{category.categoryCTId}}"
+            name="categoryCTId"
+            class="form-control">
+      </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="input-group-text">ชื่อหมวดหมู่สินค้า : </label>
+          <input type="text"
+                 ngModel
+                 class="form-control"
+                 name="categoryName">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="input-group-text">ลำดับ : </label>
+          <input type="number"
+                 ngModel
+                 class="form-control"
+                 name="categorySeq">
+        </div>
+      </div>
+      <div class="form-group">
+      <div class="input-group">
+        <label class="input-group-text">ภายใต้หมวดหมู่ : </label>
+        <select type="text"
+                name="categoryLevel"
+                ngModel class="form-control">
+          <option class="form-control" value="">หมวดหมู่</option>
+          <option
+                  *ngFor="let i of categorys"
+                  [disabled]="!i.categoryStatus"
+                  [ngValue]="i.categoryId">{{i.categoryName}}
+          </option>
+        </select>
+      </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="f-left input-group-text">สถานะการใช้งาน : </label>
+          <!--<ui-switch class="form-control" ngModel name="categoryStatus" checked></ui-switch>-->
+          <!--<div class="">-->
+          <ui-switch class="form-control input-group-text" [ngModel]="true" name="categoryStatus"></ui-switch>
+          <!--</div>-->
+          <!--<label class="f-left input-group-text">สถานะ : </label>-->
+          <!--<ui-switch [checked]="false"></ui-switch>-->
+          <!--<ui-switch [checked]="true"></ui-switch>-->
+          <!--<ui-switch disabled></ui-switch>-->
+          <!--<ui-switch checked [disabled]="true"></ui-switch>-->
+        </div>
+      </div>
+      <div class="form-group form-float">
+        <div class="form-line text-left">
+          <label for="categoryComment">รายละเอียดหมวดหมู่ : </label>
+          <textarea name="categoryComment"
+                    ngModel
+                    id="categoryComment"
+                    cols="30"
+                    rows="5"
+                    class="form-control no-resize">
+                </textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="input-group-text">อัพเดทล่าสุด : </label>
+          <input class="form-control"
+                 [readonly]="true"
+                 placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                 name="categoryLastupdate"
+                 [(ngModel)]="modelPopup"
+                 ngbDatepicker #d="ngbDatepicker">
+          <div class="input-group-append">
+                          <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                          </span>
+          </div>
+        </div>
+      </div>
+      <button type="submit"
+              class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block">
+        บันทึก
+      </button>
+      <button type="reset" (click)="categoryFormModal.close('categoryModal')"
+              class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block">
+        ปิด
+      </button>
+    </form>
+  </div>
+
+  <button (click)="categoryFormModal.close('categoryModal')" aria-label="Close" class="md-close-btn">
+    <i class="icofont icofont-ui-close"></i>
+  </button>
+</app-modal-animation>
+
+
+ <!--// edit && View data // -->
+<app-modal-basic #modalDefault  [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      # [{{ category.categoryCTId }}] - {{ category.categoryName }}
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefault.hide()">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+  <div class="app-modal-body text-center">
+    <form #categoryUpdateForm="ngForm">
+
+      <table class="table table-striped text-left m-t-20 table-sm table-responsive-sm">
+        <tr>
+          <td>รหัสหมวดหมู่ :</td>
+          <td>
+            <input type="text"
+                   [disabled]="isReadOnly"
+                   [readonly]="true"
+                   [(ngModel)]="category.categoryCTId"
+                   value="{{category.categoryCTId}}"
+                   class="form-control"
+                   name="categoryCTId" autofocus>
+          </td>
+        </tr>
+        <tr>
+          <td>ชื่อหมวดหมู่ :</td>
+          <td>
+            <input type="text"
+                   [disabled]="isReadOnly"
+                   [(ngModel)]="category.categoryName"
+                   value="{{category.categoryName}}"
+                   class="form-control"
+                   name="categoryName" autofocus>
+          </td>
+        </tr>
+        <tr>
+          <td>ลำดับ :</td>
+          <td>
+            <input type="number"
+                   [disabled]="isReadOnly"
+                   [(ngModel)]="category.categorySeq"
+                   value="{{category.categorySeq}}"
+                   class="form-control"
+                   name="categorySeq" autofocus>
+          </td>
+        </tr>
+        <tr>
+          <td>ภายใต้หมวดหมู่ :</td>
+          <td>
+            <select type="text"
+                    [disabled]="isReadOnly"
+                    [(ngModel)]="category.categoryLevel"
+                    name="categoryLevel"
+                    class="form-control"
+                    autocomplete="off">
+              <option value="" [selected]>หมวดหมู่</option>
+              <option
+                      *ngFor="let i of categorys"
+                      [disabled]="!i.categoryStatus"
+                      [ngValue]="i.categoryId"
+                      [selected]="i.categoryId===category.categoryLevel">
+                {{i.categoryName}}
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            สถานะเปิด/ปิด :
+          </td>
+          <td>
+            <div class="form-group">
+              <div class="input-group">
+                <ui-switch class="form-control input-group-text"
+                           [disabled]="isReadOnly"
+                           [(ngModel)]="category.categoryStatus"
+                           name="categoryStatus">
+                </ui-switch>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>รายละเอียด : </td>
+          <td>
+              <textarea name="categoryComment"
+                        [disabled]="isReadOnly"
+                        [(ngModel)]="category.categoryComment"
+                        value="{{category.categoryComment}}"
+                        cols="30"
+                        rows="5"
+                        class="form-control no-resize">
+              </textarea>
+          </td>
+        </tr>
+        <tr>
+          <td>อัพเดท :</td>
+          <td>
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control"
+                       [disabled]="isReadOnly"
+                       readonly
+                       name="categoryLastupdate"
+                       [(ngModel)]="modelPopupCategoryLastupdate"
+                       ngbDatepicker #ddStart="ngbDatepicker">
+                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button"
+            class="btn btn-primary ripple light"
+            *ngIf="!isReadOnly"
+            (click)="updateCategory(categoryUpdateForm)">
+      บันทึก
+    </button>
+    <button type="button"
+            (click)="modalDefault.hide()"
+            class="btn btn-danger ripple light">ปิด
+    </button>
+  </div>
+</app-modal-basic>

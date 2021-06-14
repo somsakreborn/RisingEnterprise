@@ -1,0 +1,209 @@
+<div class="row">
+  <div class="col-sm-12">
+    <form (ngSubmit)="onSubmit(ProductsCreateForm);" #ProductsCreateForm="ngForm" autocomplete="off">
+
+      <div class="card-subtitle text-right">
+        <div class="text-sm-right btn">
+          <!--<button type="submit" class="btn btn-out-dashed btn-grd-primary">-->
+          <button type="button"
+                  ngxDebounceClick (debouncedClick)="count = count + 1"
+                  (click)="onSubmit(ProductsCreateForm);"
+                  class="btn btn-primary ripple light">
+            บันทึก
+          </button>
+          <!--&nbsp;&nbsp;-->
+          <!--<button type="reset" class="btn btn-out-dashed btn-grd-danger">-->
+          <!--ยกเลิก-->
+          <!--</button>-->
+          &nbsp;&nbsp;
+          <button type="button" [routerLink]="['/management/products/product']" class="btn btn-dark ripple light">
+            ย้อนกลับ
+          </button>
+        </div>
+      </div>
+      <!-- add card 1 start -->
+      <app-card [title]="'เพิ่มข้อมูลสินค้า'" [cardOptionBlock]="true">
+        <div class="form-group row">
+          <div class="col-sm-6 mobile-inputs">
+            <h4 class="sub-title text-primary"><b>รายละเอียดสินค้า</b></h4>
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">ชื่อสินค้า</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <input type="text"
+                         class="form-control text-primary"
+                         placeholder="ชื่อสินค้า"
+                         ngModel
+                         name="productName">
+                  <span class="input-group-append">
+                  <!--<label class="input-group-text">-->
+                    <!--&lt;!&ndash;<i class="fa fa-search" aria-hidden="true"></i>&ndash;&gt;-->
+                    <!--</label>-->
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">รหัสสินค้า</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <input type="text"
+                         class="form-control form-control form-txt-primary input-group"
+                         placeholder="รหัสสินค้า"
+                         ngModel
+                         name="productCodename">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">หมวดหมู่สินค้า</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <select type="text"
+                          name="categoryId"
+                          ngModel
+                          class="form-control text-primary input-group">
+                    <option class="form-control" value="">หมวดหมู่สินค้า</option>
+                    <ng-container *ngFor="let i of categorys">
+                      <!--<option-->
+                      <!--*ngFor="let i of categorys;"-->
+                      <!--[disabled]="!i.categoryStatus"-->
+                      <!--[selected]="i.categoryId === defualtcategorys"-->
+                      <!--[ngValue]="i.categoryId">-->
+                      <!--{{i.categoryName}}-->
+                      <!--</option>-->
+
+                      <option *ngIf="i.categoryStatus"
+                              [selected]="i.categoryId"
+                              [ngValue]="i.categoryId">{{i.categoryName}}
+                      </option>
+                      <option *ngIf="!i.categoryStatus"
+                              [disabled]="!i.categoryStatus"
+                              [ngValue]="i.categoryId">{{i.categoryName}}
+                      </option>
+                    </ng-container>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">รายละเอียด</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <textarea rows="3"
+                            class="form-control form-txt-primary"
+                            placeholder="รายละเอียด"
+                            ngModel
+                            name="productComment">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- tab 2-->
+          <div class="col-sm-6 mobile-inputs">
+            <h4 class="sub-title text-primary"><b>คลังสินค้า</b></h4>
+            <div class="form-group row">
+              <label class="col-sm-4 col-lg-2 col-form-label">ต้นทุนสินค้า</label>
+              <div class="col-sm-8 col-lg-10">
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58) return false;"
+                       ngModel
+                       name="productCost"
+                       min="0" max="99999" maxlength="5"
+                       value="10.00"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-lg-2 col-form-label">ราคาต่อหน่วย</label>
+              <div class="col-sm-8 col-lg-10">
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0" max="99999" step="5.00"
+                       ngModel
+                       name="productPiece"
+                       value="0.00"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-lg-2 col-form-label">จำนวนสินค้า</label>
+              <div class="col-sm-8 col-lg-10">
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==5 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="99999.00" step="1.00"
+                       maxlength="3"
+                       ngModel
+                       name="productTotal"
+                       value="0.00"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-lg-2 col-form-label">สถานะ </label>
+              <div class="col-sm-8 col-lg-10">
+                <ui-switch
+                        [ngModel]="true"
+                        name="productStatus">
+                </ui-switch>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h4 class="sub-title text-primary"><b>รูปภาพสินค้า</b></h4>
+            <div class="form-group row">
+              <div class="col-sm-12 col-12 col-md-12 text-center">
+                <img [src]="imageUrl" class="img-200">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="input-group">
+                <label class="col-sm-2 col-lg-1 col-form-label">เพิ่มรูปภาพ</label>
+                <div class="col-sm-10 col-lg-11">
+                  <input type="file" multiple
+                         #Image accept="image/*"
+                         ngModel
+                         name="productImage"
+                         class="form-control file"
+                         (change)="handleFileInputAdd($event.target.files)">
+                </div>
+              </div>
+              <!--//  imageUrl  //-->
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-12 col-lg-12 col-md-12 col-12 text-center">
+            <div class="card-subtitle text-sm-center">
+              <div class="text-sm-center btn">
+                <!--<button type="submit" class="btn btn-out-dashed btn-grd-primary">-->
+                <button type="button"
+                        ngxDebounceClick (debouncedClick)="count = count + 1"
+                        (click)="onSubmit(ProductsCreateForm);"
+                        class="btn btn-primary ripple light">
+                  บันทึก
+                </button>
+                &nbsp;&nbsp;
+                <!--<button type="reset" class="btn btn-out-dashed btn-grd-danger">-->
+                <!--ยกเลิก-->
+                <!--</button>-->
+                <!--&nbsp;&nbsp;-->
+                <button type="button" [routerLink]="['/management/products/product']" class="btn btn-dark ripple light">
+                  ย้อนกลับ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </app-card>
+
+    </form>
+  </div>
+</div>
