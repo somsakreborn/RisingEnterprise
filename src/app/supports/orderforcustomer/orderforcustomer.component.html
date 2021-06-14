@@ -1,0 +1,636 @@
+<!--<head id="headscript" (load)="onFBPixelScript(objDD)">-->
+<head id="headscript">
+  <!--<script>-->
+  <!--!function(f,b,e,v,n,t,s)-->
+  <!--{if(f.fbq)return;n=f.fbq=function(){n.callMethod?-->
+  <!--n.callMethod.apply(n,arguments):n.queue.push(arguments)};-->
+  <!--if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';-->
+  <!--n.queue=[];t=b.createElement(e);t.async=!0;-->
+  <!--t.src=v;s=b.getElementsByTagName(e)[0];-->
+  <!--s.parentNode.insertBefore(t,s)}(window, document,'script',-->
+  <!--'https://connect.facebook.net/en_US/fbevents.js');-->
+  <!--fbq('init', '173421089998249');-->
+  <!--fbq('track', 'PageView');-->
+
+  <!--fbq('track', 'ViewContent', {-->
+  <!--content_ids: ['1234'],-->
+  <!--content_type: 'product',-->
+  <!--value: 0.50,-->
+  <!--currency: 'USD'-->
+  <!--});-->
+  <!--</script>-->
+  <!--<noscript>-->
+  <!--<img height="1" width="1" style="display:none"-->
+  <!--src="https://www.facebook.com/tr?id=173421089998249&ev=PageView&noscript=1"/>-->
+  <!--</noscript>-->
+  <script>
+
+  </script>
+  <noscript>
+    <!--<img height="1" width="1" style="display:none"-->
+    <!--src="https://www.facebook.com/tr?id=173421089998249&ev=PageView&noscript=1"/>-->
+  </noscript>
+</head>
+<!-- NEW Container-fluid starts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div class="text-center">
+        <img src="assets/images/logo_rising-sig.png" alt="Rising Enterprise">
+        <label class="label text-left mobile-inputs"><h5>Rising Enterprise Limited,Co.Ltd</h5></label>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-sm-4 col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>รายการสั่งซื้อ</h5>
+          </div>
+          <div class="card-block">
+            <div class="bs-example grid-layout grid">
+              <div class="row">
+                <div class="col-sm-12 push-md-12 align-top">
+                  <ng-container *ngFor="let p of order.products;let i = index">
+                    <B>ชื่อสินค้า: </B>{{p.name}}<br>
+                    <B>จำนวน: </B>{{p.amount}} ชิ้น<br><hr>
+                  </ng-container>
+                </div>
+                <div class="col-sm-12 pull-md-12 align-top">
+                  <B>ค่าจัดส่ง: </B>{{orderDeliveryPrice|currency:' '}} บาท<br>
+                  <B>ยอดรวมสุทธิ: </B>{{orderSumProduct + orderDeliveryPrice|currency:' '}} บาท<br>
+                  <B>ส่วนลด: </B>{{order.orderDiscount|currency:' '}} บาท<br>
+                  <B>ยอดรวม(ทั้งสิ้น): </B>{{order.orderTotal|currency:' '}} บาท<br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-sm-4 col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>แสดงข้อมูลคำสั่งซื้อสำหรับลูกค้า</h5>
+          </div>
+          <div class="col-xl-12 col-md-12" *ngIf="order">
+            <!--<div class="table-responsive-sm">-->
+              <!--<table class="table table-sm table-borderless">-->
+                <!--<tbody>-->
+                <!--<tr>-->
+                  <!--<td colspan="3">-->
+                    <div class="row">
+                      <div class="col-md-12 col-xl-12 col-sm-12 col-lg-12 text-left text-justify">
+                        <label *ngIf="order.customer" class="text-justify">
+                          <b>ที่อยู่จัดส่ง:</b><br>
+                          {{order.customer.orderCustomerNameSurname}}&nbsp;
+                          <ng-container *ngFor="let i of channels">
+                            <label class="label col-form-label-sm text-primary align-middle"
+                                   placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                                   *ngIf="i.channelId === order.customer.orderCustomerChannelId">
+                              <img [src]="i.channelImage" class="img-20">
+                            </label>
+                          </ng-container>
+                            <br>
+                          {{order.customer.orderCustomerIdhome}}<br>
+                          {{order.customer.orderCustomerAddress}}<br>
+                          {{order.customer.orderCustomerZipcode}}<br>
+                        </label>
+                      </div>
+                      <div class="col-md-12 col-xl-12 col-sm-12 col-lg-12 text-left text-justify">
+                        <hr>
+                        <label *ngIf="order.customer">
+                          <div class="row">
+                            <div class="col-sm-12 order-12 align-middle"><b>วันที่สั่งซื้อ : &nbsp;</b>
+                            <!--</div>-->
+                            <!--<div class="col-sm-6 order-2">-->
+                              {{order.orderCreated|date: 'dd-MM-yyyy HH:mm:ss'}}</div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-12 order-12 align-middle"><b>โทรศัพท์ : &nbsp;</b>
+                            <!--</div>-->
+                            <!--<div class="col-sm-6 order-2">-->
+                              {{order.customer.orderCustomerTel}}
+                            </div>
+                          </div>
+                          <div class="row align-items-center">
+                            <div class="col-sm-12 order-12 align-middle"><b>การชำระเงิน : &nbsp;</b>
+                            <!--</div>-->
+                            <!--<div class="col-sm-6 order-2">-->
+                              <label class="label bg-success"
+                                     *ngIf="order.payment.method.toUpperCase() === 'BANKTRANFER'">
+                                โอนเงิน
+                              </label>
+                              <ng-container *ngFor="let k of banks">
+                                <label class="label col-form-label-sm text-primary"
+                                       placement="top" container="body"
+                                       ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{order.payment.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{order.payment.orderPaymentTime}}"
+                                       *ngIf="((order.payment.method|uppercase) === 'BANKTRANFER')
+                                       &&(order.payment.orderBankId === k.bankId)">
+                                  <img class="img-30" [src]="k.bankImage">
+                                </label>
+                                <label class="label col-form-label-sm bg-success"
+                                       placement="top" container="body"
+                                       ngbTooltip="เก็บเงินปลายทาง {{order.payment.method|uppercase}}"
+                                       *ngIf="((order.payment.method|uppercase) === 'COD')
+                                         &&((!order.payment.orderBankId == k.bankId)
+                                         ||(order.payment.orderBankId === ''))">
+                                  เก็บเงินปลายทาง&nbsp;
+                                </label>
+                                <strong *ngIf="((order.payment.method.toUpperCase() === 'COD')
+                                    && ((!order.payment.orderBankId == k.bankId)
+                                    || (order.payment.orderBankId === '')))">
+                                  ({{order.orderTotal|currency:'฿'}})
+                                </strong>
+                              </ng-container>
+                            </div>
+                          </div>
+                          <div class="row align-items-center">
+                            <div class="col-sm-12 order-12 align-middle"><b>การจัดส่ง : &nbsp;</b>
+                            <!--</div>-->
+                            <!--<div class="col-sm-6 order-2 align-middle">-->
+                              <ng-container *ngFor="let j of shipments">
+                                <label class="label label-sm text-dark"
+                                       placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                                       *ngIf="(order.delivery.orderShipmentId === j.shipmentId)">
+                                  {{j.shipmentName|uppercase}}&nbsp;|&nbsp;
+                                  <img class="img-30" [src]="j.shipmentImage">
+                                </label>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  <!--</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+              <!--</table>-->
+            <!--</div>-->
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-sm-4 col-md-4">
+        <app-card [title]="'แสดงสถานะของสินค้า'" [cardClass]="'task-card'" [cardOptionBlock]="true">
+          <ul class="list-unstyled task-list">
+            <li *ngIf="order.orderStatusCode == 6">
+              <i class="icofont icofont-truck-loaded icon-size-22px task-icon"
+                 [ngClass]="{'badge-fails': order.orderStatusCode > 5, '': order.orderStatusCode < 6}">
+              </i>
+              <b class="m-b-5">ล้มเหลว</b>
+            </li>
+            <li *ngIf="order.orderStatusCode >= 5">
+              <i class="icofont icofont-check-circled icon-size-22px task-icon"
+                 placement="top" container="body" ngbTooltip="สำเร็จ"
+                 [ngClass]="{'badge-success': order.orderStatusCode > 4, '': order.orderStatusCode < 5}">
+              </i>
+              <b class="m-b-5">สำเร็จ</b>
+            </li>
+            <li *ngIf="order.orderStatusCode >= 4">
+              <i class="icofont icofont-truck-loaded icon-size-22px task-icon"
+                 placement="top" container="body" ngbTooltip="จัดส่ง"
+                 [ngClass]="{'badge-deliverys': order.orderStatusCode > 3, '': order.orderStatusCode < 4}">
+              </i>
+              <b class="m-b-5">จัดส่ง</b>
+            </li>
+            <li *ngIf="order.orderStatusCode >= 3">
+              <i class="icofont icofont-gift icon-size-22px task-icon"
+                 placement="top" container="body" ngbTooltip="แพ็ค"
+                 [ngClass]="{'badge-packs': order.orderStatusCode > 2, '': order.orderStatusCode < 3}">
+              </i>
+              <b class="m-b-5">แพ็ค</b>
+            </li>
+            <li *ngIf="order.orderStatusCode >= 2">
+              <i class="icofont icofont-inbox icon-size-22px task-icon"
+                 placement="top" container="body" ngbTooltip="รอดำเนินการ"
+                 [ngClass]="{'badge-waitpacks': order.orderStatusCode > 1, '': order.orderStatusCode < 2}">
+              </i>
+              <b class="m-b-5">รอดำเนินการ</b>
+            </li>
+            <li class="p-b-20" *ngIf="order.orderStatusCode >= 0">
+              <i class="icofont icofont-cart icon-size-22px task-icon"
+                 placement="top" container="body" ngbTooltip="สร้างคำสั่งซื้อ"
+                 [ngClass]="{'badge-details': order.orderStatusCode >= 0, '': order.orderStatusCode < 1}">
+              </i>
+              <b class="m-b-5">สร้างคำสั่งซื้อ</b>
+            </li>
+          </ul>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- NEW Container-fluid starts -->
+
+
+
+
+
+
+
+
+
+
+
+<!--&lt;!&ndash;<section class="login-block">&ndash;&gt;-->
+<!--&lt;!&ndash; Container-fluid starts &ndash;&gt;-->
+<!--<div class="container-fluid">-->
+  <!--<div class="row">-->
+    <!--<div class="col-sm-12 col-md-12">-->
+      <!--<div class="text-center">-->
+        <!--<img src="assets/images/logo_rising-sig.png" alt="Rising Enterprise">-->
+        <!--<label class="label text-left mobile-inputs"><h5>Rising Enterprise Limited,Co.Ltd</h5></label>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+
+
+  <!--&lt;!&ndash;  add grid-flex data&ndash;&gt;-->
+  <!--&lt;!&ndash; Push and pull card start &ndash;&gt;-->
+  <!--&lt;!&ndash;<div class="container-fluid">&ndash;&gt;-->
+  <!--<div class="col-sm-12">-->
+    <!--<div class="card">-->
+      <!--<div class="card-header">-->
+        <!--<h5>รายการสั่งซื้อ</h5>-->
+        <!--&lt;!&ndash;<span>lorem ipsum dolor sit amet, consectetur adipisicing elit</span>&ndash;&gt;-->
+      <!--</div>-->
+      <!--<div class="card-block">-->
+        <!--<div class="bs-example grid-layout grid">-->
+          <!--<div class="row">-->
+            <!--<div class="col-md-8 push-md-4 align-top">-->
+              <!--<ng-container *ngFor="let p of order.products;let i = index">-->
+                <!--<B>ชื่อสินค้า: </B>{{p.name}}<br>-->
+                <!--&lt;!&ndash;<B>ราคาขาย: </B>{{p.price|currency:' '}} บาท<br>&ndash;&gt;-->
+                <!--<B>จำนวน: </B>{{p.amount}} ชิ้น<br><hr>-->
+                <!--&lt;!&ndash;<B>ราคารวม: </B>{{p.amount * p.price|currency:' '}} บาท<br><hr>&ndash;&gt;-->
+                <!--&lt;!&ndash;{{pp.name}}&ndash;&gt;-->
+              <!--</ng-container>-->
+            <!--</div>-->
+            <!--<div class="col-md-4 pull-md-8 align-top">-->
+              <!--<B>ค่าจัดส่ง: </B>{{orderDeliveryPrice|currency:' '}} บาท<br>-->
+              <!--<B>ยอดรวมสุทธิ: </B>{{orderSumProduct + orderDeliveryPrice|currency:' '}} บาท<br>-->
+              <!--<B>ส่วนลด: </B>{{order.orderDiscount|currency:' '}} บาท<br>-->
+              <!--&lt;!&ndash;<B>ภาษีมูลค่าเพิ่ม: </B>{{0|currency:' '}} บาท<br>&ndash;&gt;-->
+              <!--<B>ยอดรวม(ทั้งสิ้น): </B>{{order.orderTotal|currency:' '}} บาท<br>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--&lt;!&ndash;<div class="card-footer">&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;<div class="col-md-4 pull-md-8">&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;ยอดรวม: <p>.col-md-4 .pull-md-8</p>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;ยอดรวม: <p>.col-md-4 .pull-md-8</p>&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;<h5>รายการสั่งซื้อ</h5>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;&lt;!&ndash;<span>lorem ipsum dolor sit amet, consectetur adipisicing elit</span>&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--&lt;!&ndash; Push and pull card end &ndash;&gt;-->
+  <!--&lt;!&ndash;  add grid-flex data&ndash;&gt;-->
+
+  <!--&lt;!&ndash; Flex Order card start &ndash;&gt;-->
+  <!--<div class="container-fluid">-->
+    <!--<div class="row">-->
+      <!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+      <!--<div class="col-xl-8 col-md-12">-->
+        <!--<div class="card">-->
+          <!--<div class="card-header">-->
+            <!--<h5>แสดงข้อมูลคำสั่งซื้อสำหรับลูกค้า</h5>-->
+            <!--&lt;!&ndash;<input class="input-group-sm" id="clipboard" type="text"&ndash;&gt;-->
+            <!--&lt;!&ndash;value="{{ENVserverCustomerLink + order.orderODId}}">&ndash;&gt;-->
+            <!--&lt;!&ndash;<i id="btnCopy"&ndash;&gt;-->
+            <!--&lt;!&ndash;data-clipboard-target="#clipboard"&ndash;&gt;-->
+            <!--&lt;!&ndash;placement="top" container="body"&ndash;&gt;-->
+            <!--&lt;!&ndash;ngbTooltip="Copy to clipboard {{order.orderODId}}">&ndash;&gt;-->
+            <!--&lt;!&ndash;<img src="assets/clippy.svg" alt="Copy to clipboard">&ndash;&gt;-->
+            <!--&lt;!&ndash;</i>&ndash;&gt;-->
+          <!--</div>-->
+          <!--&lt;!&ndash;<div class="card-block">&ndash;&gt;-->
+
+          <!--&lt;!&ndash; add test group &ndash;&gt;-->
+          <!--&lt;!&ndash; skip data icon &ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="card-block tooltip-icon button-list text-center align-content-center">&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn btn-icon ripple light"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode >= 0, '': order.orderStatusCode < 1}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="สร้างคำสั่งซื้อ">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-cart icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn  btn-icon ripple light"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 1, '': order.orderStatusCode < 2}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="รอดำเนินการ">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-inbox icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn  btn-icon ripple"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 2, '': order.orderStatusCode < 3}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="แพ็คแล้ว">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-gift icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn btn-icon ripple light"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 3, '': order.orderStatusCode < 4}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="จัดส่งแล้ว">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-truck-loaded icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn  btn-icon ripple light"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 4, '': order.orderStatusCode < 5}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="สำเร็จ">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-check-circled icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<button type="button" class="btn  btn-icon ripple light"&ndash;&gt;-->
+          <!--&lt;!&ndash;[ngClass]="{'bg-fail': order.orderStatusCode > 5, '': order.orderStatusCode < 6}"&ndash;&gt;-->
+          <!--&lt;!&ndash;placement="top" container="body" ngbTooltip="ล้มเหลว">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icofont icofont-close-circled icon-size-22px"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</button>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash; skip data icon&ndash;&gt;-->
+          <!--&lt;!&ndash; add test group &ndash;&gt;-->
+
+          <!--&lt;!&ndash; add card table data &ndash;&gt;-->
+          <!--<div class="col-xl-12 col-md-12" *ngIf="order">-->
+            <!--&lt;!&ndash;<app-card [title]="'แสดงข้อมูลคำสั่งซื้อสำหรับลูกค้า'" [cardClass]="'latest-activity-card'"&ndash;&gt;-->
+            <!--&lt;!&ndash;[headerClass]="'borderless'">&ndash;&gt;-->
+            <!--<div class="table-responsive-sm">-->
+              <!--<table class="table table-sm table-borderless">-->
+                <!--<tbody>-->
+                <!--<tr>-->
+                  <!--<td colspan="3">-->
+                    <!--&lt;!&ndash;<div class="col-xl-12 col-md-12">&ndash;&gt;-->
+                    <!--<div class="row">-->
+                      <!--<div class="col-md-6 col-xl-6 col-sm-6 col-lg-6 text-left text-justify">-->
+                        <!--<label *ngIf="order.customer" class="text-justify">-->
+                          <!--<b>ที่อยู่จัดส่ง:</b><br>-->
+                          <!--{{order.customer.orderCustomerNameSurname}}&nbsp;-->
+                          <!--<ng-container *ngFor="let i of channels">-->
+                            <!--<label class="label col-form-label-sm text-primary align-middle"-->
+                                   <!--placement="top" container="body" ngbTooltip="{{i.channelName}}"-->
+                                   <!--*ngIf="i.channelId === order.customer.orderCustomerChannelId">-->
+                              <!--<img [src]="i.channelImage" class="img-20">-->
+                            <!--</label>-->
+                          <!--</ng-container>-->
+                          <!--<br>-->
+                          <!--{{order.customer.orderCustomerIdhome}}<br>-->
+                          <!--{{order.customer.orderCustomerAddress}}<br>-->
+                          <!--{{order.customer.orderCustomerZipcode}}<br>-->
+                        <!--</label>-->
+                      <!--</div>-->
+                      <!--&lt;!&ndash;<div class="col-md-4 col-xl-4 col-sm-4 col-lg-4 text-left text-justify">&ndash;&gt;-->
+                      <!--&lt;!&ndash;<label *ngIf="order.customer">&ndash;&gt;-->
+                      <!--&lt;!&ndash;<b>ที่อยู่ใบเสร็จ:</b><br>&ndash;&gt;-->
+                      <!--&lt;!&ndash;{{order.customer.orderCustomerNameSurname}}&nbsp;&ndash;&gt;-->
+                      <!--&lt;!&ndash;<img src="">&ndash;&gt;-->
+                      <!--&lt;!&ndash;<br>&ndash;&gt;-->
+                      <!--&lt;!&ndash;{{order.customer.orderCustomerIdhome}}<br>&ndash;&gt;-->
+                      <!--&lt;!&ndash;{{order.customer.orderCustomerAddress}}<br>&ndash;&gt;-->
+                      <!--&lt;!&ndash;{{order.customer.orderCustomerZipcode}}<br>&ndash;&gt;-->
+                      <!--&lt;!&ndash;</label>&ndash;&gt;-->
+                      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                      <!--<div class="col-md-6 col-xl-6 col-sm-6 col-lg-6 text-left text-justify">-->
+                        <!--<label *ngIf="order.customer">-->
+                          <!--<div class="row">-->
+                            <!--<div class="col-sm-6 order-2"><b>วันที่สั่งซื้อ : &nbsp;</b></div>-->
+                            <!--<div class="col-sm-6 order-2">{{order.orderCreated|date: 'dd-MM-yyyy HH:mm:ss'}}</div>-->
+                          <!--</div>-->
+                          <!--<div class="row">-->
+                            <!--<div class="col-sm-6 order-2"><b>โทรศัพท์ : &nbsp;</b></div>-->
+                            <!--<div class="col-sm-6 order-2">{{order.customer.orderCustomerTel}}</div>-->
+                          <!--</div>-->
+                          <!--<div class="row align-items-center">-->
+                            <!--<div class="col-sm-6 order-2"><b>การชำระเงิน : &nbsp;</b></div>-->
+                            <!--<div class="col-sm-6 order-2">-->
+                              <!--<label class="label bg-success"-->
+                                     <!--*ngIf="order.payment.method.toUpperCase() === 'BANKTRANFER'">-->
+                                <!--โอนเงิน-->
+                              <!--</label>-->
+                              <!--<ng-container *ngFor="let k of banks">-->
+                                <!--<label class="label col-form-label-sm text-primary"-->
+                                       <!--placement="top" container="body"-->
+                                       <!--ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                                       <!--{{order.payment.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                                       <!--{{order.payment.orderPaymentTime}}"-->
+                                       <!--*ngIf="((order.payment.method|uppercase) === 'BANKTRANFER')-->
+                                       <!--&&(order.payment.orderBankId === k.bankId)">-->
+                                  <!--<img class="img-30" [src]="k.bankImage">-->
+                                <!--</label>-->
+                                <!--<label class="label col-form-label-sm bg-success"-->
+                                       <!--placement="top" container="body"-->
+                                       <!--ngbTooltip="เก็บเงินปลายทาง {{order.payment.method|uppercase}}"-->
+                                       <!--*ngIf="((order.payment.method|uppercase) === 'COD')-->
+                                         <!--&&((!order.payment.orderBankId == k.bankId)-->
+                                         <!--||(order.payment.orderBankId === ''))">-->
+                                  <!--เก็บเงินปลายทาง&nbsp;-->
+                                  <!--&lt;!&ndash;{{order.payment.method|uppercase}}&ndash;&gt;-->
+                                <!--</label>-->
+                                <!--<strong *ngIf="((order.payment.method.toUpperCase() === 'COD')-->
+                                    <!--&& ((!order.payment.orderBankId == k.bankId)-->
+                                    <!--|| (order.payment.orderBankId === '')))">-->
+                                  <!--({{order.orderTotal|currency:'฿'}})-->
+                                <!--</strong>-->
+                              <!--</ng-container>-->
+                              <!--&lt;!&ndash;<label class="label bg-success"&ndash;&gt;-->
+                              <!--&lt;!&ndash;*ngIf="order.payment.method.toUpperCase() === 'COD'">เก็บเงินปลายทาง&ndash;&gt;-->
+                              <!--&lt;!&ndash;</label>&ndash;&gt;-->
+                              <!--&lt;!&ndash;<label class="label bg-success"&ndash;&gt;-->
+                              <!--&lt;!&ndash;*ngIf="order.payment.method.toUpperCase() === 'BANKTRANFER'">&ndash;&gt;-->
+                              <!--&lt;!&ndash;โอนเงิน&ndash;&gt;-->
+                              <!--&lt;!&ndash;</label>&ndash;&gt;-->
+                              <!--&lt;!&ndash;{{order.payment.method|uppercase}}&ndash;&gt;-->
+                              <!--&lt;!&ndash;{{order.payment.orderShipmentId}}&ndash;&gt;-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="row align-items-center">-->
+                            <!--<div class="col-sm-6 order-2"><b>การจัดส่ง : &nbsp;</b></div>-->
+                            <!--<div class="col-sm-6 order-2 align-middle">-->
+                              <!--&lt;!&ndash;{{order.delivery.orderShipmentId}}&ndash;&gt;-->
+                              <!--<ng-container *ngFor="let j of shipments">-->
+                                <!--<label class="label col-form-label-sm text-dark"-->
+                                       <!--placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"-->
+                                       <!--*ngIf="(order.delivery.orderShipmentId === j.shipmentId)">-->
+                                  <!--{{j.shipmentName|uppercase}}&nbsp;|&nbsp;-->
+                                  <!--&lt;!&ndash;<img class="img-40" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">&ndash;&gt;-->
+                                  <!--<img class="img-30" [src]="j.shipmentImage">-->
+                                <!--</label>-->
+                              <!--</ng-container>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--&lt;!&ndash;<div class="row align-items-center">&ndash;&gt;-->
+                          <!--&lt;!&ndash;<div class="col-sm-6 order-2"><b>หมายเลข Tracking : &nbsp;</b></div>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<div class="col-sm-6 order-2">{{order.orderTracking}}</div>&ndash;&gt;-->
+                          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<div class="row align-items-center">&ndash;&gt;-->
+                          <!--&lt;!&ndash;<div class="col-sm-6 order-2"><b>สถานะ: &nbsp;</b></div>&ndash;&gt;-->
+                          <!--&lt;!&ndash;<div class="col-sm-6 order-2">&ndash;&gt;-->
+                          <!--&lt;!&ndash;&lt;!&ndash;{{order.orderStatusName}}&ndash;&gt;&ndash;&gt;-->
+                          <!--&lt;!&ndash;<label *ngIf="order.orderStatusName"&ndash;&gt;-->
+                          <!--&lt;!&ndash;class="label"&ndash;&gt;-->
+                          <!--&lt;!&ndash;[ngClass]="{&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-process': order.orderStatusName === 'process',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-waitpack': order.orderStatusName === 'waitpack',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-print': order.orderStatusName === 'print',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-pack': order.orderStatusName === 'pack',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-delivery': order.orderStatusName === 'delivery',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-success': order.orderStatusName === 'success',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-cancel': order.orderStatusName === 'cancel',&ndash;&gt;-->
+                          <!--&lt;!&ndash;'bg-fail': order.orderStatusName === 'fail'&ndash;&gt;-->
+                          <!--&lt;!&ndash;}"&ndash;&gt;-->
+                          <!--&lt;!&ndash;placement="top" ngbTooltip="{{order.orderStatusName|titlecase}}">&ndash;&gt;-->
+                          <!--&lt;!&ndash;{{order.orderStatusName|titlecase}}&ndash;&gt;-->
+                          <!--&lt;!&ndash;</label>&ndash;&gt;-->
+                          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--</label>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                  <!--</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+              <!--</table>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;</app-card>&ndash;&gt;-->
+          <!--</div>-->
+          <!--&lt;!&ndash; add card table data &ndash;&gt;-->
+
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<div class="col-xl-4 col-md-12">-->
+        <!--<app-card [title]="'แสดงสถานะของสินค้า'" [cardClass]="'task-card'" [cardOptionBlock]="true">-->
+          <!--<ul class="list-unstyled task-list">-->
+            <!--<li *ngIf="order.orderStatusCode == 6">-->
+              <!--<i class="icofont icofont-truck-loaded icon-size-22px task-icon"-->
+                 <!--[ngClass]="{'badge-fails': order.orderStatusCode > 5, '': order.orderStatusCode < 6}">-->
+              <!--</i>-->
+              <!--<p class="m-b-5">ล้มเหลว</p>-->
+            <!--</li>-->
+            <!--<li *ngIf="order.orderStatusCode >= 5">-->
+              <!--<i class="icofont icofont-check-circled icon-size-22px task-icon"-->
+                 <!--placement="top" container="body" ngbTooltip="สำเร็จ"-->
+                 <!--[ngClass]="{'badge-success': order.orderStatusCode > 4, '': order.orderStatusCode < 5}">-->
+              <!--</i>-->
+              <!--<p class="m-b-5">สำเร็จ</p>-->
+            <!--</li>-->
+            <!--<li *ngIf="order.orderStatusCode >= 4">-->
+              <!--<i class="icofont icofont-truck-loaded icon-size-22px task-icon"-->
+                 <!--placement="top" container="body" ngbTooltip="จัดส่ง"-->
+                 <!--[ngClass]="{'badge-deliverys': order.orderStatusCode > 3, '': order.orderStatusCode < 4}">-->
+              <!--</i>-->
+              <!--<p class="m-b-5">จัดส่ง</p>-->
+            <!--</li>-->
+            <!--<li *ngIf="order.orderStatusCode >= 3">-->
+              <!--<i class="icofont icofont-gift icon-size-22px task-icon"-->
+                 <!--placement="top" container="body" ngbTooltip="แพ็ค"-->
+                 <!--[ngClass]="{'badge-packs': order.orderStatusCode > 2, '': order.orderStatusCode < 3}">-->
+                <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 2, '': order.orderStatusCode < 3}">&ndash;&gt;-->
+              <!--</i>-->
+              <!--<p class="m-b-5">แพ็ค</p>-->
+            <!--</li>-->
+            <!--<li *ngIf="order.orderStatusCode >= 2">-->
+              <!--<i class="icofont icofont-inbox icon-size-22px task-icon"-->
+                 <!--placement="top" container="body" ngbTooltip="รอดำเนินการ"-->
+                 <!--[ngClass]="{'badge-waitpacks': order.orderStatusCode > 1, '': order.orderStatusCode < 2}">-->
+                <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode > 1, '': order.orderStatusCode < 2}">&ndash;&gt;-->
+              <!--</i>-->
+              <!--<p class="m-b-5">รอดำเนินการ</p>-->
+            <!--</li>-->
+            <!--<li class="p-b-20" *ngIf="order.orderStatusCode >= 0">-->
+              <!--<i class="icofont icofont-cart icon-size-22px task-icon"-->
+                 <!--placement="top" container="body" ngbTooltip="สร้างคำสั่งซื้อ"-->
+                 <!--[ngClass]="{'badge-details': order.orderStatusCode >= 0, '': order.orderStatusCode < 1}">-->
+                <!--&lt;!&ndash;[ngClass]="{'bg-success': order.orderStatusCode >= 0, '': order.orderStatusCode < 1}">&ndash;&gt;-->
+              <!--</i>-->
+              <!--<p class="m-b-5">สร้างคำสั่งซื้อ</p>-->
+            <!--</li>-->
+            <!--&lt;!&ndash;<div class="text-center">&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="javascript:" class="b-b-primary text-primary">View Friend List</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--</ul>-->
+        <!--</app-card>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; Flex Order card start &ndash;&gt;-->
+  <!--</div>-->
+  <!--&lt;!&ndash; end of row &ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash; end of container-fluid &ndash;&gt;-->
+<!--&lt;!&ndash;</section>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash; skip datatable &ndash;&gt;-->
+<!--&lt;!&ndash; skip datatable &ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container-fluid">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<div class="page-body">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;<h5>รายการสั่งซื้อ</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span>lorem ipsum dolor sit amet, consectetur adipisicing elit</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-xl-12 col-md-12">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<app-card [title]="'รายการสั่งซื้อ'" [cardClass]="'latest-activity-card'" [headerClass]="'borderless'">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<pre></pre>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="table-responsive-sm">&ndash;&gt;-->
+<!--&lt;!&ndash;<table class="table table-sm table-framed">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<table class="table table-sm table-bordered">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<thead >&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-center">#</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-center">รูปภาพ</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-left">ชื้อสินค้า</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-left">รหัสสินค้า</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-right">ราคาขาย</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-right">จำนวน</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-right">ส่วนลด</th>&ndash;&gt;-->
+<!--&lt;!&ndash;<th class="text-right">ราคารวม</th>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;</thead>&ndash;&gt;-->
+<!--&lt;!&ndash;<tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr *ngFor="let p of order.products;let i = index">&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-center">{{i+1}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-center"><img class="img-40" [src]="p.image"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-left">{{p.name}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-left">{{p.code}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-right">{{p.price|currency:' '}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-right">{{p.amount}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-right">0.00</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td class="text-right">{{p.amount * p.price|currency:' '}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="5" class="text-right">ค่าจัดส่ง</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="3" class="text-right">{{orderDeliveryPrice}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="5" class="text-right">ยอดรวมสุทธิ</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="3" class="text-right">{{order.orderTotal|currency:' '}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="5" class="text-right">ส่วนลด</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="3" class="text-right">{{order.orderDiscount|currency:' '}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="5" class="text-right">ภาษีมูลค่าเพิ่ม</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="3" class="text-right">0.00</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<tr>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="5" class="text-right">ยอดรวม (ทั้งสิ้น)</td>&ndash;&gt;-->
+<!--&lt;!&ndash;<td colspan="3" class="text-right">{{order.orderTotal|currency:' '}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;</tr>&ndash;&gt;-->
+<!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;</table>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</app-card>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash; skip datatable &ndash;&gt;-->
+<!--&lt;!&ndash; skip datatable &ndash;&gt;-->
