@@ -1,0 +1,346 @@
+/* You can add global styles to this file, and also import other style files */
+.cursorLink {
+  cursor: pointer;
+}
+
+// for fa-fa icon set style //
+.bg-lime-green {
+  background-color: limegreen;
+}
+
+.bg-dark-green {
+  background-color: darkgreen;
+}
+
+.bg-green {
+  background-color: green;
+}
+
+.calendar-icon-style {
+  color: #1b8bf9;
+}
+
+.cubes-icon-style {
+  color: #28a745;
+}
+
+.book-icon-style {
+  color: #0593ea;
+}
+
+.edit-icon-style {
+  color: #FF4444;
+}
+
+// color background for order //
+.bg-process {
+  background-color: deepskyblue;
+}
+.bg-waitpack {
+  background-color: goldenrod;
+}
+.bg-print {
+  background-color: dimgrey;
+}
+.bg-pack {
+  background-color: yellowgreen;
+}
+.bg-delivery {
+  background-color: limegreen;
+}
+.bg-success {
+  background-color: green;
+}
+.bg-cancel {
+  background-color: deeppink;
+}
+.bg-fail {
+  background-color: darksalmon;
+}
+
+// text-color & background color //
+
+.label-deliverys {
+  background-color: #f37020;
+}
+
+.icon-size-20px {
+  font-size: 20px;
+}
+
+.icon-size-22px {
+  font-size: 22px;
+}
+
+.text-details {
+  color: #3e5b98;
+}
+.badge-details {
+  background-color: #3e5b98;
+  color: white;
+}
+.text-waitpacks {
+  color: #f8ac5a;
+}
+.badge-waitpacks {
+  background-color: #f8ac5a;
+  color: white;
+}
+.text-packs {
+  color: #158f2f;
+}
+.badge-packs {
+  background-color: #158f2f;
+  color: white;
+}
+.text-deliverys {
+  color: #8d2d92;
+}
+.badge-deliverys {
+  background-color: #8d2d92;
+  color: white;
+}
+.text-success {
+  color: #1bb394;
+}
+.badge-success {
+  background-color: #1bb394;
+  color: white;
+}
+.text-fails {
+  color: #ed5666;
+}
+.badge-fails {
+  background-color: #ed5666;
+  color: white;
+}
+.text-create {
+  color: #158f2f;
+  // green //
+}
+.text-update {
+  color: #f8ac5a;
+  // orange //
+}
+.text-delete {
+  color: #ed5666;
+  // red //
+}
+.text-addstock {
+  color: #158f2f;
+  // green //
+}
+.text-deductstock {
+  color: #ed5666;
+  // red //
+}
+.text-addhold {
+  color: #158f2f;
+  // green //
+}
+.text-deducthold {
+  color: #ed5666;
+  // red //
+}
+.text-orderdelete {
+  color: #ed5666;
+  // red //
+}
+.text-scantobalancestock {
+  color: #158f2f;
+  // green //
+}
+.text-print {
+  color: black;
+  // black //
+}
+.text-scantopack {
+  color: black;
+  // black //
+}
+.text-scantotracking {
+  color: #3e5b98;
+  // details //
+}
+.text-importtracking {
+  //color: #3e5b98;
+  color: #158f2f;
+  // details //
+}
+// text-color & background color //
+// color background for order //
+
+// for set modal data show //
+// CSS for Modal //
+.modal-dialog,
+.modal-content {
+  /* 80% of window height */
+  //height: 95%;
+}
+
+.modal-body {
+  /* 100% = dialog height, 120px = header + footer */
+  max-height: calc(100% - 120px);
+  overflow-y: scroll;
+}
+
+.modal-body {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+//max-height: 100%;
+//overflow-y: auto;
+//
+//position:fixed;
+//overflow: hidden;
+//
+//position:absolute;
+//overflow:scroll;
+
+// CSS for Modal //
+
+// for fa-fa icon set style //
+
+/* img {
+  height: 80px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+} */
+
+img.img-10 {
+  height: 10px;
+  width: auto;
+  border-color: white;
+  border-width: 0.2px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-20 {
+  height: 20px;
+  width: auto;
+  border-color: white;
+  border-width: 0.5px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-30 {
+  height: 30px;
+  width: auto;
+  border-color: white;
+  border-width: 0.5px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-35 {
+  height: 35px;
+  width: auto;
+  border-color: white;
+  border-width: 0.5px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-40 {
+  height: 40px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-50 {
+  height: 50px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-60 {
+  height: 60px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-80 {
+  height: 80px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-100 {
+  height: 100px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-120 {
+  height: 120px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-150 {
+  height: 150px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
+
+img.img-200 {
+  height: 200px;
+  width: auto;
+  border-color: white;
+  border-width: 1.0px;
+  border-top-style: dotted;
+  border-right-style: dotted;
+  border-bottom-style: dotted;
+  border-left-style: dotted;
+}
