@@ -1,0 +1,97 @@
+<section class="login-block">
+  <!-- Container-fluid starts -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <form class="md-float-material form-material" #registerForm="ngForm" method="post" autocomplete="off">
+          <div class="text-center">
+            <img src="assets/images/logo_rising-sig.png" alt="Rising Enterprise">
+          </div>
+          <div class="auth-box card">
+            <div class="card-block">
+              <div class="row m-b-20">
+                <div class="col-md-12">
+                  <h4 class="text-center text-primary"><b>สมัครสมาชิก</b></h4>
+                </div>
+              </div>
+              <div class="form-group form-primary">
+                <input type="text" [(ngModel)]="mUser.userName" name="userName" class="form-control" required=""
+                       autofocus>
+                <span class="form-bar"></span>
+                <label class="float-label">ชื่อผู้ใช้งาน</label>
+              </div>
+              <div class="form-group form-primary">
+                <input type="text" [(ngModel)]="mUser.userEmail" name="userEmail" class="form-control" required="">
+                <span class="form-bar"></span>
+                <label class="float-label">อีเมลล์</label>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group form-primary">
+                    <input type="password" [(ngModel)]="mUser.userPassword" name="userPassword"
+                           class="form-control"
+                           required="">
+                    <span class="form-bar"></span>
+                    <label class="float-label">รหัสผ่าน</label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group form-primary">
+                    <input type="password" [(ngModel)]="mUser.confirmPassword" name="confirmPassword"
+                           class="form-control" required="">
+                    <span class="form-bar"></span>
+                    <label class="float-label">ยืนยันรหัสผ่าน</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group form-primary">
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">สิทธิการใช้งานระบบ</label>
+                  <div class="col-sm-8 text-primary">
+                    <select type="text" name="userLevel" [(ngModel)]="mUser.userLevel" class="form-control text-primary">
+                      <option [disabled]="i.disabled" *ngFor="let i of items" [ngValue]="i.level" class="text-primary">{{i.level}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-t-25 text-left">
+                <div class="col-md-12">
+                  <div class="checkbox-fade fade-in-primary">
+                    <label>
+                      <input type="checkbox" name="checkbox" value="" [checked]="true">
+                      <span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>
+                      <!--<span class="text-inverse">I read and accept <a-->
+                              <!--href="javascript:">Terms &amp; Conditions.</a></span>-->
+                        <span class="text-inverse">ฉันอ่านและยอมรับ <a
+                        href="javascript:">ข้อกำหนดในการให้บริการ.</a></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-t-30">
+                <div class="col-md-12">
+                  <button type="submit" (click)="onRegister()"
+                          class="btn btn-primary btn-md btn-block text-center m-b-20 ripple light">ยืนยันสมัครสมาชิก
+                  </button>
+                </div>
+              </div>
+              <hr/>
+              <div class="row">
+                <div class="col-md-10">
+                  <p class="text-inverse text-left m-b-0">ขอบคุณครับ.</p>
+                  <p class="text-inverse text-left"><a (click)="onBack()" class="cursorLink"><b>ย้อนกลับไปหน้าก่อนนี้</b></a></p>
+                </div>
+                <div class="col-md-2">
+                  <img src="assets/images/auth/Logo-small-bottom.png" alt="small-logo.png">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of container-fluid -->
+</section>

@@ -1,0 +1,99 @@
+<section class="login-block">
+  <!-- Container-fluid starts -->
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- Authentication card start -->
+        <form class="md-float-material form-material" [formGroup]="ngForm" (ngSubmit)="onSubmit(ngForm.value)" autocomplete="off">
+          <div class="text-center">
+            <img src="assets/images/logo_rising-sig.png" alt="Rising Enterprise">
+          </div>
+          <div class="auth-box card">
+            <div class="card-block">
+              <div class="row m-b-20">
+                <div class="col-md-12">
+                  <h4 class="text-center text-primary"><b>เข้าสู่ระบบ</b></h4>
+                </div>
+              </div>
+              <div class="form-group form-primary">
+                <input type="text" formControlName="userName" name="userName" id="userName" class="form-control" autofocus>
+                <!--<input type="text" ngModel name="userName" class="form-control" autofocus>-->
+                <span class="form-bar"></span>
+                <label class="float-label h4">ชื่อผู้ใช้งาน</label>
+              </div>
+              <div class="form-group form-primary">
+                <input type="password" formControlName="userPassword" name="userPassword" id="userPassword" class="form-control">
+                <!--<input type="password" ngModel name="userPassword" id="userPassword" class="form-control">-->
+                <span class="form-bar"></span>
+                <label class="float-label">รหัสผ่าน</label>
+              </div>
+              <!-- // add error message -->
+              <div *ngIf="isError" class="alert alert-danger" role="alert">
+                <!--Error, Incorrect username or password!-->
+                ผิดพลาดเนื่องจาก, ชื่อผู้ใช้งานหรือพาสเวิร์ด ไม่ถูกต้อง!
+              </div>
+              <div class="row m-t-25 text-left">
+                <div class="col-12">
+                  <div class="checkbox-fade fade-in-primary">
+                    <label>
+                      <input type="checkbox" formControlName="checkbox" name="checkbox">
+                      <!--<input type="checkbox" ngModel name="checkbox">-->
+                      <!--<input type="checkbox" name="active" ngModel required>-->
+                      <span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>
+                      <span class="text-inverse">บันทึกการเข้าใช้งาน</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row m-t-30">
+                <div class="col-md-12">
+                  <button type="submit"
+                          class="btn btn-primary btn-md btn-block text-center m-b-20 ripple light">
+                    ยืนยันเพื่อเข้าสู่ระบบ
+                  </button>
+                  <!--(click)="onSubmit(ngForm.value)"-->
+                  <!--[disabled]="!ngForm.valid"-->
+                </div>
+              </div>
+              <div class="row m-t-25 text-left">
+                <div class="col-12">
+                  <!--<div class="checkbox-fade fade-in-primary d-">-->
+                  <!--<label>-->
+                  <!--<input type="checkbox" value="">-->
+                  <!--<span class="cr"><i class="cr-icon fa fa-check txt-primary"></i></span>-->
+                  <!--<span class="text-inverse">Remember me</span>-->
+                  <!--</label>-->
+                  <!--</div>-->
+                  <div class="forgot-phone text-left float-left">
+                    <!--<a [routerLink]="['/auth/registration']" class="text-right f-w-600"> Registration Account?</a>-->
+                    <a [routerLink]="['/auth/registration']" class="text-right f-w-600"> สมัครสมาชิก?</a>
+                  </div>
+                  <div class="forgot-phone text-right float-right">
+                    <!--<a [routerLink]="['/auth/forgot']" class="text-right f-w-600"> Forgot Password?</a>-->
+                    <!--<a [routerLink]="['/auth/forgot']" class="text-right f-w-600"> ลืมรหัสผ่าน?</a>-->
+                  </div>
+                </div>
+              </div>
+              <hr/>
+              <div class="row">
+                <div class="col-md-10">
+                  <p class="text-inverse text-left m-b-0">ขอบคุณครับ.</p>
+                  <p class="text-inverse text-left">
+                      <b>Rising Enterprise</b>
+                  </p>
+                </div>
+                <div class="col-md-2">
+                  <img src="assets/images/auth/Logo-small-bottom.png" alt="small-logo.png">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- end of form -->
+      </div>
+      <!-- end of col-sm-12 -->
+    </div>
+    <!-- end of row -->
+  </div>
+  <!-- end of container-fluid -->
+</section>
