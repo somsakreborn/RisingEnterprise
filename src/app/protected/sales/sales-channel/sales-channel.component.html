@@ -1,0 +1,133 @@
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->
+<app-card [title]="'ยอดขายตามช่องทาง ' + ' [&nbsp;วันที่:&nbsp;' + bsRangeValueDefualtStr + '&nbsp;]'"
+          [blockClass]="'tab-icon'"
+          [cardOptionBlock]="true">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-xl-12">
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 text-left">
+          <div *ngIf="reportData.length > 0"
+               ngbDropdown class="btn-group dropdown-split-inverse">
+            <button type="button"
+                    [disabled]="reportData.length < 1"
+                    (click)="exportReportSaleChannelsAllToExcel(reportData);"
+                    class="btn btn-sm btn-inverse light">
+              <i class="fa fa-file-excel-o"></i>ส่งออกยอดขายตามช่องทาง
+            </button>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-xl-6 text-right">
+          <div style="text-align: right;">
+            <div class="btn-group-sm" role="group">
+              <label class="input-group-sm text-right">จาก - ถึง
+                <input type="text"
+                       #rangDate
+                       readonly="true"
+                       placeholder="ค้นหาจากวันที่ - วันที่"
+                       name="rangDate"
+                       class="form-control input-sm text-sm-left full-data-search dropdown-toggle"
+                       [bsConfig]="bsConfig"
+                       [(ngModel)]="bsRangeValueDefualt"
+                       bsDaterangepicker>
+              </label>
+              <button class="btn-sm icofont icofont-ui-search btn-primary"
+                      (click)="fetchOrderMapChannel(rangDate.value)">
+              </button>
+
+              <button type="button"
+                      (click)="setRangeDateSearch(rangDate.value, 'Day');"
+                      [ngClass]="{'active': ActiveVal === 'Day'}"
+                      class="btn btn-sm btn-outline-primary">วันนี้
+              </button>
+              <button type="button"
+                      (click)="setRangeDateSearch(rangDate.value, 'Tomorrow');"
+                      [ngClass]="{'active': ActiveVal === 'Tomorrow'}"
+                      class="btn btn-sm btn-outline-primary">เมื่อวานนี้
+              </button>
+              <button type="button"
+                      (click)="setRangeDateSearch(rangDate.value, 'Month');"
+                      [ngClass]="{'active': ActiveVal === 'Month'}"
+                      class="btn btn-sm btn-outline-primary">เดือนนี้
+              </button>
+              <button type="button"
+                      (click)="setRangeDateSearch(rangDate.value, 'Year');"
+                      [ngClass]="{'active': ActiveVal === 'Year'}"
+                      class="btn btn-sm btn-outline-primary">ปีนี้
+              </button>
+              <label class="input-group-sm">แสดง
+                <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                  <option [ngValue]="25">25</option>
+                  <option [ngValue]="50">50</option>
+                  <option [ngValue]="100">100</option>
+                  <option [ngValue]="200">200</option>
+                </select>
+                แถว
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive-sm">
+        <ngx-datatable
+                class="data-table text-center"
+                [rows]="reportData"
+                [columnMode]="'force'"
+                [scrollbarH]="true"
+                [headerHeight]="50"
+                [rowHeight]="45"
+                [limit]="rowsOnPage"
+                [footerHeight]="30"
+                [selected]="selected"
+                (select)='onSelect($event)'
+                (activate)="onActivate($event)"
+                [selectionType]="'checkbox'">
+          <ngx-datatable-column name="ชื่อช่องทาง" prop="channelName" [width]="250">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <p class="text-left text-print"
+                 placement="auto" container="body"
+                 ngbTooltip="{{value}}">
+                {{value}}
+              </p>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="จำนวนออเดอร์" prop="channelsSumCount" [width]="100">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <p class="text-center">{{value}}</p>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="ยอดรวมตามช่องทาง" prop="channelsTotal">
+            <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+              <p placement="top" container="body">
+                {{value|currency:'฿ '}}
+              </p>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="ส่วนลดรวม" prop="channelsDiscount">
+            <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+              <p placement="top" container="body">
+                {{value|currency:'฿ '}}
+              </p>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="ค่าส่งรวม" prop="channelsDelivery">
+            <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+              <p placement="top" container="body">
+                {{value|currency:'฿ '}}
+              </p>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div class="row">
+        <div class='col-sm-12 selected-column text-left'>
+          <br><b>ทั้งหมด </b>{{reportSumODTotal}} <b>ออเดอร์</b> | <b>ยอดรวมทั้งสิ้น</b>
+          {{reportSumPPATotal|currency:'฿ '}} <b>บาท</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-card>
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->

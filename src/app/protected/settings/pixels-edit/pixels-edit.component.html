@@ -1,0 +1,124 @@
+<div class="card">
+  <div class="card-header">
+    <i class="fa fa-edit m-r-5 text-fails"></i>
+    <h5>แก้ไขข้อมูล Pixels</h5>
+  </div>
+  <div class="card-body text-center">
+    <form #updatePixelsForm="ngForm" autocomplete="off">
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">No :</div>
+        <div class="col-sm-8 col-8">
+          <input type="number" name="pixelId"
+                 [readonly]="true"
+                 [(ngModel)]="pixelData.pixelId"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">ช่องทาง :</div>
+        <div class="col-sm-8 col-8">
+          <select class="form-control form-control-sm"
+                  [(ngModel)]="pixelData.channelId"
+                  name="channelId">
+            <option class="text-print" value="">-กรุณาเลือกช่องทาง-</option>
+            <option class="text-print"
+                    *ngFor="let c of channels;"
+                    [disabled]="!c.channelStatus"
+                    [selected]="c.channelId == pixelData.channelId"
+                    [value]="c.channelId">
+              {{c.channelName}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <!--<div class="input-group">-->
+      <!--<div class="col-sm-4 col-4 text-right">เหตุการณ์ :</div>-->
+      <!--<div class="col-sm-8 col-8">-->
+      <!--<select class="form-control"-->
+      <!--[(ngModel)]="pixelData.pixelCustomId"-->
+      <!--name="pixelCustomId">-->
+      <!--&lt;!&ndash;<option class="text-success" value="">-กรุณาเลือกช่องทาง-</option>&ndash;&gt;-->
+      <!--<option class="text-success"-->
+      <!--*ngFor="let pc of pixelCustomList;"-->
+      <!--[disabled]="!pc.customDisable"-->
+      <!--[selected]="pc.id == pixelData.pixelCustomId"-->
+      <!--[value]="pc.id">-->
+      <!--{{pc.customName}}-->
+      <!--</option>-->
+      <!--</select>-->
+      <!--</div>-->
+      <!--</div>-->
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">Event :</div>
+        <div class="col-sm-8 col-8">
+          <input type="text" name="pixelCustomEvent"
+                 [(ngModel)]="pixelData.pixelCustomEvent"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+      <!--<div class="input-group">-->
+      <!--<div class="col-sm-4 col-4 text-right">ตั้งชื่อ Pixel :</div>-->
+      <!--<div class="col-sm-8 col-8">-->
+      <!--<input type="text" name="pixelName"-->
+      <!--[(ngModel)]="pixelData.pixelName"-->
+      <!--class="form-control">-->
+      <!--</div>-->
+      <!--</div>-->
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">Pixel ID :</div>
+        <div class="col-sm-8 col-8">
+          <input type="text" name="pixelFBId"
+                 [(ngModel)]="pixelData.pixelFBId"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+      <!--<div class="input-group">-->
+      <!--<div class="col-sm-4 col-4 text-right">รูปแบบ :</div>-->
+      <!--<div class="col-sm-8 col-8">-->
+      <!--<input type="text" name="pixelCustom"-->
+      <!--[(ngModel)]="pixelData.pixelCustom"-->
+      <!--class="form-control form-control-sm">-->
+      <!--</div>-->
+      <!--</div>-->
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">ค่า :</div>
+        <div class="col-sm-8 col-8">
+          <input type="text"
+                 name="pixelCustom"
+                 [(ngModel)]="pixelData.pixelCustom"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">หมายเหตุ :</div>
+        <div class="col-sm-8 col-8">
+          <input type="text" name="pixelComment"
+                 [(ngModel)]="pixelData.pixelComment"
+                 class="form-control form-control-sm">
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="col-sm-4 col-4 text-right">สถานะ :</div>
+        <div class="col-sm-8 col-8 text-left">
+          <ui-switch [color]="pixelData.pixelStatus ? 'green': 'red'"
+                     size="small"
+                     [(ngModel)]="pixelData.pixelStatus"
+                     name="pixelStatus">
+          </ui-switch>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-center">
+    <button type="button"
+            (click)="onUpdatePixel(updatePixelsForm.value);"
+            class="btn btn-primary ripple light">
+      บันทึก
+    </button>
+    <button type="button"
+            (click)='onBack();'
+            class="btn btn-dark ripple light">
+      ย้อนกลับ
+    </button>
+  </div>
+</div>

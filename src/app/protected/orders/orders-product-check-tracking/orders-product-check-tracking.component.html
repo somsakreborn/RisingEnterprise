@@ -1,0 +1,417 @@
+<!-- // New data check orders // -->
+<form #OrderEditForm="ngForm" novalidate autocomplete="off">
+  <div class="card">
+    <div class="card-header">
+      <h5>ตรวจสอบ Tracking Number หมายเลขคำสั่งซื้อสินค้า</h5>
+      &nbsp;
+      <button type="button" class="btn btn-sm btn-primary ripple light"
+              [routerLink]="['/management/orders/details']">
+        <i class="fa fa-globe"></i>หน้าหลักคำสั่งซื้อ
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-sm btn-primary ripple light"
+              [routerLink]="['/management/orders/orders-check']">
+        <i class="fa fa-check-square-o">&nbsp;ตรวจสอบหมายเลขคำสั่งซื้อ</i>
+      </button>
+    </div>
+    <div class="card-block">
+      <div class="row">
+        <!-- card with header start -->
+        <div class="col-md-6 col-xl-6 col-sm-6">
+          <div class="card">
+            <!--<div class="card-header">-->
+            <!--<h5>รายการสินค้า</h5>-->
+            <!--</div>-->
+            <div class="card-block form-group">
+              <!--<label>ค้นหารายการสินค้า</label>-->
+              <!--<input class="form-control form-txt-primary input-group"-->
+              <!--name="searchProduct">-->
+              <!--<div class="form-group">-->
+              <div class="input-group input-group-sm">
+                <input id="ordersODId"
+                       autofocus
+                       maxlength="10"
+                       class="form-control text-primary"
+                       placeholder="ค้นหารายการคำสั่งซื้อ (ORDERS_NUMBER_ID)"
+                       type="text"
+                       #ordersODId
+                       name="ordersODId"
+                       (keyup.enter)="onScanOrdersProduct(ordersODId.value);ordersODId.value=''">
+                <span class="input-group-append">
+                  <label class="input-group-text">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                  </label>
+                </span>
+              </div>
+              <div class="input-group input-group-sm">
+                <ui-switch
+                        size="small"
+                        [color]="checkTracking ? 'green' : 'red'"
+                        id="checkTracking"
+                        class="form-group input-group-sm"
+                        [checked]="checkTracking"
+                        [(ngModel)]="checkTracking"
+                        name="checkTracking">
+                </ui-switch>
+                <!--<ui-switch size="small" [(ngModel)]="checkTracking" [color]="checkTracking ? 'green': 'red'"></ui-switch>-->
+                <label *ngIf="!checkTracking" class="text-danger">&nbsp;[ ไม่ต้องการแทนที่ Tracking เดิม ]</label>
+                <label *ngIf="checkTracking" class="text-success">&nbsp;[ ต้องการแทนที่ Tracking เดิม ]</label>
+              </div>
+              <!--<div *ngIf="!ordersODId.value" class="input-group input-group-sm">-->
+                <form [formGroup]="deliveryForm">
+                  <!--<ng-container *ngFor="let del of order.delivery">-->
+                  <div class="form-group row" hidden>
+                    <label class="col-form-label col-sm-2 col-2">ค่าจัดส่ง</label>
+                    <div class="col-sm-10 col-10 input-group-sm">
+                      <input class="form-control"
+                             #price
+                             placeholder="ค่าจัดส่ง"
+                             [ngModel]
+                             type="text"
+                             formControlName="price"
+                             name="price"
+                             (change)="calTotalOrder()">
+                    </div>
+                  </div>
+                  <div *ngIf="checkDisable" class="form-group row">
+                    <label *ngIf="order.orderODId"
+                           class="col-form-label col-sm-2 col-2 text-center label-inverse-success text-success">
+                      <br>
+                      <br>
+                      <label *ngIf="order.orderStatusName"
+                             class="label"
+                             [ngClass]="{
+                                              'bg-process': order.orderStatusName === 'process',
+                                              'bg-waitpack': order.orderStatusName === 'waitpack',
+                                              'bg-print': order.orderStatusName === 'print',
+                                              'bg-pack': order.orderStatusName === 'pack',
+                                              'bg-delivery': order.orderStatusName === 'delivery',
+                                              'bg-success': order.orderStatusName === 'success',
+                                              'bg-cancel': order.orderStatusName === 'cancel',
+                                              'bg-fail': order.orderStatusName === 'fail'
+                                            }"
+                             placement="top" ngbTooltip="{{order.orderStatusName|titlecase}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"> </i>-->
+                        {{order.orderStatusName|titlecase}}
+                      </label>
+                      <br>
+                      <i class="fa fa-check-square" style="font-size:25px;"></i>
+                    </label>
+                    <div *ngIf="order.orderODId"
+                         class="col-sm-10 col-10 text-success input-group-sm label-inverse-success">
+                      <b>หมายเลขคำสั่งซื้อ : </b>
+                      <a class="cursor text-primary" target="_blank"
+                         [routerLink]="['/management/orders/orders-edit/name/'+order.orderODId]">
+                        {{order.orderODId}}
+                      </a>
+                      <br>
+                      <b>ชื่อลูกค้า : </b>
+                      <a class="cursor text-primary" target="_blank"
+                         [routerLink]="['/management/customers/customers-edit/'+order.customer.orderCustomerId]">
+                        {{order.customer.orderCustomerNameSurname}}
+                        โทร. {{order.customer.orderCustomerTel}}
+                      </a>
+                      <br>
+                      <b>ที่อยู่จัดส่ง : </b>{{order.customer.orderCustomerAddress}}, {{order.customer.orderCustomerZipcode}}<br>
+                      <b>การจัดส่ง : </b>{{orderShipmentName.toUpperCase()}}<br>
+                      <b>ค่าจัดส่ง : </b>{{orderPrice}}<br>
+                      <b>ส่วนลด : </b>{{orderDiscount}}<br>
+                      <b>ยอดรวม : </b>{{order.orderTotal}}<br>
+                    </div>
+                  </div>
+                  <div *ngIf="!order.orderODId"
+                       class="form-group row">
+                    <label *ngIf="order.orderODId===''"
+                           class="col-form-label col-sm-2 col-2 label-inverse-danger text-center">
+                      <br>
+                      <br>
+                      <label *ngIf="order.orderStatusName"
+                             class="label"
+                             [ngClass]="{
+                                              'bg-process': order.orderStatusName === 'process',
+                                              'bg-waitpack': order.orderStatusName === 'waitpack',
+                                              'bg-print': order.orderStatusName === 'print',
+                                              'bg-pack': order.orderStatusName === 'pack',
+                                              'bg-delivery': order.orderStatusName === 'delivery',
+                                              'bg-success': order.orderStatusName === 'success',
+                                              'bg-cancel': order.orderStatusName === 'cancel',
+                                              'bg-fail': order.orderStatusName === 'fail'
+                                            }"
+                             placement="top" ngbTooltip="{{order.orderStatusName|titlecase}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"> </i>-->
+                        {{order.orderStatusName|titlecase}}
+                      </label>
+                      <br>
+                      <i class="fa fa-times" style="font-size:25px;"></i>
+                    </label>
+                    <div *ngIf="order.orderODId===''"
+                         class="col-sm-10 col-10 input-group-sm dark-grey-text label-inverse-danger">
+                      <b>หมายเลขคำสั่งซื้อ : </b>{{mID}}<br>
+                      <b>ชื่อลูกค้า : </b><br>
+                      <b>ที่อยู่จัดส่ง : </b><br>
+                      <b>การจัดส่ง : </b><br>
+                      <b>ค่าจัดส่ง : </b><br>
+                      <b>ส่วนลด : </b><br>
+                      <b>ยอดรวม : </b><br>
+                    </div>
+                  </div>
+                  <div *ngIf="checkDisable"
+                       class="form-group row justify-content-center align-bottom">
+                    <button class="btn btn-sm btn-round btn-inline bg-success"
+                            *ngIf="checkDisable">
+                      <!--<i class="fa fa-check-square"-->
+                      <i class="fa fa-barcode"
+                         style="font-size:20px;color:white">&nbsp;&nbsp;พร้อมใช้งาน Tracking Number</i>
+                    </button>
+                  </div>
+                  <div *ngIf="orderProducts.length > 0"
+                       class="form-group row justify-content-center align-bottom">
+                    <audio autoplay *ngIf="checkProducts">
+                      <source src="assets/sound/success.ogg" type="audio/ogg">
+                      <source src="assets/sound/success.wav" type="audio/wav">
+                      <source src="assets/sound/success.mp3" type="audio/mp3">
+                    </audio>
+                    <button type="button"
+                            class="btn btn-sm btn-round btn-inline bg-success"
+                            *ngIf="checkProducts"
+                            (click)='onSubmitOrdersCheck(order.orderODId)'>
+                      <i class="fa fa-check"
+                         style="font-size:15px;color:white">&nbsp;&nbsp;ข้อมูลเสร็จสมบูรณ์</i>
+                    </button>
+                  </div>
+                  <div *ngIf="!checkDisable && !checkProducts && checkWaitProducts"
+                       class="form-group row justify-content-center align-bottom">
+                    <button *ngIf="checkWaitProducts"
+                            class="btn btn-sm btn-round btn-outline bg-fail">
+                      <i class="fa fa-pause-circle"
+                         style="font-size:15px;color:white">&nbsp;&nbsp;รอการยืนยันออเดอร์ของสินค้า</i>
+                    </button>
+                  </div>
+                  <!--</ng-container>-->
+                </form>
+                <form [formGroup]="orderForm" novalidate autocomplete="off" >
+                  <!--<ng-container *ngFor="let o of dataOrder">-->
+                  <div class="form-group row" hidden>
+                    <label class="col-form-label col-sm-2 col-2">ส่วนลด</label>
+                    <div class="col-sm-10 col-10 input-group-sm">
+                      <input class="form-control"
+                             #discount
+                             [ngModel]="order.orderDiscount"
+                             placeholder="ส่วนลด"
+                             type="text"
+                             formControlName="discount"
+                             name="discount"
+                             (change)="calTotalOrder()">
+                    </div>
+                  </div>
+                  <div class="form-group row" hidden>
+                    <label class="col-form-label col-sm-2 col-2">ยอดรวม</label>
+                    <div class="col-10 col-sm-10 input-group-sm">
+                      <input class="form-control"
+                             #total
+                             placeholder="ยอดรวม"
+                             [ngModel]="order.orderTotal"
+                             name="total"
+                             type="text"
+                             formControlName="total">
+                    </div>
+                  </div>
+                  <div *ngIf="order.orderODId" class="form-group input-group-sm">
+                    <input type="number" hidden
+                           disabled="readOnly"
+                           id="orderId"
+                           #orderId
+                           class="form-control form-txt-primary"
+                           [ngModel]="order.orderId"
+                           formControlName="orderId"
+                           name="orderId">
+                  </div>
+                  <div *ngIf="order.orderODId" class="form-group input-group-sm">
+                    <input type="text" hidden
+                           disabled="readOnly"
+                           id="orderODId"
+                           #orderODId
+                           class="form-control form-txt-primary"
+                           [ngModel]="order.orderODId"
+                           formControlName="orderODId"
+                           name="orderODId">
+                  </div>
+                  <!--</ng-container>-->
+                </form>
+              <!--</div>-->
+            </div>
+          </div>
+        </div>
+        <!-- card with header end -->
+
+        <!-- card with header start -->
+        <div class="col-md-6 col-xl-6 col-sm-6">
+          <div class="card" *ngIf="checkDisable">
+            <!--<div class="card-header">-->
+            <!--<h5>รายการสินค้า</h5>-->
+            <!--</div>-->
+            <div class="card-block">
+              <div class="input-group input-group-sm">
+                <input id="orderTracking"
+                       maxlength="13"
+                       class="form-control text-primary"
+                       placeholder="สแกนข้อมูล EMS (Tracking Number)"
+                       type="text"
+                       #orderTracking
+                       [disabled]="checkProducts"
+                       name="orderTracking"
+                       (keyup.enter)="findOrderTracking(orderTracking.value, OrderEditForm.value.checkTracking)">
+                       <!--(keyup.enter)="findOrderTracking(orderTracking.value);orderTracking.value=''">-->
+                <span class="input-group-append">
+                  <label class="input-group-text">
+                    <i class="fa fa-barcode" aria-hidden="true"></i>
+                  </label>
+                </span>
+              </div>
+
+              <div *ngIf="checkDisable"
+                   class="form-group row justify-content-center align-bottom">
+                <button class="btn btn-sm btn-round btn-inline bg-pack"
+                        *ngIf="checkStatusTracking">
+                  <!--<i class="fa fa-check-square"-->
+                  <i class="fa fa-check-square"
+                     style="font-size:20px;color:white">&nbsp;&nbsp;[ {{order.orderTracking}} ]</i>
+                </button>
+              </div>
+              <!--<div *ngIf="orderProducts.length > 0"-->
+                   <!--class="form-group row justify-content-center align-bottom">-->
+                <!--<audio autoplay *ngIf="checkProducts">-->
+                  <!--<source src="assets/sound/success.ogg" type="audio/ogg">-->
+                  <!--<source src="assets/sound/success.wav" type="audio/wav">-->
+                  <!--<source src="assets/sound/success.mp3" type="audio/mp3">-->
+                <!--</audio>-->
+                <!--<button type="button"-->
+                        <!--class="btn btn-sm btn-round btn-inline bg-success"-->
+                        <!--*ngIf="checkProducts"-->
+                        <!--(click)='onSubmitOrdersCheck(order.orderODId)'>-->
+                  <!--<i class="fa fa-check"-->
+                     <!--style="font-size:15px;color:white">&nbsp;&nbsp;ข้อมูลเสร็จสมบูรณ์</i>-->
+                <!--</button>-->
+              <!--</div>-->
+            </div>
+          </div>
+        </div>
+
+        <!-- card with header start -->
+        <div *ngIf="checkDisable" class="col-md-12 col-xl-12 col-sm-12">
+          <div class="card">
+            <!--<div class="card-header">-->
+            <!--<h5>รายการสินค้า</h5>-->
+            <!--</div>-->
+            <div class="card-block form-group">
+              <!--<label>ค้นหารายการสินค้า</label>-->
+              <!--<input class="form-control form-txt-primary input-group"-->
+              <!--name="searchProduct">-->
+              <!--<div class="form-group">-->
+              <div class="input-group input-group-sm">
+              </div>
+              <div *ngIf="orderProducts.length > 0"  class="table-responsive table-responsive-sm form-group input-group-sm">
+                <table class="table table-xs table-responsive-sm table-hover text-sm-center">
+                  <thead class="bg-light">
+                  <tr>
+                    <th>สต๊อกคงเหลือ</th>
+                    <th>#ชื่อสินค้า</th>
+                    <th>รหัส</th>
+                    <th>จำนวน</th>
+                    <th *ngIf="!checkDisable">ที่ต้องการ</th>
+                    <th>ราคา</th>
+                    <th>ยอดรวม</th>
+                    <th *ngIf="!disabled">แก้ไข</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let product of orderProducts; let i = index;">
+                    <td>{{ product.remain }}</td>
+                    <td class="text-sm-left">
+                      <img [src]="product.image" class="img-40">
+                      &nbsp;&nbsp;{{ product.name }}
+                      ({{(product.remain)}})
+                    </td>
+                    <td>
+                      <a class="cursor text-primary" target="_blank"
+                         [routerLink]="['/management/products/products-edit/'+product.id]">
+                        {{ product.code }}
+                      </a>
+                    </td>
+                    <td *ngIf="!disabled">
+                      <ng-container *ngIf="!disabled">
+                        <input type="number"
+                               class="form-control-sm text-sm-center"
+                               [size]="5"
+                               [disabled]="true"
+                               name="amount-{{ i }}"
+                               [min]="1" [max]="product.max"
+                               [(ngModel)]="product.amount"
+                               (change)="onChangeProductAmount(product)"
+                               (click)="onChangeProductAmountCheck(product)"
+                               (keydown)="onChangeProductAmountCheck(product)">
+                      </ng-container>
+                    </td>
+                    <td *ngIf="!checkDisable">
+                      <ng-container>
+                        <input type="number"
+                               class="form-control-sm text-sm-center"
+                               [size]="5"
+                               [disabled]="true"
+                               name="checkamount{{i}}"
+                               [min]="0" [max]="product.amount"
+                               [(ngModel)]="product.checkamount">
+                        <!--(change)="onChangeProductAmount(product)"-->
+                        <!--(click)="onChangeProductAmountCheck(product)"-->
+                        <!--(keydown)="onChangeProductAmountCheck(product)">-->
+                      </ng-container>
+                    </td>
+
+                    <td>{{product.price}}</td>
+                    <td>{{product.total}}</td>
+                    <td *ngIf="product.checkamount < product.amount">
+                      <div class="text-center"
+                           [hidden]="product.checkamount === product.amount">
+                        <!--<label *ngIf="product.checkamount !== product.amount"-->
+                        <label *ngIf="!checkDisable"
+                               class="badge badge-inverse-danger">Require amount!!!
+                        </label>
+                        <label *ngIf="checkDisable" class="badge badge-inverse-success">Complete!!!</label>
+                      </div>
+                    </td>
+                    <td *ngIf="product.checkamount === product.amount">
+                      <div *ngIf="product.checkamount === product.amount" class="text-center"
+                           [hidden]="product.checkamount !== product.amount">
+                        <label class="badge badge-inverse-success">Complete True.</label>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                  <tfoot *ngIf="orderProducts.length > 0">
+                  <tr class="text-sm-center">
+                    <td colspan="8" *ngIf="checkProducts">
+                      <!--<div class="row">-->
+                      <div class="col-12 col-sm-12 col-md-12 text-center">
+                        &nbsp;
+                        <button type="button"
+                                *ngIf="checkProducts"
+                                class="label badge-inverse-success text-success"
+                                (click)='onSubmitOrdersCheck(order.orderODId)'>
+                          <i class="fa fa-check">&nbsp;CheckOrders</i>
+                        </button>
+                      </div>
+                      <!--</div>-->
+                    </td>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- card with header end -->
+      </div>
+    </div>
+  </div>
+</form>
+<!-- // End New data check orders // -->

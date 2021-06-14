@@ -1,0 +1,403 @@
+<div class="card">
+  <div class="card-header">
+    <h5>ข้อมูลผู้ใช้งานระบบ</h5>
+    <button type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+            (click)="userFormModal.show('userModal'); setDateNow(); resetFile('add');">
+      <i class="icofont icofont-plus m-r-5"></i>
+      เพิ่มผู้ใช้งานระบบ
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="table-content crm-table">
+      <div class="project-table">
+        <div id="crm-contact" class="dt-responsive">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              <div>
+                <label class="label-control">แสดง
+                  <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                    <option [ngValue]="100">100</option>
+                  </select>
+                  แถว
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+              <div style="text-align: right;">
+                <label class="input-group-sm">ค้นหา:
+                  <input type="search"
+                         [(ngModel)]="filterQuery"
+                         class="form-control input-sm full-data-search"
+                         placement="top" ngbTooltip="ค้นหาข้อมูลผู้ใช้งานระบบ"
+                         placeholder="Search name">
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive-sm">
+            <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                   [mfData]="users | dataFilterUser : filterQuery"
+                   #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage"
+                   [(mfSortBy)]="sortBy"
+                   [(mfSortOrder)]="sortOrder">
+              <thead class="thead-light">
+              <tr>
+                <th>
+                  <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter>รูปภาพ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="userName">ชื่อผู้ใช้งานระบบ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="userEmail">อีเมลล์</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="userLevel">สิทธิ์ผู้ใช้งาน</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="userStatus">สถานะ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="userCreated">วันที่สร้าง</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter>Action</mfDefaultSorter>
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of mf.data; let i = index;">
+                <td>#{{item.index}}</td>
+                <td class="text-center"><img class="img-40" [src]="item.userImage"></td>
+                <td>
+                  <a class="option-hover" placement="top" ngbTooltip="{{item.userName}}">
+                    <!--<label class="text-info">-->
+                    <label class="text-info">
+                      {{item.userName}}
+                    </label>
+                  </a>
+                </td>
+                <td>
+                  <a class="option-hover" placement="top" ngbTooltip="{{item.userEmail}}">
+                    <label class="label bg-default label-inverse-primary">
+                      <i class="fa fa-envelope" aria-hidden="true">&nbsp;</i>
+                      {{item.userEmail}}
+                    </label>
+                  </a>
+                </td>
+                <!--
+                <label *ngIf="value"
+                       class="label text-sm-center"
+                       [ngClass]="{
+                                  'bg-process': value === 'process',
+                                  'bg-waitpack': value === 'waitpack',
+                                  'bg-print': value === 'print',
+                                  'bg-pack': value === 'pack',
+                                  'bg-delivery': value === 'delivery',
+                                  'bg-success': value === 'success',
+                                  'bg-cancel': value === 'cancel',
+                                  'bg-fail': value === 'fail'
+                                }"
+                       placement="top" ngbTooltip="{{value|titlecase}}">
+                  {{value|titlecase}}
+                </label>
+
+                {id: 99, disabled: true, level: 'superadmin'},
+                {id: 1, disabled: true, level: 'admin'},
+                {id: 2, disabled: false, level: 'manager'},
+                {id: 3, disabled: false, level: 'stock'},
+                {id: 4, disabled: false, level: 'sale'},
+                {id: 5, disabled: false, level: 'packing'},
+                {id: 7, disabled: false, level: 'user'},
+                {id: 8, disabled: false, level: 'other'}
+                -->
+                <!--<td *ngIf="item.userLevel === 'admin'">-->
+                <td>
+                  <label *ngIf="item.userLevel"
+                         [ngClass]="{
+                                  'bg-process': item.userLevel === 'admin',
+                                  'bg-waitpack': item.userLevel === 'manager',
+                                  'bg-print': item.userLevel === 'stock',
+                                  'bg-pack': item.userLevel === 'packing',
+                                  'bg-delivery': item.userLevel === 'sale',
+                                  'bg-success': item.userLevel === 'superadmin',
+                                  'bg-cancel': item.userLevel === 'user',
+                                  'bg-fail': item.userLevel === 'other'
+                                }"
+                         class="label"
+                         placement="top" ngbTooltip="{{item.userLevel}}">
+                    {{item.userLevel}}
+                  </label>
+                </td>
+                <!--<td *ngIf="item.userLevel === 'user'">-->
+                  <!--<label class="label label-inverse-primary text-primary"-->
+                         <!--placement="top" ngbTooltip="{{item.userLevel}}">-->
+                    <!--{{item.userLevel}}-->
+                  <!--</label>-->
+                <!--</td>-->
+                <!--<td *ngIf="item.userLevel === 'other'">-->
+                  <!--<label class="label label-inverse-info text-info"-->
+                         <!--placement="top" ngbTooltip="{{item.userLevel}}">-->
+                    <!--{{item.userLevel}}-->
+                  <!--</label>-->
+                <!--</td>-->
+                <td *ngIf="item.userStatus">
+                  <label class="label bg-lime-green" placement="top" ngbTooltip="เปิดใช้งาน">เปิดใช้งาน</label>
+                </td>
+                <td *ngIf="!item.userStatus">
+                  <label class="label label-inverse-danger" placement="top" ngbTooltip="ปิดใช้งาน">ปิดใช้งาน</label>
+                </td>
+                <td>
+                  <label class="label bg-info" placement="top" ngbTooltip="{{item.userCreated | date: 'dd-MM-yyyy'}}">
+                  <i class="fa fa-calendar" aria-hidden="true"> </i>
+                  {{item.userCreated | date: 'dd-MM-yyyy'}}
+                  </label>
+                </td>
+                <td class="action-icon">
+                  <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                     (click)="viewUser(item); modalDefault.show();resetFile();"><i
+                          class="fa fa-book"></i></a>
+                  <a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"
+                     (click)="editUser(item);modalDefault.show();resetFile();"><i
+                          class="fa fa-edit"></i></a>
+                  <a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"
+                     (click)="deleteUser(item)"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="8">
+                  <mfBootstrapPaginator
+                          class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Start Model -->
+<app-modal-animation [modalID]="'userModal'" [modalClass]="'md-effect-13'" #userFormModal>
+  <h3 class="f-26 bg-primary">เพิ่มข้อมูลผู้ใช้งานระบบ</h3>
+  <div class="text-center modal-body">
+
+    <!--// Start insert data  //-->
+    <form (ngSubmit)="onSubmit(userForm);userForm.reset();" #userForm="ngForm" autocomplete="off">
+      <div class="form-group">
+        <div class="col-sm-12 col-12 col-md-12 text-center">
+          <img class="img-120" [src]="imageUrl">
+        </div>
+        <hr>
+        <div class="input-group">
+          <label class="input-group-text file">เพิ่มรูปภาพ : </label>
+          <input type="file"
+                 #Image accept="image/*"
+                 ngModel
+                 name="userImage"
+                 class="form-control file"
+                 (change)="handleFileInputAdd($event.target.files)">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="input-group-text">ชื่อผู้ใช้งานระบบ : </label>
+          <input type="text"
+                 ngModel
+                 class="form-control"
+                 name="userName"
+                 placeholder="User-Name/ชื่อผู้ใช้งานระบบ" required autofocus>
+        </div>
+      </div>
+      <div class="form-group">
+      <div class="input-group">
+        <label class="input-group-text">อีเมลล์ : </label>
+        <input type="text"
+               ngModel
+               name="userEmail"
+               class="form-control"
+               placeholder="Email/อีเมลล์">
+      </div>
+      </div>
+      <div class="form-group input-group-text text-left">
+            <label class="input-group-text">รหัสผ่าน : </label>
+            <input type="password"
+                   ngModel
+                   name="userPassword"
+                   class="form-control"
+                   placeholder="รหัสผ่านผู้ใช้งาน">
+            <label class="input-group-text">ยืนยันรหัสผ่าน : </label>
+            <input type="password"
+                   ngModel
+                   name="confirmPassword"
+                   class="form-control"
+                   placeholder="ยืนยันรหัสผ่านผู้ใช้งาน">
+      </div>
+      <div class="form-group">
+        <div class="input-group input-group-text text-left form-control-primary">
+          <label class="col-sm-4">สิทธิ์ผู้ใช้งานระบบ : </label>
+          <div class="col-sm-8">
+            <select type="text" name="userLevel" ngModel class="form-control">
+              <option [disabled]="i.disabled" *ngFor="let i of itemsLevel" [ngValue]="i.level">{{i.level}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label class="input-group-text">ล็อกอินล่าสุด : </label>
+          <input class="form-control"
+                 placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                 name="userLastlogin"
+                 readonly
+                 [(ngModel)]="modelPopup"
+                 ngbDatepicker #d="ngbDatepicker">
+          <div class="input-group-append">
+                          <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                          </span>
+          </div>
+        </div>
+      </div>
+      <button type="submit"
+              class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block">
+        บันทึก
+      </button>
+      <button type="reset" (click)="userFormModal.close('userModal')"
+              class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block">
+        ปิด
+      </button>
+    </form>
+  </div>
+
+  <button (click)="userFormModal.close('userModal')" aria-label="Close" class="md-close-btn">
+    <i class="icofont icofont-ui-close"></i>
+  </button>
+</app-modal-animation>
+
+<app-modal-basic #modalDefault>
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      # [{{ user.userId }}] - {{ user.userName }}
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefault.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body text-center">
+    <form #userUpdateForm="ngForm" autocomplete="off">
+      <div class="col-sm-12 col-12 text-center">
+        <!--<img [attr.src]="user.userImage">-->
+        <img class="img-120" [src]="showImg">
+      </div>
+      <hr>
+      <div class="input-group">
+        <div class="col-sm-4 col-4">แก้ไขรูปภาพ :</div>
+        <div class="col-sm-8 col-8">
+          <input type="file"
+                 [disabled]="isReadOnly"
+                 #Image
+                 accept="image/*"
+                 [(ngModel)]="resetFileDefault"
+                 name="userImage"
+                 class="form-control file"
+                 (change)="handleFileInputEdit($event.target.files)">
+        </div>
+      </div>
+
+      <table class="table table-striped text-left m-t-20 table-sm table-responsive-sm">
+        <tr>
+          <td>ชื่อผู้ใช้งานระบบ :</td>
+          <td>
+            <input type="text"
+                   [disabled]="isReadOnly"
+                   value="{{user.userName}}"
+                   class="form-control"
+                   name="userName" autofocus>
+          </td>
+        </tr>
+        <tr>
+          <td>อีเมลล์ :</td>
+          <td>
+            <input type="text"
+                   [disabled]="isReadOnly"
+                   [(ngModel)]="user.userEmail"
+                   value="{{user.userEmail}}"
+                   class="form-control"
+                   name="userEmail">
+          </td>
+        </tr>
+        <tr>
+          <td>รหัสผ่าน : </td>
+          <td>
+          <input type="password"
+                     [disabled]="isReadOnly"
+                     [readonly]="true"
+                     [(ngModel)]="user.userPassword"
+                     name="userPassword"
+                     class="form-control">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="form-group form-primary">
+              <div class="form-group row">
+                <label class="col-sm-6 col-form-label">สิทธิ์ผู้ใช้งานระบบ : </label>
+                <div class="col-sm-6">
+                  <select type="text" name="userLevel" [(ngModel)]="user.userLevel" class="form-control" [disabled]="true">
+                    <option [disabled]="i.disabled" *ngFor="let i of itemsLevel" [ngValue]="i.level">{{i.level}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>ล็อกอินล่าสุด : </td>
+          <td>
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control"
+                       [disabled]="isReadOnly"
+                       readonly="true"
+                       name="userLastlogin"
+                       [(ngModel)]="modelPopupUserStartDate"
+                       ngbDatepicker #ddStart="ngbDatepicker">
+                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button"
+            class="btn btn-primary ripple light"
+            *ngIf="!isReadOnly"
+            (click)="updateUser(userUpdateForm)">
+      บันทึก
+    </button>
+    <button type="button"
+            (click)="modalDefault.hide()"
+            class="btn btn-danger ripple light">ปิด
+    </button>
+  </div>
+</app-modal-basic>

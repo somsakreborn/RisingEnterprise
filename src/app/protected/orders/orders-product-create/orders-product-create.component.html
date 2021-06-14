@@ -1,0 +1,1282 @@
+<form #OrderCreateForm="ngForm" novalidate autocomplete="off">
+    <!--<form [formGroup]="orderForm" novalidate autocomplete="off">-->
+    <!--(ngSubmit)="onSubmit(OrderCreateForm, ordersCustomerNameSurname.value,-->
+    <!--customerId.value, name2.value, name3.value, name4.value,-->
+    <!--orderPaymentDate.value, customerAddId.value, address2.value, zipcode.value);-->
+    <!--onSubmitCustomer(customerForm);">-->
+    <!--[formGroup]="ngForm"  autocomplete="off">-->
+    <!--onSubmitCustomer(customerForm);" #OrdersCreateForm [formGroup]="ngForm"  autocomplete="off">-->
+
+    <!--<form [formGroup]="customerForm" novalidate autocomplete="off">-->
+    <!--<div class="row">-->
+    <div class="col-sm-12 input-group">
+        <div class="card">
+            <!--<div class="card-header">-->
+            <!--<h5>เพิ่มข้อมูลคำสั่งซื้อ</h5>-->
+            <!--</div>-->
+            <div class="card-block">
+                <div class="row">
+                    <!-- basic card start -->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card">
+                            <!--<div class="card-header">-->
+                            <!--<h5>เพิ่มข้อมูลคำสั่งซื้อ</h5>-->
+                            <!--</div>-->
+                            <div class="card-block form-group">
+                                <!--<h4>เพิ่มข้อมูลคำสั่งซื้อ</h4>-->
+
+                                <div class="input-group input-group-sm">
+                                    <!--<input type="text" autofocus-->
+                                    <!--class="form-control form-control-round form-txt-primary input-group"-->
+                                    <!--placeholder="ค้นหาชื่อ-สกุลลูกค้า"-->
+                                    <!--ngModel-->
+                                    <!--name="Name1">-->
+                                    <input type="search"
+                                           id="typeahead-template"
+                                           #ordersCustomerNameSurnamexx
+                                           autofocus
+                                           class="form-control form-txt-primary"
+                                           placeholder="ค้นหาชื่อ-สกุลลูกค้า / เบอร์โทรศัพท์"
+                                           [(ngModel)]="modelCustomers"
+                                           [ngbTypeahead]="searchCustomer"
+                                           [inputFormatter]="formatterCustomerNameSurname"
+                                           [resultTemplate]="rtName"
+                                           name="ordersCustomerNameSurnamexx">
+                                    <!--<pre>{{modelCustomers|json}}</pre>-->
+                                    <ng-template #rtName let-r="result" let-t="term" class="input-group-sm text-sm-center text-primary">
+                                        <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                                        <!--<img [src]="'http://178.128.117.155:9999/images/kerry-cod.png'"-->
+                                        <!--class="mr-1" style="width: 16px">-->
+                                        <ngb-highlight [result]="r.customerNameSurname + ' | '+ r.customerTel" [term]="t"></ngb-highlight>
+                                    </ng-template>
+                                    <span class="input-group-append">
+                  <label class="input-group-text">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </label>
+                </span>
+                                </div>
+                                <form [formGroup]="customerForm" novalidate autocomplete="off">
+                                    <div class="form-group input-group-sm">
+                                        <!--<label class="col-sm-4 col-lg-2 col-form-label">ช่องทาง</label>-->
+                                        <select
+                                                id="orderCustomerChannelId"
+                                                #orderCustomerChannelId
+                                                name="orderCustomerChannelId"
+                                                formControlName="orderCustomerChannelId"
+                                                class="form-control text-primary input-group-sm">
+                                            <!--<option class="form-control" value="">เลือกช่องทาง</option>-->
+                                            <option
+                                                    *ngFor="let i of channels;"
+                                                    [disabled]="!i.channelStatus"
+                                                    [selected]="i.channelId === orderCustomerChannelId"
+                                                    [ngValue]="i.channelId">
+                                                {{i.channelName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!--<div class="form-group input-group-sm">-->
+                                    <!--<ng-select-->
+                                    <!--[ngClass]="'ng-select'"-->
+                                    <!--highlightColor="ligthblue"-->
+                                    <!--highlightTextColor="ligthblue"-->
+                                    <!--[options]="channels"-->
+                                    <!--name="selectOrdersChannel"-->
+                                    <!--formGroupName="selectOrdersChannel"-->
+                                    <!--filterPlaceholder="Type to search..."-->
+                                    <!--[multiple]="false"-->
+                                    <!--[allowClear]="true"-->
+                                    <!--[(ngModel)]="defualtChannels">-->
+                                    <!--&lt;!&ndash;[(ngModel)]="selectedChannel">&ndash;&gt;-->
+                                    <!--<ng-template #optionTemplate let-value="option" let-option="option">-->
+                                    <!--&lt;!&ndash;<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="famfamfam-flags {{option?.channelName.toLowerCase()}}"></div>&ndash;&gt;-->
+                                    <!--<img [src]="option.channelImage" class="img-30">&nbsp;&nbsp;-->
+                                    <!--{{option?.channelName}}-->
+                                    <!--</ng-template>-->
+                                    <!--</ng-select>-->
+                                    <!--</div>-->
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" hidden
+                                               id="orderCustomerId"
+                                               #orderCustomerId
+                                               class="form-control form-txt-primary"
+                                               placeholder="orderCustomerId"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchCustomer"
+                                               [inputFormatter]="formatterCustomerId"
+                                               formControlName="orderCustomerId"
+                                               name="orderCustomerId">
+                                        <!--[value]="customerId"-->
+                                    </div>
+                                    <ng-template #rtSocial let-r="result" let-t="term">
+                                        <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                                        <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                                        <!--class="mr-1" style="width: 16px">-->
+                                        <ngb-highlight [result]="r.customerSocial" [term]="t"></ngb-highlight>
+                                    </ng-template>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text" hidden
+                                               id="orderCustomerCMId"
+                                               #orderCustomerCMId
+                                               class="form-control form-txt-primary"
+                                               placeholder="customerCMId"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchCustomer"
+                                               [inputFormatter]="formatterCustomerCMId"
+                                               formControlName="orderCustomerCMId"
+                                               name="orderCustomerCMId">
+                                    </div>
+                                    <div class="form-group input-group-sm">
+                                        <input type="text"
+                                               id="orderCustomerSocial"
+                                               class="form-control form-txt-primary"
+                                               placeholder="ชื่อโซลเชียล"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchSocial"
+                                               [inputFormatter]="formatterSocial"
+                                               [resultTemplate]="rtSocial"
+                                               #orderCustomerSocial
+                                               formControlName="orderCustomerSocial"
+                                               name="orderCustomerSocial">
+                                    </div>
+                                    <ng-template #rtTel let-r="result" let-t="term">
+                                        <ngb-highlight [result]="r.customerTel" [term]="t"></ngb-highlight>
+                                    </ng-template>
+                                    <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'orderCustomerTel')">
+                                        <input type="text"
+                                               required
+                                               id="orderCustomerTel"
+                                               class="form-control form-txt-primary"
+                                               minlength="10"
+                                               maxlength="10"
+                                               placeholder="เบอร์โทรศัพท์"
+                                               (keypress)="onKeypressPhone($event)"
+                                               (paste)="onPastePhone($event)"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchTel"
+                                               [inputFormatter]="formatterTel"
+                                               [resultTemplate]="rtTel"
+                                               #orderCustomerTel
+                                               formControlName="orderCustomerTel"
+                                               name="orderCustomerTel">
+                                    </div>
+                                    <!--<ng-template #rtNameSur let-r="result" let-t="term">-->
+                                    <!--<ngb-highlight [result]="r.customerNameSurname" [term]="t"></ngb-highlight>-->
+                                    <!--</ng-template>-->
+                                    <div class="form-group input-group-sm">
+                                        <input type="text"
+                                               id="orderCustomerNameSurname"
+                                               class="form-control form-txt-primary"
+                                               placeholder="ชื่อ-สกุลลูกค้า"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchCustomer"
+                                               [inputFormatter]="formatterCustomerNameSurname"
+                                               [resultTemplate]="rtName"
+                                               #orderCustomerNameSurname
+                                               formControlName="orderCustomerNameSurname"
+                                               name="orderCustomerNameSurname">
+                                    </div>
+                                    <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'orderCustomerIdhome')">
+                                        <input autocomplete="off"
+                                               id="orderCustomerIdhome"
+                                               #orderCustomerIdhome
+                                               class="form-control form-txt-primary"
+                                               placeholder="บ้านเลขที่/อาคาร/ซอย/ถนน" type="text"
+                                               [ngModel]="modelCustomers"
+                                               [ngbTypeahead]="searchIdhome"
+                                               [inputFormatter]="formatterIdhome"
+                                               [resultTemplate]="rtIdhome"
+                                               name="orderCustomerIdhome"
+                                               formControlName="orderCustomerIdhome">
+                                    </div>
+                                    <ng-template #rtIdhome let-r="result" let-t="term">
+                                        <ngb-highlight [result]="r.customerIdhome" [term]="t"></ngb-highlight>
+                                    </ng-template>
+                                    <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'address2')">
+                                        <input
+                                                #address2
+                                                id="address2"
+                                                class="form-control form-control-sm form-txt-primary"
+                                                placeholder="ตำบล/อำเภอ/จังหวัด" type="text"
+                                                [ngModel]
+                                                name="address2"
+                                                formControlName="address2">
+                                    </div>
+                                    <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'zipcode')">
+                                        <input id="zipcode" required
+                                               #zipcode
+                                               minlength="5"
+                                               maxlength="5"
+                                               class="form-control form-txt-primary"
+                                               placeholder="รหัสไปรษณีย์" type="text"
+                                               [ngModel]
+                                               name="zipcode"
+                                               formControlName="zipcode">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- basic card end -->
+
+                    <!-- card with header start -->
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card">
+                            <!--<div class="card-header">-->
+                            <!--<h5>ที่พักข้อมูล</h5>-->
+                            <!--</div>-->
+                            <div class="card-block form-group">
+                <textarea rows="15"
+                          id="stayData"
+                          #stayData
+                          class="form-control form-control-sm input-group"
+                          placeholder="ที่พักข้อมูล"
+                          [ngModel]=""
+                          name="stayData">
+                </textarea>
+                                <!--[ngModel]="'วิฑูรย์ มูลแก้ว\n087/*-*/*/\*-/&#45;&#45;1755886\nวิฑูรย์ มูลแก้ว\n89 หมู่ 10 บ้านป่าตัน\nต.เหมืองจี้ อ.เมืองลำพูน จ.ลำพูน\n51000\nหมายเหตุ: 89 หมู่ 10 บ้านป่าตัน ต.เหมืองจี้ อ.เมืองลำพูน จ.ลำพูน 51000'"-->
+                                <button type="button"
+                                        [disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"
+                                        (click)="!disabled;
+                          onSubmitCustomer(
+                          orderCustomerChannelId.value,
+                          orderCustomerId.value,
+                          orderCustomerCMId.value,
+                          orderCustomerSocial.value,
+                          orderCustomerTel.value,
+                          orderCustomerNameSurname.value,
+                          orderCustomerIdhome.value,
+                          address2.value,
+                          zipcode.value,
+                          OrderCreateForm,
+                          method.value,
+                          'false'
+                          );"
+                                        class="btn btn-sm btn-primary ripple light">
+                                    <!--(ngSubmit)="!ngForm.invalid; onSubmitCustomer(customerForm);"-->
+                                    <!--orderPaymentDate.value,-->
+                                    <!--orderPaymentTime.value-->
+                                    บันทึก
+                                </button>
+                                &nbsp;
+                                <button type="button"
+                                        [disabled]="saving || orderForm.invalid || deliveryForm.invalid || deliveryForm.invalid ||(orderProducts.length === 0)"
+                                        (click)="!disabled;
+                          onSubmitCustomer(
+                          orderCustomerChannelId.value,
+                          orderCustomerId.value,
+                          orderCustomerCMId.value,
+                          orderCustomerSocial.value,
+                          orderCustomerTel.value,
+                          orderCustomerNameSurname.value,
+                          orderCustomerIdhome.value,
+                          address2.value,
+                          zipcode.value,
+                          OrderCreateForm,
+                          method.value,
+                          'true'
+                          );"
+                                        class="btn btn-sm btn-success ripple light">
+                                    <!--(ngSubmit)="!ngForm.invalid; onSubmitCustomer(customerForm);"-->
+                                    <!--orderPaymentDate.value,-->
+                                    <!--orderPaymentTime.value-->
+                                    บันทึก-สร้างใหม่
+                                </button>
+                                &nbsp;
+                                <button type="button" [routerLink]="['/management/orders']" class="btn btn-sm btn-dark">
+                                    ย้อนกลับ
+                                </button>
+                                &nbsp;
+                                <!--<button type="button"-->
+                                <!--(click)="getStayData(stayData.value);"-->
+                                <!--class="btn btn-sm btn-out-dashed btn-grd-success">-->
+                                <!--ดูดข้อมูลจากที่พัก-->
+                                <!--</button>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card with header end -->
+
+                    <!-- card with header, footer start -->
+
+                    <div class="col-md-6 col-xl-4">
+
+                        <div class="card">
+                            <!--<div class="card-header">-->
+                            <!--<h5>การจัดส่ง</h5>-->
+                            <!--</div>-->
+                            <!--<form [formGroup]="paymentForm" novalidate autocomplete="off">-->
+                            <div class="card-block form-group input-group-sm">
+                                <!--<label>dada</label>-->
+                                <form [formGroup]="paymentForm" novalidate autocomplete="off">
+                                    <!--</div>-->
+                                    <!--<div class="card-block input-group">-->
+                                    <!--<label class="col-sm-4 col-lg-2 col-form-label">ช่องทาง</label>-->
+                                    <!--formControlName="orderpaymentId"-->
+                                    <label>การชำระเงิน</label>
+                                    <select
+                                            #method
+                                            formControlName="method"
+                                            [(ngModel)]="method.value"
+                                            class="form-control text-primary input-group">
+                                        <option value="cod">เก็บเงินปลายทาง</option>
+                                        <option value="banktranfer">โอนเงินผ่านบัญชี</option>
+                                    </select>
+                                    <select type="text"
+                                            #orderShipmentId
+                                            name="orderShipmentId"
+                                            formControlName="orderShipmentId"
+                                            class="form-control text-primary input-group">
+                                        <!--<option class="form-control" value="">เลือกรูปแบบการจัดส่ง</option>-->
+                                        <option
+                                                *ngFor="let i of shipments;"
+                                                [disabled]="!i.shipmentStatus"
+                                                [selected]="i.shipmentId === orderShipmentId"
+                                                [ngValue]="i.shipmentId">
+                                            {{i.shipmentName}}
+                                        </option>
+                                    </select>
+                                    <!--// banks-tranfer //-->
+                                    <div *ngIf="method.value === 'banktranfer'">
+                                        <select
+                                                #orderBankId
+                                                name="orderBankId"
+                                                formControlName="orderBankId"
+                                                class="form-control text-primary input-group">
+                                            <!--<option class="form-control" value="">เลือกรูปแบบการจัดส่ง</option>-->
+                                            <option
+                                                    *ngFor="let i of banks;"
+                                                    [disabled]="!i.bankStatus"
+                                                    [selected]="i.bankId === orderBankId"
+                                                    [ngValue]="i.bankId">
+                                                {{i.bankName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <div class="form-group input-group-sm" *ngIf="method.value === 'banktranfer'">
+                                    <div class="form-group">
+                                        <div class="col-sm-12 col-12 col-md-12 text-center">
+                                            <img class="img-80" [src]="imageUrl">
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <!--<div class="input-group">-->
+                                            <!--<label >อัพโหลดสลิป :</label>-->
+                                            <div class="input-group-append">
+                                      <span class="input-group-text">
+                                        <i class="icofont icofont-ui-image"></i>
+                                      </span>
+                                            </div>
+                                            <input type="file"
+                                                   id="orderPaymentImage"
+                                                   #Image accept="image/*"
+                                                   ngModel
+                                                   name="orderPaymentImage"
+                                                   class="form-control form-control-sm file text-primary input-group"
+                                                   (change)="handleFileInputAdd($event.target.files)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group-sm input-group" *ngIf="method.value === 'banktranfer'">
+                                    <!--<div class="col-sm-6">-->
+                                    <!--<label>วันที่ </label>-->
+                                    <!--<label>-->
+                                    <!--<i class="fa fa-calendar" aria-hidden="true"> </i>-->
+                                    <!--</label>-->
+                                    <div class="input-group-append">
+                          <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                          </span>
+                                    </div>
+                                    <input class="form-control"
+                                           #orderPaymentDate
+                                           [readonly]="true"
+                                           placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                                           name="orderPaymentDate"
+                                           [(ngModel)]="modelPopup"
+                                           ngbDatepicker #d="ngbDatepicker"
+                                           (click)="d.toggle()">
+
+                                    <!--<div class="input-group-append">-->
+                                    <!--<span class="input-group-text">-->
+                                    <!--<i class="icofont icofont-ui-clock"></i>-->
+                                    <!--</span>-->
+                                    <!--</div>-->
+                                    <!--<input type="time"-->
+                                    <!--name="orderTime"-->
+                                    <!--#orderTime-->
+                                    <!--[textMask]="{mask: maskUsTime}"-->
+                                    <!--id="orderTime"-->
+                                    <!--class="form-control"-->
+                                    <!--[ngModel]="checkTime(modelTime.hour)+':'+checkTime(modelTime.minute)" required="">-->
+
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="form-group input-group">-->
+                                    <!--<div *ngIf="method.value === 'banktranfer'">-->
+                                    <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="icofont icofont-ui-clock"></i>
+                          </span>
+                                    </div>
+                                    <input type="text"
+                                           id="orderPaymentTime"
+                                           #orderPaymentTime
+                                           class="form-control"
+                                           [textMask]="{mask: maskUsTime}"
+                                           [ngModel]="checkTime(modelTime.hour)+':'+checkTime(modelTime.minute)"
+                                           name="orderPaymentTime">
+                                </div>
+                                <div class="form-group">
+                        <textarea rows="3"
+                                  id="orderRemark"
+                                  class="form-control input-group text-warning"
+                                  placeholder="หมายเหตุ"
+                                  ngModel
+                                  name="orderRemark">
+                        </textarea>
+                                </div>
+                                <!--<input type="text"-->
+                                <!--[textMask]="{mask: maskUsbank}"-->
+                                <!--ngModel-->
+                                <!--class="form-control"-->
+                                <!--name="bankSerialNumber"-->
+                                <!--placeholder="xxx-x-xxxxx-x">-->
+                                <!--<input type="text" class="form-control"-->
+                                <!--[value]="modelTime.hour+':'+modelTime.minute" name="orderTime2">-->
+                                <!--</div>-->
+                                <!--// banks-tranfer //-->
+                                <!--<div class="form-group ">-->
+                                <!--<label>พนักงานขาย</label>-->
+                                <select class="form-control text-primary" [disabled]="true" hidden>
+                                    <option [selected]="true" [value]="ID">{{Name | titlecase}}</option>
+                                </select>
+                                <!--</div>-->
+                                <!--<select class="form-control" #method formControlName="method">-->
+                                <!--<option value="transfer">โอนเงิน</option>-->
+                                <!--<option value="collectOnDelivery">เก็บเงินปลายทาง</option>-->
+                                <!--</select>-->
+
+                            </div>
+                            <!--</form>-->
+                            <!--<div class="card-block">-->
+                            <!--<h5>Card with header</h5>-->
+                            <!--<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>-->
+                            <!--</div>-->
+                            <!--<div class="card-footer">-->
+                            <!--<p class="m-b-0"> my footer</p>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <!-- card with header, footer end -->
+
+                    <!-- card with header start -->
+                    <div class="col-md-8 col-xl-8 col-sm-8">
+                        <div class="card">
+                            <!--<div class="card-header">-->
+                            <!--<h5>รายการสินค้า</h5>-->
+                            <!--</div>-->
+                            <div class="card-block form-group">
+                                <!--<label>ค้นหารายการสินค้า</label>-->
+                                <!--<input class="form-control form-txt-primary input-group"-->
+                                <!--name="searchProduct">-->
+                                <!--<div class="form-group">-->
+                                <div class="input-group input-group-sm">
+
+                                    <input id="searchProductInput"
+                                           autofocus
+                                           class="form-control text-primary"
+                                           placeholder="ค้นหารายการชื่อสินค้า / SKU"
+                                           type="search"
+                                           autocomplete="off"
+                                           #product
+                                           [disabled]="disabled"
+                                           (keyup)="findProduct(product.value)">
+                                    <!--<ng-select [ngClass]="'ng-select'"-->
+                                    <!--[options]="countries"-->
+                                    <!--name="selectOrdersCountry"-->
+                                    <!--[multiple]="false"-->
+                                    <!--[allowClear]="true"-->
+                                    <!--[(ngModel)]="selectedCountries">-->
+                                    <!--<ng-template #optionTemplate let-option="option">-->
+                                    <!--&lt;!&ndash;<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>&ndash;&gt;-->
+                                    <!--<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>-->
+                                    <!--{{option?.label}}-->
+                                    <!--</ng-template>-->
+                                    <!--</ng-select>-->
+                                    <!--<ng-select [ngClass]="'ng-select'"-->
+                                    <!--[options]="channels"-->
+                                    <!--name="selectOrdersChannel"-->
+                                    <!--[multiple]="false"-->
+                                    <!--[allowClear]="true"-->
+                                    <!--[(ngModel)]="defualtChannels">-->
+                                    <!--<ng-template #optionTemplate let-option="option">-->
+                                    <!--&lt;!&ndash;<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>&ndash;&gt;-->
+                                    <!--<div class="famfamfam-flags {{option?.channelName.toLowerCase()}}"></div>-->
+                                    <!--<img [src]="option?.channelImage" class="img-30">&nbsp;&nbsp;-->
+                                    <!--{{option?.channelName}}-->
+                                    <!--</ng-template>-->
+                                    <!--</ng-select>-->
+                                    <div class="dropdown-menu dropdown-search show col-12 col-xl-12 col-md-12 col-sm-12"
+                                         *ngIf="searchProducts?.length > 0">
+                                        <div *ngFor="let p of searchProducts">
+                                            <div class="dropdown-item"
+                                                 *ngIf="searchProducts.length > 0"
+                                                 (click)="addProduct(p)">
+                                                <img src="{{p.productImage}}" class="img-30">
+                                                |
+                                                <label class="label bg-pack">
+                                                    {{p.productCodename}}
+                                                </label>
+                                                |
+                                                <label class="label bg-primary">
+                                                    {{p.productName}}
+                                                </label>
+                                                |
+                                                <label class="label bg-success">
+                                                    ({{p.productTotal - p.productHold}})
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--</div>-->
+                                </div>
+
+                                <div class="table-responsive table-responsive-sm form-group input-group-sm">
+                                    <table class="table table-xs table-responsive-sm table-hover text-sm-center">
+                                        <thead class="bg-light">
+                                        <tr>
+                                            <th>#ชื่อสินค้า</th>
+                                            <th>รหัส</th>
+                                            <th>จำนวน</th>
+                                            <th>ราคา</th>
+                                            <th>ยอดรวม</th>
+                                            <th *ngIf="!disabled">แก้ไข</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let product of orderProducts; let i = index;">
+                                            <td class="text-sm-left">
+                                                <img [src]="product.image" class="img-30">
+                                                &nbsp;&nbsp;{{ product.name }}
+                                            </td>
+                                            <td>{{ product.code }}</td>
+                                            <td>
+                                                <ng-container *ngIf="!disabled" class="form-group input-group-sm">
+                                                    <!--<div class="form-group input-group-sm">-->
+                                                    <input type="number"
+                                                           class="form-control-sm text-sm-center"
+                                                           name="amount-{{ i }}"
+                                                           min="1" [max]="product.max"
+                                                           [(ngModel)]="product.amount"
+                                                           (change)="onChangeProductAmount(product)">
+                                                    <!--</div>-->
+                                                </ng-container>
+                                            </td>
+                                            <td>{{ product.price }}</td>
+                                            <td>{{ product.total }}</td>
+                                            <td *ngIf="!disabled">
+                                                <div class="btn-close text-center" (click)="removeProduct(product)">
+                                                    <i class="fa fa-trash text-danger"></i>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card with header end -->
+                    <!-- card with header start -->
+                    <div class="col-md-4 col-xl-4 col-sm-4">
+                        <div class="card">
+                            <!--<div class="card-header">-->
+                            <!--<h5>รายการสินค้า</h5>-->
+                            <!--</div>-->
+                            <div class="card-block">
+                                <form [formGroup]="deliveryForm">
+                                    <div class="form-group row justify-content-center">
+                                        <label class="col-form-label col-sm-4 col-4">ค่าจัดส่ง</label>
+                                        <div class="col-sm-6 col-6 input-group-sm">
+                                            <input class="form-control"
+                                                   #price
+                                                   placeholder="ค่าจัดส่ง"
+                                                   [ngModel]
+                                                   type="text"
+                                                   formControlName="price"
+                                                   name="price"
+                                                   (change)="calTotalOrder()">
+                                        </div>
+                                    </div>
+                                </form>
+                                <form [formGroup]="orderForm">
+                                    <div class="form-group row justify-content-center">
+                                        <label class="col-form-label col-sm-4 col-4">ส่วนลด</label>
+                                        <div class="col-sm-6 col-6 input-group-sm">
+                                            <input class="form-control"
+                                                   #discount
+                                                   [ngModel]
+                                                   placeholder="ส่วนลด"
+                                                   type="text"
+                                                   formControlName="discount"
+                                                   name="discount"
+                                                   (change)="calTotalOrder()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row justify-content-center">
+                                        <label class="col-form-label col-sm-4 col-4">ยอดรวม</label>
+                                        <div class="col-6 col-sm-6 input-group-sm">
+                                            <input class="form-control"
+                                                   #total
+                                                   placeholder="ยอดรวม"
+                                                   [ngModel]
+                                                   name="total"
+                                                   type="text"
+                                                   formControlName="total">
+                                        </div>
+                                    </div>
+                                </form>
+                                <!--<label>ค้นหารายการสินค้า</label>-->
+                                <!--<input class="form-group form-control" >-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card with header end -->
+
+                    <!--// form payment 3 form //-->
+                    <!--<form [formGroup]="paymentForm">-->
+                    <!--<form >-->
+                    <!--<div class="form-group row justify-content-center">-->
+                    <!--<label class="col-form-label col-2" for="">ช่องทาง</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<select class="form-control" #method formControlName="method">-->
+                    <!--<option value="transfer">โอนเงิน</option>-->
+                    <!--<option value="collectOnDelivery">เก็บเงินปลายทาง</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row justify-content-center"-->
+                    <!--*ngIf="method.value === 'transfer'">-->
+                    <!--<label class="col-form-label col-2" for="">ธนาคาร</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<select class="form-control" formControlName="bank">-->
+                    <!--<option *ngFor="let bank of banks" [value]="bank.name">-->
+                    <!--{{ bank.name }}-->
+                    <!--</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row justify-content-center" style="margin-top: 30px; margin-bottom: 30px;"-->
+                    <!--*ngIf="method.value === 'transfer'">-->
+                    <!--<label class="col-form-label col-2" for="">วันที่ / เวลา</label>-->
+                    <!--<div class="col-4">-->
+                    <!--<div class="date-input">-->
+                    <!--<input class="single-daterange form-control" placeholder="dd/mm/yyyy" type="text" formControlName="date" (click)="date.toggle()"-->
+                    <!--ngbDatepicker #date="ngbDatepicker">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-2">-->
+                    <!--<ngb-timepicker #time formControlName="time" class="time"></ngb-timepicker>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row justify-content-center"-->
+                    <!--*ngIf="method.value === 'transfer'">-->
+                    <!--<div class="offset-2 col-6">-->
+                    <!--<input type="file" style="display: none" #file (change)="onChangeFile($event)">-->
+                    <!--<div class="input-group mb-3">-->
+                    <!--<div class="input-group-prepend">-->
+                    <!--<button class="btn btn-secondary" type="button" (click)="file.click()">แนบไฟล์</button>-->
+                    <!--</div>-->
+                    <!--<input class="form-control" placeholder="Choose file" type="text" [attr.disabled]="true" formControlName="file">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
+
+                    <!--<form [formGroup]="deliveryForm" style="position: relative; z-index: -1;">-->
+                    <!--<div class="form-group row justify-content-center">-->
+                    <!--<label class="col-form-label col-2" for="">วืธัจัดส่ง</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<select class="form-control" #delivery formControlName="name">-->
+                    <!--<option *ngFor="let delivery of deliveries" [value]="delivery.name">-->
+                    <!--{{ delivery.name }}-->
+                    <!--</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row justify-content-center">-->
+                    <!--<label class="col-form-label col-2" for="">ค่าจัดส่ง</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<input class="form-control" placeholder="ค่าจัดส่ง" type="text" formControlName="price" (change)="calTotalOrder()">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                    <!--<form [formGroup]="orderForm" style="position: relative; z-index: -1;">-->
+                    <!--<div class="form-group row justify-content-center">-->
+                    <!--<label class="col-form-label col-2" for="">ส่วนลด</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<input class="form-control" placeholder="ส่วนลด" type="text" formControlName="discount" (change)="calTotalOrder()">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row justify-content-center">-->
+                    <!--<label class="col-form-label col-2" for="">ยอดรวม</label>-->
+                    <!--<div class="col-6">-->
+                    <!--<input class="form-control" placeholder="ยอดรวม" type="text" formControlName="total">-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
+
+                    <!--// form payment 3 form//-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+    <!--<div class="card-subtitle text-right">-->
+    <!--<div class="text-sm-right btn">-->
+    <!--<button type="submit"-->
+    <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+    <!--(click)="!disabled;-->
+    <!--onSubmitCustomer(-->
+    <!--orderCustomerChannelId.value,-->
+    <!--orderCustomerId.value,-->
+    <!--orderCustomerSocial.value,-->
+    <!--orderCustomerTel.value,-->
+    <!--orderCustomerNameSurname.value,-->
+    <!--orderCustomerIdhome.value,-->
+    <!--address2.value,-->
+    <!--zipcode.value-->
+    <!--);"-->
+    <!--class="btn btn-sm btn-out-dashed btn-grd-success">-->
+    <!--&lt;!&ndash;(ngSubmit)="!ngForm.invalid; onSubmitCustomer(customerForm);"&ndash;&gt;-->
+    <!--บันทึก-->
+    <!--</button>-->
+    <!--&nbsp;-->
+    <!--&lt;!&ndash;&nbsp;[disabled]="!submitted"&ndash;&gt;-->
+    <!--<button type="reset" class="btn btn-sm btn-out-dashed btn-grd-info">-->
+    <!--ยกเลิก-->
+    <!--</button>-->
+    <!--&nbsp;-->
+    <!--<button type="button" [routerLink]="['/management/orders']" class="btn btn-sm btn-out-dashed btn-grd-dark">-->
+    <!--ย้อนกลับ-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--</div>-->
+</form>
+
+
+<!--<div class="row">-->
+<!--<div class="col-sm-12">-->
+<!--&lt;!&ndash;<form (ngSubmit)="onSubmit(OrdersCreateForm); onSubmitCustomer(customerForm);" #OrdersCreateForm="ngForm" autocomplete="off">&ndash;&gt;-->
+
+<!--<div class="card-subtitle text-right">-->
+<!--<div class="text-sm-right btn">-->
+<!--<button type="submit" class="btn btn-out-dashed btn-grd-primary">-->
+<!--บันทึก-->
+<!--</button>-->
+<!--&nbsp;-->
+<!--<button type="reset" class="btn btn-out-dashed btn-grd-info">-->
+<!--ยกเลิก-->
+<!--</button>-->
+<!--&nbsp;-->
+<!--<button type="button" [routerLink]="['/management/orders']" class="btn btn-out-dashed btn-grd-dark">-->
+<!--ย้อนกลับ-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash; add card 1 start &ndash;&gt;-->
+<!--<app-card [title]="'เพิ่มข้อมูลคำสั่งซื้อ'" [cardOptionBlock]="false">-->
+<!--<div class="form-group row">-->
+<!--<div class="col-sm-6 mobile-inputs">-->
+<!--<h4 class="sub-title text-primary"><b>ข้อมูลทั่วไป</b></h4>-->
+<!--&lt;!&ndash;<form action="javascript:">&ndash;&gt;-->
+
+<!--<div class="form-group">-->
+<!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control form-txt-primary input-group"&ndash;&gt;-->
+<!--&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า...AutoComplete"&ndash;&gt;-->
+<!--&lt;!&ndash;[(ngModel)]="modelCustomers"&ndash;&gt;-->
+<!--&lt;!&ndash;[ngbEdit]="searchCustomer"&ndash;&gt;-->
+<!--&lt;!&ndash;[inputFormatter]="formatterCustomer"&ndash;&gt;-->
+<!--&lt;!&ndash;name="ordersCustomerNameSearch">&ndash;&gt;-->
+<!--&lt;!&ndash;<pre>{{modelCustomers|json}}</pre>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<pre class="card card-block card-header mb-3">Model: {{selectedValue | json}}</pre>&ndash;&gt;-->
+<!--&lt;!&ndash;<pre class="card card-block card-header mb-3">Selected option: {{selectedOption | json}}</pre>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<input [(ngModel)]="selectedValue"&ndash;&gt;-->
+<!--&lt;!&ndash;[typeahead]="states"&ndash;&gt;-->
+<!--&lt;!&ndash;typeaheadOptionField="name"&ndash;&gt;-->
+<!--&lt;!&ndash;(typeaheadOnSelect)="onSelect($event)"&ndash;&gt;-->
+<!--&lt;!&ndash;name="states1"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<input [(ngModel)]="selectedValue"&ndash;&gt;-->
+<!--&lt;!&ndash;[typeahead]="states222"&ndash;&gt;-->
+<!--&lt;!&ndash;typeaheadOptionField="district"&ndash;&gt;-->
+<!--&lt;!&ndash;(typeaheadOnSelect)="onSelect($event)"&ndash;&gt;-->
+<!--&lt;!&ndash;name="states2"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control">&ndash;&gt;-->
+<!--&lt;!&ndash;<input [(ngModel)]="selectedValue"&ndash;&gt;-->
+<!--&lt;!&ndash;[typeahead]="states222"&ndash;&gt;-->
+<!--&lt;!&ndash;typeaheadOptionField="amphoe"&ndash;&gt;-->
+<!--&lt;!&ndash;(typeaheadOnSelect)="onSelect($event)"&ndash;&gt;-->
+<!--&lt;!&ndash;name="states3"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control">&ndash;&gt;-->
+<!--&lt;!&ndash;<input [(ngModel)]="selectedValue"&ndash;&gt;-->
+<!--&lt;!&ndash;[typeahead]="states222"&ndash;&gt;-->
+<!--&lt;!&ndash;typeaheadOptionField="zipcode"&ndash;&gt;-->
+<!--&lt;!&ndash;(typeaheadOnSelect)="onSelect($event)"&ndash;&gt;-->
+<!--&lt;!&ndash;name="states4"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control">&ndash;&gt;-->
+
+<!--&lt;!&ndash;<ng-template #rt let-r="result" let-t="term">&ndash;&gt;-->
+<!--&lt;!&ndash;<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"&ndash;&gt;-->
+<!--&lt;!&ndash;class="mr-1" style="width: 16px">&ndash;&gt;-->
+<!--&lt;!&ndash;<ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>&ndash;&gt;-->
+<!--&lt;!&ndash;</ng-template>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<label for="typeahead-template">Search for a state:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input id="typeahead-template" type="text" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;[(ngModel)]="model" [ngbTypeahead]="search" [resultTemplate]="rt"&ndash;&gt;-->
+<!--&lt;!&ndash;name="12345"&ndash;&gt;-->
+<!--&lt;!&ndash;[inputFormatter]="formatter" />&ndash;&gt;-->
+<!--&lt;!&ndash;<hr>&ndash;&gt;-->
+<!--&lt;!&ndash;<pre>Model: {{ model | json }}</pre>&ndash;&gt;-->
+
+<!--<ng-template #rt let-r="result" let-t="term">-->
+<!--&lt;!&ndash;<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"&ndash;&gt;-->
+<!--&lt;!&ndash;<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"&ndash;&gt;-->
+<!--&lt;!&ndash;class="mr-1" style="width: 16px">&ndash;&gt;-->
+<!--<ngb-highlight [result]="r.district +'> '+ r.amphoe+'> '+r.zipcode " [term]="t"></ngb-highlight>-->
+<!--</ng-template>-->
+
+<!--<label for="typeahead-template">Search for a state:</label>-->
+<!--<input id="typeahead-template" type="text" class="form-control"-->
+<!--[(ngModel)]="model2" [ngbTypeahead]="searchx" [resultTemplate]="rt"-->
+<!--name="N1234"-->
+<!--[inputFormatter]="formatterx" />-->
+<!--<hr>-->
+<!--<input id="typeahead-template" type="text" class="form-control"-->
+<!--[ngModel]="model2" [ngbTypeahead]="searchx" [resultTemplate]="rt"-->
+<!--name="N12345678"-->
+<!--[inputFormatter]="formatterXX" />-->
+<!--<hr>-->
+<!--<label>{{model2 | json  }}</label>-->
+<!--<hr>-->
+<!--<pre>Model: {{ model2 | json }}</pre>-->
+
+<!--</div>-->
+
+<!--&lt;!&ndash; add test&ndash;&gt;-->
+<!--&lt;!&ndash;<form [formGroup]="customerForm" novalidate autocomplete="off">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group ">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group" [class.has-danger]="isInvalid(customerForm, 'address2')">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="">ตำบล/อำเภอ/จังหวัด</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input id="address2" class="form-control" placeholder="ตำบล/อำเภอ/จังหวัด" type="text" ngModel name="address2" formControlName="address2" >&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="help-block form-text with-errors form-control-feedback " *ngIf="isInvalid(customerForm, 'address2')">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<div class="help-block form-text with-errors form-control-feedback">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<ul class="list-unstyled">&ndash;&gt;-->
+<!--&lt;!&ndash;<li class="alert-danger">Address2 is required </li>&ndash;&gt;-->
+<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<div class="form-group ">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group" [class.has-danger]="isInvalid(customerForm, 'zipcode')">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="">รหัสไปรษณีย์</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input id="zipcode" class="form-control" placeholder="รหัสไปรษณีย์" type="text" ngModel name="zipcode" formControlName="zipcode" >&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="help-block form-text with-errors form-control-feedback" *ngIf="isInvalid(customerForm, 'zipcode')">&ndash;&gt;-->
+<!--&lt;!&ndash;<ul class="list-unstyled alert-danger">&ndash;&gt;-->
+<!--&lt;!&ndash;<li>Zipcode is required </li>&ndash;&gt;-->
+<!--&lt;!&ndash;</ul>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--&lt;!&ndash; add test&ndash;&gt;-->
+
+<!--<div class="form-group">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="ค้าหาข้อมูลลูกค้า...Province..."-->
+<!--[(ngModel)]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomer"-->
+<!--name="ordersCustomerNameSearch2">-->
+<!--<pre>{{modelCustomers|json}}</pre>-->
+<!--&lt;!&ndash;[inputFormatter]="formatterProvince"&ndash;&gt;-->
+<!--</div>-->
+
+<!--<div class="form-group">-->
+<!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-4 col-lg-2 col-form-label">ช่องทาง</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<select type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;name="orderChannelId"&ndash;&gt;-->
+<!--&lt;!&ndash;ngModel&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control text-primary">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<option class="form-control" value="">ช่องทาง</option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<option&ndash;&gt;-->
+<!--&lt;!&ndash;*ngFor="let i of channels"&ndash;&gt;-->
+<!--&lt;!&ndash;[disabled]="!i.channelStatus"&ndash;&gt;-->
+<!--&lt;!&ndash;[ngValue]="i.channelId">&ndash;&gt;-->
+<!--&lt;!&ndash;{{i.channelName}}&ndash;&gt;-->
+<!--&lt;!&ndash;</option>&ndash;&gt;-->
+<!--&lt;!&ndash;</select>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<div class="form-group">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="ชื่อ-สกุลลูกค้า"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerNameSurname"-->
+<!--name="ordersCustomerNameSurname">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="ชื่อโซเชียล"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerSocial"-->
+<!--name="ordersCustomerSocial">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="ทีอยู่ลูกค้า"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerTel"-->
+<!--name="ordersCustomerTel">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="ทีอยู่ลูกค้า"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="ordersCustomerAddress">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="รหัสไปรษณีย์"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerZipcode"-->
+<!--name="ordersCustomerZipcode">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary input-group"-->
+<!--placeholder="รหัสลูกค้า...AutoComplete"-->
+<!--[disabled]="true"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerId"-->
+<!--name="ordersCustomerId">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-4 col-lg-2 col-form-label">ค้นหาลูกค้า</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-8 col-lg-10">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary input-group"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;ngModel&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName11">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<input&ndash;&gt;-->
+<!--&lt;!&ndash;type="text" class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า"&ndash;&gt;-->
+<!--&lt;!&ndash;[(ngModel)]="model"&ndash;&gt;-->
+<!--&lt;!&ndash;name="customerNameSurname1234"&ndash;&gt;-->
+<!--&lt;!&ndash;[ngbTypeahead]="searchNameSurname"&ndash;&gt;-->
+<!--&lt;!&ndash;[inputFormatter]="formatter">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-4 col-lg-2 col-form-label">ค้นหาลูกค้า1</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-8 col-lg-10">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary input-group"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;ngModel&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName11">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;type="text" class="form-control"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="customerNameSurname1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[ngbTypeahead]="search1">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<pre>model : {{model1|json}}</pre>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-4 col-lg-2 col-form-label">ค้นหาลูกค้า2</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-8 col-lg-10">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary input-group"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;ngModel&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName11">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input id="typeahead-format"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;type="text" class="form-control"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="ค้าหาข้อมูลลูกค้า2"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model2"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="customerNameSurname2"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[ngbTypeahead]="search2"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[resultFormatter]="formatter">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<pre>model : {{model2|json}}</pre>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-4 col-lg-2 col-form-label">Right Add-on</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-8 col-lg-10">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control text-primary"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder="Right addon"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName2">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<span class="input-group-append" id="basic-addon3">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<label class="input-group-text">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<i class="fa fa-search" aria-hidden="true"></i>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</label>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</span>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group row">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-2">data 1</label>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<div class="col-sm-4">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder=".form-txt-warning"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName3">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-2">data 1</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-4">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder=".form-txt-default"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName4">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group row">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-2">data 1</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-4">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder=".form-txt-danger"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName5">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="col-sm-2">data 1</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-4">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;<input type="text"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;placeholder=".form-txt-success"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;[(ngModel)]="model1"&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;name="ordersName6">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;-->
+<!--&lt;!&ndash;placeholder=".form-txt-inverse"&ndash;&gt;-->
+<!--&lt;!&ndash;ngModel&ndash;&gt;-->
+<!--&lt;!&ndash;name="ordersName7">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-6">&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;-->
+<!--&lt;!&ndash;placeholder=".form-txt-info"&ndash;&gt;-->
+<!--&lt;!&ndash;ngModel&ndash;&gt;-->
+<!--&lt;!&ndash;name="ordersName8">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash; tab 2&ndash;&gt;-->
+<!--<div class="col-sm-6 mobile-inputs">-->
+<!--<h4 class="sub-title text-primary"><b>การจัดส่ง</b></h4>-->
+<!--&lt;!&ndash;<form action="javascript:">&ndash;&gt;-->
+<!--<div class="form-group">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-primary"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName1">-->
+<!--</div>-->
+<!--<div class="form-group row">-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-warning"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName2">-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-default"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName3">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="form-group row">-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-danger"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName4">-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-success"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName5">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-inverse"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName6">-->
+<!--</div>-->
+<!--<div class="col-sm-6">-->
+<!--<input type="text"-->
+<!--id="for"-->
+<!--class="form-control form-txt-primary"-->
+<!--placeholder=".form-bg-info"-->
+<!--[ngModel]="modelCustomers"-->
+<!--[ngbTypeahead]="searchCustomer"-->
+<!--[inputFormatter]="formatterCustomerAddress"-->
+<!--name="shipmentName7">-->
+<!--</div>-->
+<!--</div>-->
+<!--<hr>-->
+<!--<div class="row">-->
+<!--<div class="col-sm-12 col-xl-12">-->
+<!--<h4 class="sub-title">Multiple Select With Icon</h4>-->
+<!--<ng-select [ngClass]="'ng-select'"-->
+<!--[options]="countries"-->
+<!--name="selectOrdersCountry"-->
+<!--[multiple]="true"-->
+<!--[allowClear]="true"-->
+<!--[(ngModel)]="selectedCountries">-->
+<!--<ng-template #optionTemplate let-option="option">-->
+<!--&lt;!&ndash;<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>&ndash;&gt;-->
+<!--<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>-->
+<!--{{option?.label}}-->
+<!--</ng-template>-->
+<!--</ng-select>-->
+
+<!--<ng-select [ngClass]="'ng-select'"-->
+<!--[options]="characters"-->
+<!--[allowClear]="true"-->
+<!--[multiple]="true"-->
+<!--name="selectOrdersCharacter"-->
+<!--(selected)="onSelected($event)"-->
+<!--(deselected)="onDeselected($event)">-->
+<!--</ng-select>-->
+<!--<ng-select [ngClass]="'ng-select'"-->
+<!--[(ngModel)]="myOptionData"-->
+<!--name="myOption"-->
+<!--[options]="myOptions">-->
+<!--</ng-select>-->
+<!--</div>-->
+<!--</div>-->
+<!--<hr>-->
+<!--<div class="form-group row">-->
+<!--<div class="col-12">-->
+<!--<select id="demo-htmlselect" [ngModel] name="selectOrdersTest">-->
+<!--<option value="0" data-imagesrc="http://i.imgur.com/XkuTj3B.png"-->
+<!--data-description="Description with Facebook">Facebook</option>-->
+<!--<option value="1" data-imagesrc="http://i.imgur.com/8ScLNnk.png"-->
+<!--data-description="Description with Twitter">Twitter</option>-->
+<!--<option value="2" selected="selected" data-imagesrc="http://i.imgur.com/aDNdibj.png"-->
+<!--data-description="Description with LinkedIn">LinkedIn</option>-->
+<!--<option value="3" data-imagesrc="http://i.imgur.com/kFAk2DX.png"-->
+<!--data-description="Description with Foursquare">Foursquare</option>-->
+<!--<option value="4" data-imagesrc="/assets/images/avatar-1.jpg"-->
+<!--data-description="test-profile">profiles</option>-->
+<!--</select>-->
+<!--</div>-->
+<!--</div>-->
+<!--<hr>-->
+<!--<div class="form-group row">-->
+<!--<div class="col-sm-12 col-xl-12 m-b-30">-->
+<!--<h4 class="sub-title">Select With Icon</h4>-->
+<!--<ng-select [ngClass]="'ng-select'" [options]="countries"-->
+<!--name="selectOrdersShipments" [allowClear]="true" [(ngModel)]="selectedCountry">-->
+<!--<ng-template #optionTemplate let-option="option">-->
+<!--<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>-->
+<!--{{option?.value}} - {{option?.label}}-->
+<!--</ng-template>-->
+<!--</ng-select>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="famfamfam-flags fr"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="famfamfam-flags th"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="famfamfam-flags us"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;<img src="/assets/images/avatar-1.jpg">&ndash;&gt;-->
+<!--</div>-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+<!--</app-card>-->
+
+
+<!--&lt;!&ndash; add card 1 end &ndash;&gt;-->
+
+<!--<app-card [title]="'เพิ่มข้อมูลคำสั่งซื้อ xxx'" [cardOptionBlock]="false">-->
+<!--<div class="col-sm-12">-->
+<!--<label class="label-inverse-primary">-->
+<!--เพิ่มข้อมูลคำสั่งซื้อ xxx-->
+<!--</label>-->
+<!--</div>-->
+
+<!--</app-card>-->
+
+<!--<app-card [title]="'เพิ่มข้อมูลคำสั่งซื้อ xxx'" [cardOptionBlock]="false">-->
+<!--<div class="col-sm-12">-->
+<!--<label class="label-inverse-primary">-->
+<!--เพิ่มข้อมูลคำสั่งซื้อ xxx-->
+<!--</label>-->
+<!--</div>-->
+
+<!--</app-card>-->
+
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--</form>-->

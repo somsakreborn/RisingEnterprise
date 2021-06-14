@@ -1,0 +1,187 @@
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->
+<app-card [title]="'ยอดขายรายบุคคล ' + ' [&nbsp;วันที่:&nbsp;' + bsRangeValueDefualtStr + '&nbsp;]'"
+          [blockClass]="'tab-icon'"
+          [cardOptionBlock]="true">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-xl-12 text-left">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-xl-6 text-left">
+                    <div ngbDropdown class="btn-group dropdown-split-inverse">
+                        <button type="button" class="btn btn-sm btn-inverse light">
+                            <i class="icofont icofont-exchange"></i>เลือกทำทั้งหมด
+                        </button>
+                        <button ngbDropdownToggle type="button"
+                                class="btn btn-sm btn-inverse dropdown-toggle-split light">
+                            <span class="sr-only">Toggle primary</span>
+                        </button>
+                        <!--<div ngbDropdownMenu>-->
+                            <!--<button class="dropdown-item ripple light">-->
+                                <!--&lt;!&ndash;[disabled]="selected.length < 1"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(click)="checkedSelectedProcessToPrint(selected);">&ndash;&gt;-->
+                                <!--&lt;!&ndash;(click)="genPrintPDFmake(selected);">&ndash;&gt;-->
+                                <!--<i class="fa fa-print">&nbsp;ใบจ่าหน้าพัสดุ</i>-->
+                                <!--&lt;!&ndash;<span *ngIf="selected.length > 0"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="badge badge-inverse-success text-right">&ndash;&gt;-->
+                                <!--&lt;!&ndash;{{selected.length}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--</button>-->
+                            <!--<button class="dropdown-item ripple light">-->
+                                <!--&lt;!&ndash;[disabled]="selected.length < 1"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(click)="genBillPDFmake(selected)">&ndash;&gt;-->
+                                <!--<i class="fa fa-file-archive-o">&nbsp;ใบเสร็จ</i>-->
+                                <!--&lt;!&ndash;<span *ngIf="selected.length > 0"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="badge badge-inverse-success text-right">&ndash;&gt;-->
+                                <!--&lt;!&ndash;{{selected.length}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--</button>-->
+                            <!--<button class="dropdown-item ripple light">-->
+                                <!--&lt;!&ndash;[disabled]="selected.length < 1"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(click)="exportKerryToExcel(selected);">&ndash;&gt;-->
+                                <!--<i class="fa fa-file-excel-o">&nbsp;ส่งออก KerryEasyShip</i>-->
+                                <!--&lt;!&ndash;<span *ngIf="selected.length > 0"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="badge badge-inverse-success text-right">&ndash;&gt;-->
+                                <!--&lt;!&ndash;{{selected.length}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--</button>-->
+                            <!--<button class="dropdown-item ripple light">-->
+                                <!--&lt;!&ndash;[disabled]="selected.length < 1"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(click)="exportOrdersAllToExcel(selected);">&ndash;&gt;-->
+                                <!--<i class="fa fa-file-excel-o">&nbsp;ส่งออกคำสั่งซื้อ</i>-->
+                                <!--&lt;!&ndash;<span *ngIf="selected.length > 0"&ndash;&gt;-->
+                                <!--&lt;!&ndash;class="badge badge-inverse-success text-right">&ndash;&gt;-->
+                                <!--&lt;!&ndash;{{selected.length}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                            <!--</button>-->
+                            <!--<button class="dropdown-item ripple light">-->
+                                <!--<i class="fa fa-search">&nbsp;ค้นหาขั้นสูง</i>-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6 col-md-6 col-xl-6 text-right form-group">
+                    <div style="text-align: right;">
+                        <div class="btn-group-sm" role="group">
+                            <label class="input-group-sm text-right">จาก - ถึง
+                                <input type="text"
+                                       #rangDate
+                                       readonly="true"
+                                       placeholder="ค้นหาจากวันที่ - วันที่"
+                                       name="rangDate"
+                                       class="form-control input-sm text-sm-left full-data-search dropdown-toggle"
+                                       [bsConfig]="bsConfig"
+                                       [(ngModel)]="bsRangeValueDefualt"
+                                       bsDaterangepicker>
+                            </label>
+                            <button class="btn-sm icofont icofont-ui-search btn-primary"
+                                    (click)="fetchOrderMapUser(rangDate.value)">
+                            </button>
+
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Day');"
+                                    [ngClass]="{'active': ActiveVal === 'Day'}"
+                                    class="btn btn-sm btn-outline-primary">วันนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Tomorrow');"
+                                    [ngClass]="{'active': ActiveVal === 'Tomorrow'}"
+                                    class="btn btn-sm btn-outline-primary">เมื่อวานนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Month');"
+                                    [ngClass]="{'active': ActiveVal === 'Month'}"
+                                    class="btn btn-sm btn-outline-primary">เดือนนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Year');"
+                                    [ngClass]="{'active': ActiveVal === 'Year'}"
+                                    class="btn btn-sm btn-outline-primary">ปีนี้
+                            </button>
+                            <label class="input-group-sm">แสดง
+                                <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                    <option [ngValue]="25">25</option>
+                                    <option [ngValue]="50">50</option>
+                                    <option [ngValue]="100">100</option>
+                                    <option [ngValue]="200">200</option>
+                                </select>
+                                แถว
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive-sm">
+                <ngx-datatable
+                        class="data-table text-center"
+                        [rows]="reportData"
+                        [columnMode]="'force'"
+                        [scrollbarH]="true"
+                        [headerHeight]="50"
+                        [rowHeight]="45"
+                        [limit]="rowsOnPage"
+                        [footerHeight]="30"
+                        [selected]="selected"
+                        (select)='onSelect($event)'
+                        (activate)="onActivate($event)"
+                        [selectionType]="'checkbox'">
+                    <ngx-datatable-column name="ชื่อผู้ขาย" prop="userName">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-left text-print"
+                               placement="auto" container="body"
+                               ngbTooltip="{{value|titlecase}}">
+                                {{value|titlecase}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ตำแหน่ง" prop="userLevel">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-left">{{value|titlecase}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ค่าคอมมิสชัน" prop="userComm">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-center">{{value|currency: '฿ '}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="จำนวนออเดอร์" prop="usersSumCount">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-center">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ยอดรวมทั้งสิ้น" prop="usersTotal">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value|currency:'฿ '}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ส่วนลดรวม" prop="usersDiscount">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value|currency:'฿ '}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ค่าส่งรวม" prop="usersDelivery">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value|currency:'฿ '}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <div class="row">
+                <div class='col-sm-12 selected-column text-left'>
+                    <br><b>ทั้งหมด </b>{{reportSumODTotal}} <b>ออเดอร์</b>
+                    | <b>ยอดรวมทั้งสิ้น</b> {{reportSumPPATotal|currency:'฿ '}} <b>บาท</b>
+                    | <b>ค่าคอมมิสชั่นรวมทั้งสิ้น</b> {{reportSumCommTotal|currency:'฿ '}} <b>บาท</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-card>
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->

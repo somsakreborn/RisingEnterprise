@@ -1,0 +1,513 @@
+<div class="card">
+  <div class="card-header">
+    <h5>คลังสินค้า</h5>
+    <button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+            placement="top" ngbTooltip="เพิ่มคลังสินค้า"
+            (click)="modalDefaultWizard.show(); setDateNow(); resetFile('add');">
+      <i class="icofont icofont-plus m-r-5"></i>
+      เพิ่มคลังสินค้า
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="table-content crm-table">
+      <div class="project-table">
+        <div id="crm-contact" class="dt-responsive">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              <div>
+                <label class="label-control">แสดง
+                  <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                    <option [ngValue]="100">100</option>
+                  </select>
+                  แถว
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+              <div style="text-align: right;">
+                <label class="input-group-sm">ค้นหา:
+                  <input type="search"
+                         [(ngModel)]="filterQuery"
+                         class="form-control input-sm full-data-search"
+                         placement="top" ngbTooltip="ค้นหาข้อมูลคลังสินค้า"
+                         placeholder="Search name">
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered full-data-table text-center"
+                   [mfData]="warehouses | dataFilterWarehouse : filterQuery"
+                   #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage"
+                   [(mfSortBy)]="sortBy"
+                   [(mfSortOrder)]="sortOrder">
+              <thead class="thead-light">
+              <tr>
+                <th>
+                  <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseName">ชื่อคลังสินค้า</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseTel">เบอร์โทรศัพท์</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseComment">รายละเอียด</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseDefualt">ค่าเริ่มต้น</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseStatus">สถานะ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="warehouseCreated">วันที่สร้าง</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter>Action</mfDefaultSorter>
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of mf.data; let i = index;">
+                <td>#{{item.index}}</td>
+                <!--<td class="text-center"><img [src]="item.warehouseImage"></td>-->
+                <td>
+                  <a placement="top" ngbTooltip="{{item.warehouseName}}">
+                    <label class="text-info">
+                      {{item.warehouseName}}
+                    </label>
+                  </a>
+                </td>
+                <td>
+                  <label class="label badge-inverse-primary badge btn-round"
+                         placement="top" ngbTooltip="{{item.warehouseTel}}">
+                    <i class="fa fa-phone-square" aria-hidden="true"></i>
+                    {{item.warehouseTel}}
+                  </label>
+                </td>
+                <td>
+                  <a placement="top" ngbTooltip="{{item.warehouseComment}}">
+                    <!--<i class="fa fa-phone-square" aria-hidden="true"></i>-->
+                  {{item.warehouseComment}}
+                  </a>
+                </td>
+                <!--<td>{{item.warehouseComment}} {{testMomentTime()}}</td>-->
+                <!--<td>{{item.warehouseComment}} {{testMoment(item.warehouseCreated)}}</td>-->
+                <!--<td>{{item.warehouseComment}} {{testMomentTime()}}</td>-->
+                <td *ngIf="item.warehouseDefualt">
+                  <label class="label bg-lime-green" placement="top" ngbTooltip="เปิดค่าเริ่มต้น">เปิดค่าเริ่มต้น</label>
+                </td>
+                <td *ngIf="!item.warehouseDefualt">
+                  <label class="label label-inverse-danger" placement="top" ngbTooltip="ปิดค่าเริ่มต้น">ปิดค่าเริ่มต้น</label>
+                </td>
+                <td *ngIf="item.warehouseStatus">
+                  <label class="label bg-lime-green" placement="top" ngbTooltip="เปิดใช้งาน">เปิดใช้งาน</label>
+                </td>
+                <td *ngIf="!item.warehouseStatus">
+                  <label class="label label-inverse-danger" placement="top" ngbTooltip="ปิดใช้งาน">ปิดใช้งาน</label>
+                </td>
+                <td>
+                  <label class="label bg-info"
+                         placement="top" ngbTooltip="{{item.warehouseCreated|date: 'dd-MM-yyyy'}}">
+                    <i class="fa fa-calendar" aria-hidden="true"> </i>
+                    {{item.warehouseCreated|date: 'dd-MM-yyyy'}}
+                  </label>
+                </td>
+                <td class="action-icon">
+                  <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                     (click)="viewWarehouse(item); modalDefault.show();resetFile();"><i
+                          class="fa fa-book"></i></a>
+                  <a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"
+                     (click)="editWarehouse(item);modalDefault.show();resetFile();"><i
+                          class="fa fa-edit"></i></a>
+                  <a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"
+                     (click)="deleteWarehouse(item)"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="8">
+                  <mfBootstrapPaginator
+                          class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--// Test add Custom Wizard //-->
+<app-modal-basic #modalDefaultWizard [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      <i class="fa fa fa-cubes cubes-icon-style" aria-hidden="true"></i>
+      เพิ่มคลังสินค้า
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefaultWizard.hide(); resetFile('add');">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form (ngSubmit)="onSubmit(warehouseForm); warehouseForm.reset();" #warehouseForm="ngForm" autocomplete="off">
+      <!--<app-card [title]="'Custom Wizard'">-->
+      <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+        <wizard-step stepTitle="คลังสินค้า" navigationSymbol="&#xf1b2;"
+                     navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--// คลังสินค้า // -->
+            <!--//  imageUrl  //-->
+            <!--<div class="form-group">-->
+              <!--<div class="col-sm-12 col-12 col-md-12 text-center">-->
+                <!--<img [src]="imageUrl">-->
+              <!--</div>-->
+              <!--<div class="input-group">-->
+                <!--<label class="input-group-text">เพิ่มรูปภาพ : </label>-->
+                <!--<input type="file" multiple-->
+                       <!--#Image accept="image/*"-->
+                       <!--ngModel-->
+                       <!--name="warehouseImage"-->
+                       <!--class="form-control file"-->
+                       <!--(change)="handleFileInputAdd($event.target.files)">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--//  imageUrl  //-->
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>ชื่อคลังสินค้า : </label>
+                <div class="col-sm-12 input-group-sm d-inline">
+                  <input type="text"
+                         ngModel
+                         class="form-control form-txt-primary"
+                         placeholder="ชื่อคลังสินค้า"
+                         name="warehouseName">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>เบอร์โทรศัพท์ : </label>
+                <div class="col-sm-12 input-group-sm d-inline">
+                  <input type="text"
+                         ngModel
+                         class="form-control form-txt-primary"
+                         placeholder="เบอร์โทรศัพท์"
+                         name="warehouseTel">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>ที่อยู่ : </label>
+                <div class="col-sm-12 d-inline">
+                  <textarea
+                        ngModel
+                        class="form-control form-txt-primary"
+                        rows="3"
+                        placeholder="รายละเอียดคลังสินค้า"
+                        name="warehouseAddress">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>รายละเอียด : </label>
+                <div class="col-sm-12 d-inline">
+                  <textarea
+                          ngModel
+                          class="form-control form-txt-primary"
+                          rows="3"
+                          placeholder="รายละเอียดคลังสินค้า"
+                          name="warehouseComment">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <!--<div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">-->
+                <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline checkbox-color checkbox-primary input-group">
+                  <input type="checkbox"
+                         id="checkboxDefualtAdd"
+                         name="warehouseDefualt"
+                         checked="checked"
+                         ngModel
+                         class="form-control">
+                  <label for="checkboxDefualtAdd" class="f-left m-lg-4">
+                    ตั้งเป็นค่าเริ่มต้น
+                  </label>
+                </div>
+              <!--</div>-->
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <label class="f-left input-group-text">สถานะการใช้งาน : </label>
+                <ui-switch class="form-control input-group-text" [ngModel]="true"
+                           name="warehouseStatus"></ui-switch>
+              </div>
+            </div>
+            <!--<div class="input-group">-->
+              <!--<label class="input-group-text">คลังสินค้า : </label>-->
+              <!--<select type="text"-->
+                      <!--name="inventoryName"-->
+                      <!--ngModel class="form-control">-->
+                <!--<option class="form-control" value="">คลังสินค้า</option>-->
+                <!--<option value="Rising Warehouse">Rising Warehouse-->
+                  <!--&lt;!&ndash;*ngFor="let i of categorys"&ndash;&gt;-->
+                  <!--&lt;!&ndash;[disabled]="!i.categoryStatus"&ndash;&gt;-->
+                  <!--&lt;!&ndash;[ngValue]="i.categoryId">{{i.categoryName}}&ndash;&gt;-->
+                <!--</option>-->
+              <!--</select>-->
+            <!--</div>-->
+
+            <!--<div><label class="label-inverse-primary">{{times | date: 'yyyy-MM-dd h:mm:ss a zzzz'}}</label></div>-->
+
+            <div class="form-group">
+              <div class="input-group">
+                <label class="input-group-text">อัพเดทล่าสุด : </label>
+                <input class="form-control"
+                       [readonly]="true"
+                       placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                       name="warehouseLastupdate"
+                       [(ngModel)]="modelPopup"
+                       ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                            <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                            </span>
+                </div>
+              </div>
+            </div>
+            <!--// คลังสินค้า // -->
+
+            <div class="btn-group mt-10">
+              <button type="reset" class="btn btn-danger btn-sm" resetWizard (click)="resetFile('add');">
+                < ล้างค่า >
+              </button>
+            </div>
+            <button type="submit" resetWizard
+                    class="btn btn-primary waves-effect m--20 f-w-600 d-inline-block float-left">
+              บันทึก
+            </button>
+            <button type="button" resetWizard (click)="modalDefaultWizard.hide()"
+                    class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block float-right">
+              ปิด
+            </button>
+
+          </div>
+        </wizard-step>
+      </wizard>
+
+    </form>
+    <!--</app-card>-->
+  </div>
+
+  <div class="app-modal-footer">
+
+  </div>
+
+</app-modal-basic>
+<!--// Test Custom Wizard //-->
+
+<!--// edit && View data // -->
+<app-modal-basic #modalDefault [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title" *ngIf="isReadOnly">
+      <i class="fa fa fa-book book-icon-style" aria-hidden="true"></i>
+      วิวคลังสินค้า
+    </h4>
+    <h4 class="modal-title" *ngIf="!isReadOnly">
+      <i class="fa fa fa-edit edit-icon-style" aria-hidden="true"></i>
+      แก้ไขคลังสินค้า
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefault.hide();">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body">
+    <form #warehouseUpdateForm="ngForm" autocomplete="off">
+      <!--<app-card [title]="'Custom Wizard'">-->
+      <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+        <wizard-step stepTitle="คลังสินค้า" navigationSymbol="&#xf1b2;"
+                     navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--// คลังสินค้า // -->
+            <!--//  imageUrl  //-->
+            <!--<div class="form-group">-->
+              <!--<div class="col-sm-12 col-12 col-md-12 text-center">-->
+                <!--<img [src]="showImg" class="img img-100">-->
+              <!--</div>-->
+              <!--<div class="input-group">-->
+                <!--<label class="input-group-text file">เปลี่ยนรูปภาพ : </label>-->
+                <!--<input type="file" multiple-->
+                       <!--#Image accept="image/*"-->
+                       <!--[disabled]="isReadOnly"-->
+                       <!--[(ngModel)]="resetFileDefault"-->
+                       <!--name="warehouseImage"-->
+                       <!--class="form-control file"-->
+                       <!--(change)="handleFileInputEdit($event.target.files)">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--//  imageUrl  //-->
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                <label>ชื่อคลังสินค้า : </label>
+                <div class="col-sm-12 input-group-sm d-inline">
+                  <input type="text"
+                         [disabled]="isReadOnly"
+                         [(ngModel)]="warehouse.warehouseName"
+                         value="{{warehouse.warehouseName}}"
+                         class="form-control form-txt-primary"
+                         placeholder="ชื่อคลังสินค้า"
+                         name="warehouseName">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                <label>เบอร์โทรศัพท์ : </label>
+                <div class="col-sm-12 input-group-sm d-inline">
+                  <input type="text"
+                         [disabled]="isReadOnly"
+                         [(ngModel)]="warehouse.warehouseTel"
+                         value="{{warehouse.warehouseTel}}"
+                         class="form-control form-txt-primary"
+                         placeholder="เบอร์โทรศัพท์"
+                         name="warehouseTel">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                <label>ที่อยู่ : </label>
+                <div class="col-sm-12 input-group-sm d-inline">
+                  <input type="text"
+                         [disabled]="isReadOnly"
+                         [(ngModel)]="warehouse.warehouseAddress"
+                         value="{{warehouse.warehouseAddress}}"
+                         class="form-control form-txt-primary"
+                         name="warehouseAddress">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>รายละเอียดคลังสินค้า : </label>
+                <div class="col-sm-12 d-inline">
+                                    <textarea
+                                            [disabled]="isReadOnly"
+                                            [(ngModel)]="warehouse.warehouseComment"
+                                            [value]="warehouse.warehouseComment"
+                                            class="form-control form-txt-primary"
+                                            rows="3"
+                                            name="warehouseComment">
+                                    </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline checkbox-color checkbox-primary input-group">
+                <input type="checkbox"
+                       [disabled]="isReadOnly"
+                       id="checkboxDefualtEdit"
+                       name="warehouseDefualt"
+                       [(ngModel)]="warehouse.warehouseDefualt"
+                       class="form-control">
+                <label for="checkboxDefualtEdit" class="f-left m-lg-4">
+                  ตั้งเป็นค่าเริ่มต้น
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <label class="f-left input-group-text">สถานะการใช้งาน : </label>
+                <ui-switch class="form-control input-group-text"
+                           [disabled]="isReadOnly"
+                           [(ngModel)]="warehouse.warehouseStatus"
+                           name="warehouseStatus">
+                </ui-switch>
+              </div>
+            </div>
+
+            <!--<div class="input-group">-->
+              <!--<label class="input-group-text">คลังสินค้า : </label>-->
+              <!--<select type="text"-->
+                      <!--[disabled]="isReadOnly"-->
+                      <!--[(ngModel)]="warehouse.inventoryName"-->
+                      <!--name="inventoryName"-->
+                      <!--class="form-control"-->
+                      <!--autocomplete="off">-->
+                <!--<option value="" [selected]>หมวดหมู่</option>-->
+                <!--<option-->
+                        <!--[ngValue]="warehouse.inventoryName">{{warehouse.inventoryName}}-->
+                  <!--&lt;!&ndash;*ngFor="let i of categorys"&ndash;&gt;-->
+                  <!--&lt;!&ndash;[disabled]="!i.categoryStatus"&ndash;&gt;-->
+                  <!--&lt;!&ndash;[ngValue]="i.categoryId"&ndash;&gt;-->
+                  <!--&lt;!&ndash;[selected]="i.categoryId===category.categoryLevel">&ndash;&gt;-->
+                  <!--&lt;!&ndash;{{i.categoryName}}&ndash;&gt;-->
+                <!--</option>-->
+              <!--</select>-->
+            <!--</div>-->
+
+            <div class="form-group">
+              <div class="input-group">
+                <label class="input-group-text">อัพเดทล่าสุด : </label>
+                <input class="form-control"
+                       [disabled]="isReadOnly"
+                       readonly="true"
+                       name="warehouseLastupdate"
+                       [(ngModel)]="modelPopupWarehouseLastupdate"
+                       ngbDatepicker #ddStart="ngbDatepicker">
+                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                </div>
+              </div>
+            </div>
+
+            <!--// คลังสินค้า // -->
+            <div class="form-group">
+              <button type="button"
+                      resetWizard
+                      class="btn btn-sm btn-success waves-effect float-left"
+                      *ngIf="!isReadOnly"
+                      (click)="updateWarehouse(warehouseUpdateForm);">
+                บันทึก
+              </button>
+              <button type="button"
+                      resetWizard
+                      (click)="modalDefault.hide()"
+                      class="btn btn-sm btn-danger waves-effect float-right">ปิด
+              </button>
+            </div>
+
+          </div>
+        </wizard-step>
+      </wizard>
+
+    </form>
+    <!--</app-card>-->
+  </div>
+
+  <div class="app-modal-footer">
+  </div>
+
+</app-modal-basic>
+<!--// edit && View data // -->

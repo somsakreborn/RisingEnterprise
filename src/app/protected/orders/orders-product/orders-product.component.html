@@ -1,0 +1,1967 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-xl-12">
+    <app-card [title]="'รายการสั่งซื้อทั้งหมด'" [blockClass]="'tab-icon'">
+      <div class="row text-center">
+        <div class="col-sm-12 col-md-12 col-xl-12">
+          <ngb-tabset #tabs="ngbTabset"
+                      [activeId]="selectedTab"
+                      (tabChange)="beforeChange($event)"
+                      [orientation]="currentOrientation">
+            <ngb-tab id="details">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='details'" class="text-details">
+                  <i class="icofont icofont-cart icon-size-22px"></i>ทั้งหมด
+                  <span class="badge badge-details">{{orders.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='details'">
+                  <i class="icofont icofont-cart icon-size-22px"></i>ทั้งหมด
+                  <span class="badge badge-details">{{orders.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-md-6 col-xl-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-inverse">
+                      <button type="button" class="btn btn-sm btn-inverse light">
+                        <i class="icofont icofont-exchange"></i>เลือกทำทั้งหมด</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-inverse dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <button class="dropdown-item ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedProcessToPrint(selected);">
+                          <!--(click)="genPrintPDFmake(selected);">-->
+                          <i class="fa fa-print">&nbsp;ใบจ่าหน้าพัสดุ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                        {{selected.length}}
+                                    </span>
+                        </button>
+                        <button class="dropdown-item ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="genBillPDFmake(selected)">
+                          <i class="fa fa-file-archive-o">&nbsp;ใบเสร็จ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                        {{selected.length}}
+                                    </span>
+                        </button>
+                        <button class="dropdown-item ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="exportKerryToExcel(selected);">
+                          <i class="fa fa-file-excel-o">&nbsp;ส่งออก KerryEasyShip</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                        {{selected.length}}
+                                    </span>
+                        </button>
+                        <button class="dropdown-item ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="exportOrdersAllToExcel(selected);">
+                          <i class="fa fa-file-excel-o">&nbsp;ส่งออกคำสั่งซื้อ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                        {{selected.length}}
+                                    </span>
+                        </button>
+                        <button class="dropdown-item ripple light"
+                                (click)="searchOrderForm.reset();modalDefault.show();checkExportExcel;">
+                          <i class="fa fa-search">&nbsp;ค้นหาขั้นสูง</i>
+                        </button>
+                      </div>
+                    </div>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>พิมพ์เอกสาร</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedProcessToPrint(selected);">
+                          <i class="fa fa-print">&nbsp;ใบจ่าหน้าพัสดุ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                    {{selected.length}}
+                                </span>
+                        </button>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="genBillPDFmake(selected)">
+                          <i class="fa fa-file-archive-o">&nbsp;ใบเสร็จ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                    {{selected.length}}
+                                </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check']">
+                      <i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check-tracking']">
+                      <i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>
+                    </button>
+                    <!--<i class="fa fa-barcode cursorLink" style="font-size: 22px;"-->
+                       <!--[routerLink]="['/management/orders/orders-import-tracking']"-->
+                       <!--container="body" ngbTooltip="Import Tracking Number"></i>-->
+                  </div>
+
+                  <div class="col-md-6 col-xl-6 text-right">
+                    <div style="text-align: right;">
+                      <br>
+                      <div class="form-group-sm ">
+                        <label class="input-group-sm">จาก - ถึง
+                          <input type="text"
+                                 #rangDate
+                                 readonly="true"
+                                 placeholder="ค้นหาจากวันที่ - วันที่"
+                                 name="rangDate"
+                                 [(ngModel)]="bsRangeValue"
+                                 class="form-control input-sm text-sm-left full-data-search dropdown-toggle"
+                                 [minDate]="minDate"
+                                 [maxDate]="maxDate"
+                                 [bsConfig]="bsConfig"
+                                 bsDaterangepicker>
+                        </label>
+                        <button class="btn-sm icofont icofont-search btn-primary"
+                                (click)="onSelectedRangDate('', rangDate.value)">
+                        </button>
+                        <label class="input-group-sm">ค้นหา:
+                          <input type="search"
+                                 class="form-control form-control-lowercase input-sm text-primary text-sm-left full-data-search"
+                                 placeholder="ค้นหาข้อมูล"
+                                 (keyup)='ordersFilter($event);'>
+                        </label>
+                        <label class="input-group-sm">แสดง
+                          <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                            <option [ngValue]="50">50</option>
+                            <option [ngValue]="100">100</option>
+                            <option [ngValue]="200">200</option>
+                          </select>
+                          แถว
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBox"
+                               #table
+                               class="data-table dt-chk text-center"
+                               [rows]="orders"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="rowsOnPage"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)='onSelect($event)'>
+                  <!--[selectionType]="'checkbox'"-->
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                          border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                          border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                      <!--<button>-->
+                      <!--<a class="text-sm-center cursor"-->
+                      <!--target="_blank"-->
+                      <!--[routerLink]="['/supports/customers/'+order.orderODId]">-->
+                      <!--&lt;!&ndash;{{value.orderCustomerNameSurname}}&ndash;&gt;-->
+                      <!--</a>-->
+                      <!--</button>-->
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                  'bg-process': value === 'process',
+                                  'bg-waitpack': value === 'waitpack',
+                                  'bg-print': value === 'print',
+                                  'bg-pack': value === 'pack',
+                                  'bg-delivery': value === 'delivery',
+                                  'bg-success': value === 'success',
+                                  'bg-cancel': value === 'cancel',
+                                  'bg-fail': value === 'fail'
+                                }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column
+                          name="ลบ" prop="orderId"
+                          *ngIf="checkRole === 'superadmin'"
+                          [width]="90"
+                          [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <a *ngIf="checkRole === 'superadmin'"
+                         placement="top" container="body" ngbTooltip="ViewHistorys"
+                         class="crm-action-view text-info"
+                         (click)="viewHisOrder(value);modalDefaultView.show();">
+                        <i class="fa fa-history"></i>
+                      </a>
+                      <label class="label text-danger col-form-label-sm float-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value}}"
+                             (click)="deleteOrder(value);">
+                        <i class="fa fa-remove" aria-hidden="true"></i>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <div class="row">
+                  <div class='col-sm-12 selected-column text-left'>
+                    OrderAll : {{orders.length}} / Total : {{ordersCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="waitpacks">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='waitpacks'" class="text-waitpacks">
+                  <i class="icofont icofont-inbox icon-size-22px"></i>รอดำเนินการ
+                  <span class="badge badge-waitpacks">{{ordersProcess.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='waitpacks'">
+                  <i class="icofont icofont-inbox icon-size-22px"></i>รอดำเนินการ
+                  <span class="badge badge-waitpacks">{{ordersProcess.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>พิมพ์เอกสาร</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedProcessToPrint(selected);">
+                          <i class="fa fa-print">&nbsp;ใบจ่าหน้าพัสดุ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                  {{selected.length}}
+                                </span>
+                        </button>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="genBillPDFmake(selected)">
+                          <i class="fa fa-file-archive-o">&nbsp;ใบเสร็จ</i>
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                  {{selected.length}}
+                                </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check']">
+                      <i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check-tracking']">
+                      <i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>
+                    </button>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <br>
+                    <div style="text-align: right;">
+                      <label class="input-group-sm">ค้นหา:
+                        <input type="search"
+                               class="form-control input-sm text-primary text-sm-left full-data-search"
+                               placeholder="ค้นหาข้อมูล"
+                               (keyup)='processFilter($event)'>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBoxProcess"
+                               #table
+                               class="data-table dt-chk text-center"
+                               [rows]="ordersProcess"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="50"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)="onSelect($event)">
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                            border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                          border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                              </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                          'bg-process': value === 'process',
+                                          'bg-waitpack': value === 'waitpack',
+                                          'bg-print': value === 'print',
+                                          'bg-pack': value === 'pack',
+                                          'bg-delivery': value === 'delivery',
+                                          'bg-success': value === 'success',
+                                          'bg-cancel': value === 'cancel',
+                                          'bg-fail': value === 'fail'
+                                        }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <!--show data selected in checkbox-->
+                <div class="row text-sm-left">
+                  <div class='col-sm-12 selected-column'>
+                    OrderAll : {{ordersProcess.length}} / Total : {{processCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+                <!--show data selected in checkbox-->
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="packs">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='packs'" class="text-packs">
+                  <i class="icofont icofont-gift icon-size-22px"></i>แพ็ค
+                  <span class="badge badge-packs">{{ordersPack.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='packs'">
+                  <i class="icofont icofont-gift icon-size-22px"></i>แพ็ค
+                  <span class="badge badge-packs">{{ordersPack.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>ดำเนินการแพ็ค</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedPackUp(selected);">
+                          <i class="fa fa-angle-double-right text-success"></i>จัดส่ง
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedPackDown(selected);">
+                          <i class="fa fa-angle-double-left text-danger"></i>รอดำเนินการ
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check']">
+                      <i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check-tracking']">
+                      <i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>
+                    </button>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <br>
+                    <div style="text-align: right;">
+                      <label class="input-group-sm">ค้นหา:
+                        <input type="search"
+                               class="form-control input-sm text-primary text-sm-left full-data-search"
+                               placeholder="ค้นหาข้อมูล"
+                               (keyup)="packFilter($event)">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBoxPack"
+                               class="data-table dt-chk text-center"
+                               #table
+                               [rows]="ordersPack"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="50"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)="onSelect($event)">
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                              </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                                  'bg-process': value === 'process',
+                                                  'bg-waitpack': value === 'waitpack',
+                                                  'bg-print': value === 'print',
+                                                  'bg-pack': value === 'pack',
+                                                  'bg-delivery': value === 'delivery',
+                                                  'bg-success': value === 'success',
+                                                  'bg-cancel': value === 'cancel',
+                                                  'bg-fail': value === 'fail'
+                                                }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <!--  show data selected in checkbox-->
+                <div class="row text-sm-left">
+                  <div class='col-sm-12 selected-column'>
+                    OrderAll : {{ordersPack.length}} / Total : {{packCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+                <!--  show data selected in checkbox-->
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="deliverys">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='deliverys'" class="text-deliverys">
+                  <i class="icofont icofont-truck-loaded icon-size-22px"></i>จัดส่ง
+                  <span class="badge badge-deliverys">{{ordersDelivery.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='deliverys'">
+                  <i class="icofont icofont-truck-loaded icon-size-22px"></i>จัดส่ง
+                  <span class="badge badge-deliverys">{{ordersDelivery.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>ดำเนินการจัดส่ง</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedDeliveryUpSuccess(selected);">
+                          <i class="fa fa-angle-double-right text-success"></i>สำเร็จ
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedDeliveryUpFail(selected);">
+                          <i class="fa fa-angle-double-right text-success"></i>ล้มเหลว
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="selected.length < 1"
+                                (click)="checkedSelectedDeliveryDown(selected);">
+                          <i class="fa fa-angle-double-left text-danger"></i>แพ็ค
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check']">
+                      <i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>
+                    </button>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-check-tracking']">
+                      <i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>
+                    </button>
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <br>
+                    <div style="text-align: right;">
+                      <label class="input-group-sm">ค้นหา:
+                        <input type="search"
+                               class="form-control input-sm text-primary text-sm-left full-data-search"
+                               placeholder="ค้นหาข้อมูล"
+                               (keyup)="deliveryFilter($event)">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBoxDelivery"
+                               class="data-table dt-chk text-center"
+                               #table
+                               [rows]="ordersDelivery"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="50"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)="onSelect($event)">
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                            border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                                  'bg-process': value === 'process',
+                                                  'bg-waitpack': value === 'waitpack',
+                                                  'bg-print': value === 'print',
+                                                  'bg-pack': value === 'pack',
+                                                  'bg-delivery': value === 'delivery',
+                                                  'bg-success': value === 'success',
+                                                  'bg-cancel': value === 'cancel',
+                                                  'bg-fail': value === 'fail'
+                                                }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <!--  show data selected in checkbox-->
+                <div class="row text-sm-left">
+                  <div class='col-sm-12 selected-column'>
+                    OrderAll : {{ordersDelivery.length}} / Total : {{deliveryCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+                <!--  show data selected in checkbox-->
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="success">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='success'" class="text-success">
+                  <i class="icofont icofont-check-circled icon-size-22px"></i>
+                  สำเร็จ
+                  <span class="badge badge-success">{{ordersSuccess.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='success'">
+                  <i class="icofont icofont-check-circled icon-size-22px"></i>
+                  สำเร็จ
+                  <span class="badge badge-success">{{ordersSuccess.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>ดำเนินการสำเร็จ</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <!--<button class="dropdown-item btn-success ripple light"-->
+                        <!--[disabled]="selected.length < 1"-->
+                        <!--(click)="checkedSelectedDeliveryUpSuccess(selected);">-->
+                        <!--<i class="fa fa-angle-double-right text-success"></i>สำเร็จ-->
+                        <!--<span *ngIf="selected.length > 0"-->
+                        <!--class="badge badge-inverse-success text-right">-->
+                        <!--{{selected.length}}-->
+                        <!--</span>-->
+                        <!--</button>-->
+                        <!--<button class="dropdown-item btn-success ripple light"-->
+                        <!--[disabled]="selected.length < 1"-->
+                        <!--(click)="checkedSelectedDeliveryUpFail(selected);">-->
+                        <!--<i class="fa fa-angle-double-right text-success"></i>ล้มเหลว-->
+                        <!--<span *ngIf="selected.length > 0"-->
+                        <!--class="badge badge-inverse-success text-right">-->
+                        <!--{{selected.length}}-->
+                        <!--</span>-->
+                        <!--</button>-->
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="(selected.length < 1) || (checkRole !== 'superadmin')"
+                                (click)="checkedSelectedSuccessDown(selected);">
+                          <i class="fa fa-angle-double-left text-danger"></i>จัดส่ง
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <!--<button class="btn btn-sm btn-primary ripple light"-->
+                    <!--[routerLink]="['/management/orders/orders-check']">-->
+                    <!--<i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>-->
+                    <!--</button>-->
+                    <!--&nbsp;-->
+                    <!--<button class="btn btn-sm btn-primary ripple light"-->
+                    <!--[routerLink]="['/management/orders/orders-check-tracking']">-->
+                    <!--<i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>-->
+                    <!--</button>-->
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <br>
+                    <div style="text-align: right;">
+                      <label class="input-group-sm">ค้นหา:
+                        <input type="search"
+                               class="form-control input-sm text-primary text-sm-left full-data-search"
+                               placeholder="ค้นหาข้อมูล"
+                               (keyup)="successFilter($event)">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBoxSuccess"
+                               class="data-table dt-chk text-center"
+                               #table
+                               [rows]="ordersSuccess"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="50"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)="onSelect($event)">
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                                  'bg-process': value === 'process',
+                                                  'bg-waitpack': value === 'waitpack',
+                                                  'bg-print': value === 'print',
+                                                  'bg-pack': value === 'pack',
+                                                  'bg-delivery': value === 'delivery',
+                                                  'bg-success': value === 'success',
+                                                  'bg-cancel': value === 'cancel',
+                                                  'bg-fail': value === 'fail'
+                                                }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <!--  show data selected in checkbox-->
+                <div class="row text-sm-left">
+                  <div class='col-sm-12 selected-column'>
+                    OrderAll : {{ordersSuccess.length}} / Total : {{successCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+                <!--  show data selected in checkbox-->
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab id="fails">
+              <ng-template ngbTabTitle>
+                <div *ngIf="selectedTabActive==='fails'" class="text-fails">
+                  <i class="icofont icofont-close-circled icon-size-22px"></i>
+                  ล้มเหลว
+                  <span class="badge badge-fails">{{ordersFail.length|number}}</span>
+                </div>
+                <div *ngIf="selectedTabActive!=='fails'">
+                  <i class="icofont icofont-close-circled icon-size-22px"></i>
+                  ล้มเหลว
+                  <span class="badge badge-fails">{{ordersFail.length|number}}</span>
+                </div>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6 text-left form-group">
+                    <br>
+                    <div ngbDropdown class="btn-group dropdown-split-success">
+                      <button type="button" class="btn btn-sm btn-success light">
+                        <i class="icofont icofont-check-circled"></i>ดำเนินการล้มเหลว</button>
+                      <button ngbDropdownToggle type="button"
+                              class="btn btn-sm btn-success dropdown-toggle-split light">
+                        <span class="sr-only">Toggle primary</span>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <!--<button class="dropdown-item btn-success ripple light"-->
+                        <!--[disabled]="selected.length < 1"-->
+                        <!--(click)="checkedSelectedDeliveryUpSuccess(selected);">-->
+                        <!--<i class="fa fa-angle-double-right text-success"></i>สำเร็จ-->
+                        <!--<span *ngIf="selected.length > 0"-->
+                        <!--class="badge badge-inverse-success text-right">-->
+                        <!--{{selected.length}}-->
+                        <!--</span>-->
+                        <!--</button>-->
+                        <!--<button class="dropdown-item btn-success ripple light"-->
+                        <!--[disabled]="selected.length < 1"-->
+                        <!--(click)="checkedSelectedDeliveryUpFail(selected);">-->
+                        <!--<i class="fa fa-angle-double-right text-success"></i>ล้มเหลว-->
+                        <!--<span *ngIf="selected.length > 0"-->
+                        <!--class="badge badge-inverse-success text-right">-->
+                        <!--{{selected.length}}-->
+                        <!--</span>-->
+                        <!--</button>-->
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item btn-success ripple light"
+                                [disabled]="((selected.length < 1) || (checkRole !== 'superadmin'))"
+                                (click)="checkedSelectedFailDown(selected);">
+                          <i class="fa fa-angle-double-left text-danger"></i>จัดส่ง
+                          <span *ngIf="selected.length > 0"
+                                class="badge badge-inverse-success text-right">
+                                                {{selected.length}}
+                                            </span>
+                        </button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary ripple light"
+                            [routerLink]="['/management/orders/orders-create']">
+                      <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                    </button>
+                    <!--<button class="btn btn-sm btn-primary ripple light"-->
+                    <!--[routerLink]="['/management/orders/orders-check']">-->
+                    <!--<i class="icofont icofont-cubes">&nbsp;ตรวจสอบคำสั่งซื้อ</i>-->
+                    <!--</button>-->
+                    <!--&nbsp;-->
+                    <!--<button class="btn btn-sm btn-primary ripple light"-->
+                    <!--[routerLink]="['/management/orders/orders-check-tracking']">-->
+                    <!--<i class="icofont icofont-delivery-time">&nbsp;เช็คหมายเลขพัสดุ</i>-->
+                    <!--</button>-->
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-6 form-group">
+                    <br>
+                    <div style="text-align: right;">
+                      <label class="input-group-sm">ค้นหา:
+                        <input type="search"
+                               class="form-control input-sm text-primary text-sm-left full-data-search"
+                               placeholder="ค้นหาข้อมูล"
+                               (keyup)="failFilter($event)">
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <ngx-datatable id="printOrdersBoxFail"
+                               class="data-table dt-chk text-center"
+                               #table
+                               [rows]="ordersFail"
+                               [columnMode]="'force'"
+                               [scrollbarH]="true"
+                               [headerHeight]="50"
+                               [footerHeight]="30"
+                               [rowHeight]="45"
+                               [limit]="50"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               (activate)="onActivate($event)"
+                               (select)="onSelect($event)">
+                  <ngx-datatable-column [width]="50" [sortable]="false"
+                                        [canAutoResize]="false" [draggable]="false"
+                                        [resizeable]="false">
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-header-template let-value="value"
+                                 let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                    <ng-template class="datatable-checkbox"
+                                 ngx-datatable-cell-template let-value="value"
+                                 let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                      <div class="checkbox-fade datatable-header-cell-label
+                                                    border-checkbox-group border-checkbox-group-default">
+                        <label>
+                          <input type="checkbox"
+                                 [checked]="isSelected"
+                                 (change)="onCheckboxChangeFn($event)">
+                          <span class="cr">
+                                                  <i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>
+                                                </span>
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="คำสั่งซื้อ" prop="orderODId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="text-left">
+                        <a class="text-center cursorLink"
+                           (click)="editOderODId(value, checkEditStatus='editorder');">
+                          {{value}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ลูกค้า" prop="customer" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label class="label col-form-label-sm text-sm-left float-sm-left"
+                             placement="top" container="body"
+                             ngbTooltip="{{value.orderCustomerNameSurname}}  {{value.orderCustomerTel}}">
+                        <a class="text-sm-center cursor"
+                           target="_blank"
+                           [routerLink]="['/management/customers/customers-edit/'+value.orderCustomerId]">
+                          {{value.orderCustomerNameSurname}}
+                        </a>
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ช่องทาง" prop="orderChannelId">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let i of channels">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{i.channelName}}"
+                               *ngIf="i.channelId === value">
+                          <img [src]="i.channelImage" class="img-20">
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="การจัดส่ง" prop="delivery" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let j of shipments">
+                        <label class="label col-form-label-sm text-primary"
+                               placement="top" container="body" ngbTooltip="{{j.shipmentName|uppercase}}"
+                               *ngIf="(value.orderShipmentId === j.shipmentId)">
+                          <img class="img-20" [src]="ENVserverAPI+'/images/shipment/'+j.shipmentImage">
+                        </label>
+                      </ng-container>
+                      <i *ngIf="value.orderTracking" class="fa fa-barcode" style="font-size:18px;"
+                         container="body" ngbTooltip="{{value.orderTracking}}"></i>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ชำระเงิน" prop="payment" [sortable]="false">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <ng-container *ngFor="let k of banks">
+                        <!--<label class="label col-form-label-sm text-primary"-->
+                        <!--placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}-->
+                        <!--{{value.orderPaymentDate|date: 'dd-MM-yyyy'}}-->
+                        <!--{{value.orderPaymentTime}}"-->
+                        <!--*ngIf="((value.method|uppercase) === 'BANKTRANFER')-->
+                        <!--&&(value.orderBankId === k.bankId)">-->
+                        <img class="img-30"
+                             placement="top" container="body" ngbTooltip="โอนเงินผ่านธนาคาร  {{k.bankName}}
+                                       {{value.orderPaymentDate|date: 'dd-MM-yyyy'}}
+                                       {{value.orderPaymentTime}}"
+                             *ngIf="((value.method|uppercase) === 'BANKTRANFER')
+                                       &&(value.orderBankId == k.bankId)"
+                             [src]="ENVserverAPI+'/images/bank/'+k.bankImage">
+                        <!--</label>-->
+                        <label class="label col-form-label-sm bg-success"
+                               placement="top" container="body" ngbTooltip="เก็บเงินปลายทาง {{value.method|uppercase}}"
+                               *ngIf="((value.method|uppercase) === 'COD')
+                                         &&((!value.orderBankId == k.bankId)
+                                         ||(value.orderBankId === ''))">
+                          {{value.method|uppercase}}
+                        </label>
+                      </ng-container>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="สถานะ" prop="orderStatusName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <label *ngIf="value"
+                             class="label text-sm-center"
+                             [ngClass]="{
+                                              'bg-process': value === 'process',
+                                              'bg-waitpack': value === 'waitpack',
+                                              'bg-print': value === 'print',
+                                              'bg-pack': value === 'pack',
+                                              'bg-delivery': value === 'delivery',
+                                              'bg-success': value === 'success',
+                                              'bg-cancel': value === 'cancel',
+                                              'bg-fail': value === 'fail'
+                                            }">
+                        {{value|titlecase}}
+                      </label>
+                      <label *ngIf="!value" class="label bg-warning text-sm-center"
+                             placement="top" container="body" ngbTooltip="{{value|titlecase}}">
+                        {{value|titlecase}}
+                      </label>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ยอดรวม" prop="orderTotal">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p class="text-right">{{value|currency: '฿'}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="ผู้ขาย" prop="orderSellerName">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                      <p>{{value|titlecase}}</p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="อัพเดท" prop="orderLastupdate">
+                    <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                      <p placement="top" container="body"
+                         ngbTooltip="{{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}">
+                        <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                        {{value|date:'dd-MM-yyyy'}} {{value|date:'HH:mm'}}
+                      </p>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+                <div class="row text-sm-left">
+                  <div class='col-sm-12 selected-column'>
+                    OrderAll : {{ordersFail.length}} / Total : {{failCalSumTotal|currency:'฿'}}
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>
+
+
+<!--// ViewHistory data // -->
+<app-modal-basic #modalDefaultView [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title" *ngIf="isReadOnly">
+      <label *ngIf="order.orderStatusName"
+             class="label text-center"
+             [ngClass]="{
+                      'bg-process': order.orderStatusName === 'process',
+                      'bg-waitpack': order.orderStatusName === 'waitpack',
+                      'bg-print': order.orderStatusName === 'print',
+                      'bg-pack': order.orderStatusName === 'pack',
+                      'bg-delivery': order.orderStatusName === 'delivery',
+                      'bg-success': order.orderStatusName === 'success',
+                      'bg-cancel': order.orderStatusName === 'cancel',
+                      'bg-fail': order.orderStatusName === 'fail'
+                    }"
+             placement="top" container="body" ngbTooltip="{{order.orderStatusName|titlecase}}">
+        {{order.orderStatusName|titlecase}}
+      </label>
+      <!--<i class="fa fa fa-book book-icon-style" aria-hidden="true"></i>-->
+      <!--วิวออเดอร์ -->
+      [{{order.orderODId}}]:: ViewHistory (Limit: {{ordershistorysLimit}}, All: {{ordersHistorys.length}})
+    </h4>
+    <h4 class="modal-title" *ngIf="!isReadOnly">
+      <i class="fa fa fa-edit edit-icon-style" aria-hidden="true"></i>
+      แก้ไขสินค้า
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefaultView.hide();">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body">
+    <!--<form (ngSubmit)="onSubmit(productForm); productForm.reset();" #productForm="ngForm" autocomplete="off">-->
+    <form #productUpdateForm="ngForm" autocomplete="off">
+
+      <!-- add table historys -->
+      <!--// if data > 0 | noData show //-->
+      <div *ngIf="ordersHistorys.length > 0" class="card">
+        <div class="table-responsive-sm table-scroll-vertical">
+          <table class="table table-xs table-striped text-sm-left text-primary">
+            <thead class="text-sm-center">
+            <tr class="text-sm-center">
+              <td>#No</td>
+              <td>Event</td>
+              <td>Details</td>
+            </tr>
+            </thead>
+            <tbody class="text-sm-left">
+            <tr *ngFor="let his of order.historys,let x = index;">
+              <td class="text-sm-center">{{x + 1}}</td>
+              <td>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.hisName}}">
+                  <i class="fa fa-refresh" aria-hidden="true">
+                    {{his.hisName}}</i>
+                </label>
+              </td>
+              <td>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.hisRemark}}">
+                  <i class="fa fa-file-archive-o" aria-hidden="true">
+                    {{his.hisRemark}}</i>
+                </label>
+                <br>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.sellerName}}">
+                  <i class="fa fa-user" aria-hidden="true">
+                    {{his.sellerName}}</i>
+                </label>
+                <br>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}">
+                  <i class="fa fa-calendar" aria-hidden="true">
+                    {{his.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</i>
+                </label>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--// if data > 0 | noData show //-->
+
+      <!--// if data = 0 | noData show //-->
+      <div *ngIf="ordersHistorys.length === 0" class="card">
+        <div class="table-responsive-sm table-scroll-vertical">
+          <table class="table table-xs table-striped text-sm-left text-primary">
+            <thead class="text-sm-center">
+            <tr class="text-sm-center">
+              <td>#No</td>
+              <td>Event</td>
+              <td>Details</td>
+            </tr>
+            </thead>
+            <tbody class="text-sm-left">
+            <tr *ngFor="let his of order.historys,let x = index;">
+              <td class="text-sm-center">{{x + 1}}</td>
+              <td>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.hisName}}">
+                  <i class="fa fa-refresh" aria-hidden="true">
+                    {{his.hisName}}</i>
+                </label>
+              </td>
+              <td>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.hisRemark}}">
+                  <i class="fa fa-file-archive-o" aria-hidden="true">
+                    {{his.hisRemark}}</i>
+                </label>
+                <br>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.sellerName}}">
+                  <i class="fa fa-user" aria-hidden="true">
+                    {{his.sellerName}}</i>
+                </label>
+                <br>
+                <label class="label text-primary col-form-label-sm float-sm-left"
+                       placement="top" container="body" ngbTooltip="{{his.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}">
+                  <i class="fa fa-calendar" aria-hidden="true">
+                    {{his.lastUpdate | date: 'dd/MM/yyyy HH:mm'}}</i>
+                </label>
+              </td>
+            </tr>
+            <!--// if data = 0 | noData show //-->
+            <tr *ngIf="ordersHistorys.length === 0" class="text-sm-center">
+              <td colspan="3" class="text-sm-center">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <label class="label text-danger col-form-label-sm float-sm-center"
+                       placement="top" container="body" ngbTooltip="ยังไม่มีข้อมูล">
+                  <i class="fa fa-warning text-lg-center" style="font-size: 28px" aria-hidden="true">
+                    ยังไม่มีข้อมูล</i>
+                </label>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <!--// if data = 0 | noData show //-->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--// if data = 0 | noData show //-->
+      <!-- add table historys -->
+
+    </form>
+    <!--</app-card>-->
+  </div>
+
+</app-modal-basic>
+<!--// ViewHistory data // -->
+
+<!-- modal for search -->
+<!--// edit && View data // -->
+<app-modal-basic #modalDefault [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">
+      <i class="fa fa-search edit-icon-style" aria-hidden="true"></i>
+      ค้าหาคำสั่งซื้อขั้นสูง
+    </h5>
+    <button type="button" class="close basic-close" (click)="modalDefault.hide();">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body">
+    <div class="card">
+      <form #searchOrderForm="ngForm" autocomplete="off">
+        <div class="centered-content">
+          <div class="form-group row d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <!--<label>ชื่อช่องทางการขาย :-->
+              <!--<input type="text"-->
+              <!--class="form-control input-group-sm"-->
+              <!--placeholder="ชื่อช่องทางการขาย"-->
+              <!--ngModel-->
+              <!--name="channelName">-->
+              <!--</label>-->
+              <div class="input-group input-group-sm">
+                <!--[color]="checkExportExcel ? 'green' : 'red'"-->
+                <ui-switch
+                        size="small"
+                        [color]="checkExportExcel ? 'green' : 'red'"
+                        id="checkExportExcel"
+                        class="form-group input-group-sm"
+                        [checked]="checkExportExcel"
+                        [(ngModel)]="checkExportExcel"
+                        name="checkExportExcel">
+                </ui-switch>
+                <!--<ui-switch size="small" [(ngModel)]="checkTracking" [color]="checkTracking ? 'green': 'red'"></ui-switch>-->
+                <label *ngIf="!checkExportExcel" class="text-danger">
+                  &nbsp;[ ไม่ต้องการส่งออก Excel]
+                  <i class="fa fa-print text-fails"></i>
+                </label>
+                <label *ngIf="checkExportExcel" class="text-success">
+                  &nbsp;[ ต้องการส่งออก Excel]&nbsp;
+                  <i class="fa fa-print text-print"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <div class="row">
+                <label class="input-group-sm text-tab">
+                  จาก - ถึง :
+                  <input type="text"
+                         #rangeDateSearch
+                         readonly="true"
+                         placeholder="ค้นหาจากวันที่ - วันที่"
+                         name="rangeDateSearch"
+                         [(ngModel)]="bsRangeValueDayNow"
+                         class="form-control input-group-sm full-data-search dropdown-toggle"
+                         [minDate]="minDate"
+                         [maxDate]="maxDate"
+                         [bsConfig]="bsConfig"
+                         #drp="bsDaterangepicker"
+                         bsDaterangepicker>
+                </label>
+                <div class="btn-group-sm">
+                  <button class="btn-sm icofont icofont-calendar btn-primary"
+                          (click)="drp.toggle()"
+                          [attr.aria-expanded]="drp.isOpen">
+                    <!--<i class="icofont icofont-ui-calendar"-->
+                    <!--(click)="drp.toggle()" [attr.aria-expanded]="drp.isOpen">-->
+                    <!--</i>-->
+                  </button>
+                </div>
+                &nbsp;
+                <div class="btn-group-sm" role="group">
+                  <button type="button" (click)="setRangeDateSearch('Day')" class="btn btn-sm btn-outline-primary">D</button>
+                  <button type="button" (click)="setRangeDateSearch('Month')" class="btn btn-sm btn-outline-primary">M</button>
+                  <button type="button" (click)="setRangeDateSearch('Year')" class="btn btn-sm btn-outline-primary">Y</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <label>ชื่อช่องทางการขาย :</label>
+              <select
+                      id="orderCustomerChannelId"
+                      #orderCustomerChannelId
+                      name="orderCustomerChannelId"
+                      [ngModel]
+                      class="form-control input-group-sm">
+                <option
+                        *ngFor="let i of channels;"
+                        [disabled]="!i.channelStatus"
+                        [selected]="i.channelId === orderCustomerChannelId"
+                        [ngValue]="i.channelId">
+                  {{i.channelName}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <label>การชำระเงิน :</label>
+              <select
+                      id="searchPaymentName"
+                      #searchPaymentName
+                      name="searchPaymentName"
+                      [ngModel]
+                      class="form-control input-group-sm">
+                <option value="cod">COD</option>
+                <option value="banktranfer">Banktranfer</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <label>ค้นหาจากชื่อผู้ใช้งาน :</label>
+              <select
+                      id="searchUserId"
+                      #searchUserId
+                      name="searchUserId"
+                      [ngModel]
+                      class="form-control input-group-sm">
+                <option
+                        *ngFor="let u of users;"
+                        [disabled]="!u.userStatus"
+                        [selected]="u.userId"
+                        [ngValue]="u.userId">
+                  {{u.userName}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <br>
+          <hr>
+          <div class="form-group row d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <label>รายละเอียดช่องทางการขาย : </label>
+              <ng-select
+                      [ngClass]="'ng-select'"
+                      highlightColor="ligthblue"
+                      highlightTextColor="ligthblue"
+                      [options]="channels"
+                      [multiple]="true"
+                      [allowClear]="true"
+                      name="ChannelId"
+                      [ngModel]
+                      required>
+                <ng-template #optionTemplate let-value="option" let-option="option">
+                  <img [src]="option.channelImage" class="img-20">&nbsp;&nbsp;
+                  {{option?.channelName}}
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-group row d-inline">
+            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+              <label>ค้นหาจากชื่อผู้ใช้งาน : </label>
+              <ng-select
+                      [ngClass]="'ng-select'"
+                      highlightColor="ligthblue"
+                      highlightTextColor="ligthblue"
+                      [options]="users"
+                      [multiple]="true"
+                      [allowClear]="true"
+                      name="userId"
+                      [ngModel]
+                      required>
+                <ng-template #optionTemplate let-value="option" let-option="option">
+                  <img [src]="option.userImage" class="img-20">&nbsp;&nbsp;
+                  {{option?.userName}}
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <br>
+          </div>
+
+          <div class="form-group text-center">
+            <button type="button"
+                    class="btn btn-sm btn-success waves-effect"
+                    (click)="onSelectedRangDate(searchOrderForm.value, rangeDateSearch.value);
+                            searchOrderForm.reset();modalDefault.hide();">
+              ค้นหา
+            </button>
+            <button type="button"
+                    (click)="modalDefault.hide();"
+                    class="btn btn-sm btn-default waves-effect">
+              ปิด
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <!--</app-card>-->
+  </div>
+
+  <div class="app-modal-footer">
+  </div>
+
+</app-modal-basic>
+<!--// edit && View data // -->
+<!-- modal for search -->

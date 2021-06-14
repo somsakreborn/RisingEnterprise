@@ -1,0 +1,975 @@
+<div class="card">
+  <!--<div class="card-header">-->
+    <!--<h5>รายการสต๊อกสินค้า</h5>-->
+    <!--<button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"-->
+            <!--(click)="modalDefaultWizard.show(); setDateNow(); resetFile('add');">-->
+      <!--<i class="icofont icofont-plus m-r-5"></i>-->
+      <!--เพิ่มสต๊อกสินค้า-->
+    <!--</button>-->
+  <!--</div>-->
+  <div class="card-body">
+    <div class="table-content crm-table">
+      <div class="project-table">
+        <div id="crm-contact" class="dt-responsive">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              <div>
+                <label class="label-control">แสดง
+                  <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                    <option [ngValue]="100">100</option>
+                  </select>
+                  แถว
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+              <div style="text-align: right;">
+                <label class="input-group-sm">ค้นหา:
+                  <input type="search"
+                         [(ngModel)]="filterQuery"
+                         class="form-control input-sm full-data-search"
+                         placement="top" ngbTooltip="ค้นหาข้อมูลคลังสินค้า"
+                         placeholder="Search name">
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered full-data-table text-center"
+                   [mfData]="products | dataFilterInventory : filterQuery"
+                   #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage"
+                   [(mfSortBy)]="sortBy"
+                   [(mfSortOrder)]="sortOrder">
+              <thead class="thead-light">
+              <tr>
+                <th>
+                  <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="productImage">รูปภาพ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="productCodename">รหัสสินค้า</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="productName">ชื่อสินค้า</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="productCategory">ประเภทสินค้า</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter></mfDefaultSorter>คลังสินค้า
+                </th>
+                <th>
+                  <mfDefaultSorter by="productTotal">คงเหลือ</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="productPiece">จอง</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="categoryId">พร้อมขาย</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter></mfDefaultSorter>Action
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of mf.data; let i = index;">
+                <td>#{{item.index}}</td>
+                <td class="text-center">
+                  <img class="img-40" [src]="item.productImage" x-placement="" ngbTooltip="{{item.productName}}">
+                </td>
+                <td>
+                  <label class="label bg-info"
+                         placement="top" ngbTooltip="{{item.productCodename}}">
+                  {{item.productCodename}}
+                  </label>
+                </td>
+                <td>
+                  <label class="label bg-primary"
+                           placement="top" ngbTooltip="{{item.productName}}">
+                  {{item.productName}}
+                  </label>
+                </td>
+                <td *ngIf="item.productCategory == 'สินค้าธรรมดา'">
+                  <label class="label bg-lime-green" placement="top" ngbTooltip="{{item.productCategory}}">{{item.productCategory}}</label>
+                </td>
+                <td *ngIf="item.productCategory == 'สินค้ามีตัวเลือก'">
+                  <label class="label bg-dark-green" placement="top" ngbTooltip="{{item.productCategory}}">{{item.productCategory}}</label>
+                </td>
+                <td *ngIf="item.productCategory == 'สินค้าจัดเซ็ต'">
+                  <label class="label bg-green" placement="top" ngbTooltip="{{item.productCategory}}">{{item.productCategory}}</label>
+                </td>
+                <ng-container *ngFor="let i of warehouses">
+                  <td *ngIf="item.warehouseId == i.warehouseId">
+                    <label class="label btn-grd-primary" placement="top" ngbTooltip="{{i.warehouseName}}">{{i.warehouseName}}</label>
+                  </td>
+                </ng-container>
+                <td *ngIf="!item.productCategory"><label
+                        class="label bg-green" placement="top" ngbTooltip="{{item.productCategory}}">{{item.productCategory}}</label>
+                </td>
+                <td>
+                  <a class="text-primary cursorLink" placement="top" ngbTooltip="{{item.productInventory}}">
+                    <u><b>{{item.productInventory}}</b></u>
+                  </a>
+                </td>
+                <td>
+                  <i class="text-sm-center text-danger" placement="top" ngbTooltip="{{item.productMinimum}}">
+                    {{item.productMinimum}}
+                  </i>
+                </td>
+                <!-- check categoryId to categoryName -->
+                <ng-container *ngFor="let i of categorys">
+                  <td *ngIf="item.categoryId == i.categoryId">
+                    <label class="label btn-grd-success"
+                           placement="top" ngbTooltip="{{item.productInventory - item.productMinimum}}">
+                      {{item.productInventory - item.productMinimum}}
+                    </label>
+                  </td>
+                </ng-container>
+                <!-- check categoryId to categoryName -->
+                <td class="action-icon">
+                  <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                     (click)="viewProduct(item); modalDefault.show();resetFile();"><i
+                          class="fa fa-book"></i></a>
+                  <!--<a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"-->
+                     <!--(click)="editProduct(item);modalDefault.show();resetFile();"><i-->
+                          <!--class="fa fa-edit"></i></a>-->
+                  <!--<a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"-->
+                     <!--(click)="deleteProduct(item)"><i class="fa fa-trash"></i></a>-->
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="10">
+                  <mfBootstrapPaginator
+                          class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--// Test add Custom Wizard //-->
+<app-modal-basic #modalDefaultWizard [dialogClass]="'modal-lg'">
+
+  <div class="app-modal-header">
+    <h4 class="modal-title">
+      <i class="fa fa fa-cubes cubes-icon-style" aria-hidden="true"></i>
+      เพิ่มสินค้า
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefaultWizard.hide(); resetFile('add');">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body">
+    <form (ngSubmit)="onSubmit(productForm); productForm.reset();" #productForm="ngForm" autocomplete="off">
+      <!--<app-card [title]="'Custom Wizard'">-->
+      <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+        <wizard-step stepTitle="สินค้า" navigationSymbol="&#xf1b2;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--// รายการสต๊อกสินค้า // -->
+            <div class="form-group row text-left">
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>ชื่อสินค้า : </label>
+                <input type="text"
+                       ngModel
+                       class="form-control form-txt-primary"
+                       placeholder="ชื่อสินค้า"
+                       name="productName">
+              </div>
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>รหัสสินค้า : </label>
+                <input type="text"
+                       ngModel
+                       class="form-control form-txt-primary"
+                       placeholder="รหัสสินค้า"
+                       name="productCodename">
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>บาร์โค๊ดสินค้า : </label>
+                <input type="text"
+                       ngModel
+                       class="form-control form-txt-primary"
+                       placeholder="บาร์โค๊ดสินค้า"
+                       name="productBarcode">
+              </div>
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>หมวดหมู่สินค้า : </label>
+                <select type="text" name="categoryId" ngModel class="form-control">
+                  <option class="form-control" value="">หมวดหมู่</option>
+                  <option
+                          *ngFor="let i of categorys"
+                          [disabled]="!i.categoryStatus"
+                          [ngValue]="i.categoryId">{{i.categoryName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <div class="input-group-sm d-inline">
+                  <label>รายละเอียดสินค้า (ย่อ) : </label>
+                  <textarea type="text"
+                            ngModel
+                            class="form-control form-txt-primary"
+                            placeholder="รายละเอียดสินค้า (ย่อ)"
+                            [cols]="50"
+                            [rows]="10"
+                            name="productComment">
+                                        </textarea>
+                </div>
+                <div class="col-12 col-md-12 col-sm-12  input-group-sm d-inline">
+                  <div class="input-group-sm d-inline">
+                    <label>รายละเอียดสินค้า : </label>
+                    <textarea type="text"
+                              ngModel
+                              class="form-control form-txt-primary"
+                              placeholder="รายละเอียดสินค้า"
+                              [cols]="50"
+                              [rows]="10"
+                              name="productDetail">
+                                        </textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>ติดป้ายแท็ก : </label>
+                <input type="text"
+                       ngModel
+                       class="form-control form-txt-primary"
+                       placeholder="ติดป้ายแท็ก"
+                       name="productTag">
+              </div>
+            </div>
+            <!--// รายการสต๊อกสินค้า // -->
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="รูปภาพ" navigationSymbol="&#xf1c5;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--//  imageUrl  //-->
+            <div class="form-group">
+              <div class="col-sm-12 col-12 col-md-12 text-center">
+                <img class="img-120" [src]="imageUrl">
+              </div>
+              <hr>
+              <div class="input-group">
+                <label class="input-group-text file">เพิ่มรูปภาพ : </label>
+                <input type="file" multiple
+                       #Image accept="image/*"
+                       ngModel
+                       name="productImage"
+                       class="form-control file"
+                       (change)="handleFileInputAdd($event.target.files)">
+              </div>
+            </div>
+            <!--//  imageUrl  //-->
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="ประเภท" navigationSymbol="&#xf1b3;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--<div class="form-group row text-left">-->
+            <!--<div class="form-radio">-->
+            <!--<div class="col-12 col-md-12 col-sm-12">-->
+
+            <!--<div class="radio radio-inline">-->
+            <!--<div class="radio radio-inline">-->
+            <!--<label>ประเภทสสินค้า</label>-->
+            <!--<label class="form-radio">-->
+            <!--<input type="radio"-->
+            <!--class="form-control"-->
+            <!--[ngModel]-->
+            <!--name="productCategory"-->
+            <!--value="สินค้าธรรมดา"-->
+            <!--checked="checked">-->
+            <!--<i class="helper"></i>สินค้าธรรมดา-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--<div class="radio radio-inline">-->
+            <!--<label class="form-radio">-->
+            <!--<input type="radio"-->
+            <!--class="form-control"-->
+            <!--[ngModel]-->
+            <!--name="productCategory"-->
+            <!--value="สินค้ามีตัวเลือก">-->
+            <!--<i class="helper"></i>สินค้ามีตัวเลือก-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--<div class="radio radio-inline">-->
+            <!--<label>-->
+            <!--<input type="radio"-->
+            <!--class="form-control"-->
+            <!--[ngModel]-->
+            <!--name="productCategory"-->
+            <!--value="สินค้าจัดเซ็ต">-->
+            <!--<i class="helper"></i>สินค้าจัดเซ็ต-->
+            <!--</label>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-12 col-md-12 col-sm-12">-->
+            <!--<select type="text" name="warehouseId" ngModel class="form-control">-->
+            <!--<option class="form-control" value="">ชื่อคลังสินค้า :</option>-->
+            <!--<option class="form-control form-txt-primary"-->
+            <!--*ngFor="let i of warehouses"-->
+            <!--[disabled]="!i.warehouseStatus"-->
+            <!--[ngValue]="i.warehouseId">{{i.warehouseName}}-->
+            <!--</option>-->
+            <!--</select>-->
+            <!--</div>-->
+            <!--<div class="col-12 col-md-12 col-sm-12">-->
+            <!--&lt;!&ndash;<label>คลังสินค้า : </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;<input type="number"&ndash;&gt;-->
+            <!--&lt;!&ndash;class="form-control form-txt-primary"&ndash;&gt;-->
+            <!--&lt;!&ndash;placeholder="9999"&ndash;&gt;-->
+            <!--&lt;!&ndash;ngModel&ndash;&gt;-->
+            <!--&lt;!&ndash;name="productInventory">&ndash;&gt;-->
+            <!--<label>ต้นทุน : </label>-->
+            <!--<input type="number"-->
+            <!--class="form-control form-txt-primary"-->
+            <!--onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58) return false;"-->
+            <!--ngModel-->
+            <!--name="productCost"-->
+            <!--min="0" max="99999" maxlength="5" value="10.00"/>-->
+            <!--<label>ราคาต่อหน่วย : </label>-->
+            <!--<input type="number"-->
+            <!--class="form-control form-txt-primary"-->
+            <!--(onchange)="setTwoNumberDecimal($event)"-->
+            <!--min="0" max="99999" step="5.00"-->
+            <!--ngModel-->
+            <!--name="productPiece"-->
+            <!--value="0.00"/>-->
+            <!--<label>จำนวนสินค้า : </label>-->
+            <!--<input type="number"-->
+            <!--class="form-control form-txt-primary"-->
+            <!--onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"-->
+            <!--(onchange)="setTwoNumberDecimal($event)"-->
+            <!--min="0.00" max="100.00" step="0.5"-->
+            <!--maxlength="3"-->
+            <!--ngModel-->
+            <!--name="productTotal"-->
+            <!--value="0.00"/>-->
+            <!--<label>สินค้าคงคลังขั้นต่ำ : </label>-->
+            <!--<input type="number"-->
+            <!--class="form-control form-txt-primary"-->
+            <!--onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"-->
+            <!--(onchange)="setTwoNumberDecimal($event)"-->
+            <!--min="0.00" max="200.00" step="1.00"-->
+            <!--ngModel-->
+            <!--name="productMinimum"-->
+            <!--value="0.00"/>-->
+            <!--<label>น้ำหนัก : </label>-->
+            <!--<input type="number"-->
+            <!--class="form-control form-txt-primary"-->
+            <!--onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"-->
+            <!--(onchange)="setTwoNumberDecimal($event)"-->
+            <!--min="0.00" max="100.00" step="0.01"-->
+            <!--maxlength="3"-->
+            <!--ngModel-->
+            <!--name="productWeight"-->
+            <!--value="0.00"/>-->
+
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="btn-group mt-10">-->
+            <!--<button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>-->
+            <!--<button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>-->
+            <!--</div>-->
+
+
+            <div class="form-group row text-left">
+              <div class="form-radio">
+                <div class="col-12 col-md-12 col-sm-12">
+
+                  <div class="radio radio-inline">
+                    <div class="radio radio-inline">
+                      <label>ประเภทสสินค้า</label>
+                      <label class="form-radio">
+                        <input type="radio"
+                               class="form-control"
+                               [ngModel]
+                               name="productCategory"
+                               value="สินค้าธรรมดา"
+                               checked="checked">
+                        <i class="helper"></i>สินค้าธรรมดา
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label class="form-radio">
+                        <input type="radio"
+                               class="form-control"
+                               [ngModel]
+                               name="productCategory"
+                               value="สินค้ามีตัวเลือก">
+                        <i class="helper"></i>สินค้ามีตัวเลือก
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label>
+                        <input type="radio"
+                               class="form-control"
+                               [ngModel]
+                               name="productCategory"
+                               value="สินค้าจัดเซ็ต">
+                        <i class="helper"></i>สินค้าจัดเซ็ต
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-12 col-sm-12">
+                <select type="text" name="warehouseId" ngModel class="form-control">
+                  <option class="form-control" value="">ชื่อคลังสินค้า :</option>
+                  <option class="form-control form-txt-primary"
+                          *ngFor="let i of warehouses"
+                          [disabled]="!i.warehouseStatus"
+                          [ngValue]="i.warehouseId">{{i.warehouseName}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-12 col-md-12 col-sm-12">
+                <!--<label>คลังสินค้า : </label>-->
+                <!--<input type="number"-->
+                <!--class="form-control form-txt-primary"-->
+                <!--placeholder="9999"-->
+                <!--ngModel-->
+                <!--name="productInventory">-->
+                <label>ต้นทุน : </label>
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58) return false;"
+                       ngModel
+                       name="productCost"
+                       min="0" max="99999" maxlength="5" value="10.00"/>
+                <label>ราคาต่อหน่วย : </label>
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0" max="99999" step="5.00"
+                       ngModel
+                       name="productPiece"
+                       value="0.00"/>
+                <label>จำนวนสินค้า : </label>
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="100.00" step="0.5"
+                       maxlength="3"
+                       ngModel
+                       name="productTotal"
+                       value="0.00"/>
+                <label>สินค้าคงคลังขั้นต่ำ : </label>
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="200.00" step="1.00"
+                       ngModel
+                       name="productMinimum"
+                       value="0.00"/>
+                <label>น้ำหนัก : </label>
+                <input type="number"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="100.00" step="0.01"
+                       maxlength="3"
+                       ngModel
+                       name="productWeight"
+                       value="0.00"/>
+
+              </div>
+            </div>
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="เสร็จสมบูรณ์" navigationSymbol="&#xf00c;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <div class="form-group">
+              <div class="input-group">
+                <label class="input-group-text">อัพเดทล่าสุด : </label>
+                <input class="form-control"
+                       [readonly]="true"
+                       placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                       name="productLastupdate"
+                       [(ngModel)]="modelPopup"
+                       ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                            <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                            </span>
+                </div>
+              </div>
+            </div>
+
+            <!--// test text mark //-->
+            <!--<input currencyMask min="-10.50" max="999.00" maxlength="8" value="0.00" placeholder="0.00"-->
+            <!--name="productCost" class="form-control"/>-->
+            <!--<input currencyMask min="0.00" max="100.00" maxlength="8" value="0.00" placeholder="0.00"-->
+            <!--name="productCost" class="form-control"/>-->
+
+            <!--<div class="form-group row">-->
+            <!--<label class="col-sm-3 col-form-label">Amount Alignment</label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<input currencyMask type="text" class="form-control" placeholder="Enter Amount Left"-->
+            <!--[options]="{ align: 'left' }"/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group row">-->
+            <!--<label class="col-sm-3 col-form-label">Positive Amount Only</label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<input currencyMask type="text" class="form-control" placeholder="Enter Positive Amount"-->
+            <!--[options]="{ allowNegative: false }"/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group row">-->
+            <!--<label class="col-sm-3 col-form-label">Decimal Separator</label>-->
+            <!--<div class="col-sm-9">-->
+            <!--<input currencyMask type="text" class="form-control" placeholder="Enter Amount"-->
+            <!--[options]="{ decimal: '.' }"/>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--// test text mark //-->
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-danger btn-sm" resetWizard>< ล้างค่า ></button>
+            </div>
+          </div>
+          <button type="submit" resetWizard
+                  class="btn btn-primary waves-effect m--20 f-w-600 d-inline-block float-left">
+            บันทึก
+          </button>
+          <button type="button" resetWizard (click)="modalDefaultWizard.hide()"
+                  class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block float-right">
+            ปิด
+          </button>
+        </wizard-step>
+      </wizard>
+
+    </form>
+    <!--</app-card>-->
+  </div>
+
+  <div class="app-modal-footer">
+
+  </div>
+
+</app-modal-basic>
+<!--// Test Custom Wizard //-->
+
+<!--// edit && View data // -->
+<app-modal-basic #modalDefault [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title" *ngIf="isReadOnly">
+      <i class="fa fa fa-book book-icon-style" aria-hidden="true"></i>
+      วิวสินค้า
+    </h4>
+    <h4 class="modal-title" *ngIf="!isReadOnly">
+      <i class="fa fa fa-edit edit-icon-style" aria-hidden="true"></i>
+      แก้ไขสินค้า
+    </h4>
+    <button type="button" class="close basic-close" (click)="modalDefault.hide();">
+      <span aria-hidden="true">x</span>
+    </button>
+  </div>
+
+  <div class="app-modal-body">
+    <!--<form (ngSubmit)="onSubmit(productForm); productForm.reset();" #productForm="ngForm" autocomplete="off">-->
+    <form #productUpdateForm="ngForm" autocomplete="off">
+      <!--<app-card [title]="'Custom Wizard'">-->
+      <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+        <wizard-step stepTitle="สินค้า" navigationSymbol="&#xf1b2;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--// รายการสต๊อกสินค้า // -->
+            <div class="form-group row text-left">
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>ชื่อสินค้า : </label>
+                <input type="text"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productName"
+                       value="{{product.productName}}"
+                       class="form-control form-txt-primary"
+                       placeholder="ชื่อสินค้า"
+                       name="productName">
+              </div>
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>รหัสสินค้า : </label>
+                <input type="text"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productCodename"
+                       value="{{product.productCodename}}"
+                       class="form-control form-txt-primary"
+                       placeholder="รหัสสินค้า"
+                       name="productCodename">
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>บาร์โค๊ดสินค้า : </label>
+                <input type="text"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productBarcode"
+                       value="{{product.productBarcode}}"
+                       class="form-control form-txt-primary"
+                       placeholder="บาร์โค๊ดสินค้า"
+                       name="productBarcode">
+              </div>
+              <div class="col-6 col-md-6 col-sm-6 input-group-sm">
+                <label>หมวดหมู่สินค้า : </label>
+                <select type="text"
+                        [disabled]="isReadOnly"
+                        [(ngModel)]="product.categoryId"
+                        name="categoryId"
+                        class="form-control">
+                  <option class="form-control" value="">หมวดหมู่</option>
+                  <option
+                          *ngFor="let i of categorys"
+                          [disabled]="!i.categoryStatus"
+                          [ngValue]="i.categoryId"
+                          [selected]="i.categoryId === product.categoryId">
+                    {{i.categoryName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <div class="input-group-sm d-inline">
+                  <label>รายละเอียดสินค้า (ย่อ) : </label>
+                  <textarea type="text"
+                            [disabled]="isReadOnly"
+                            [(ngModel)]="product.productComment"
+                            value="{{product.productComment}}"
+                            class="form-control form-txt-primary"
+                            placeholder="รายละเอียดสินค้า (ย่อ)"
+                            [cols]="50"
+                            [rows]="10"
+                            name="productComment">
+                                        </textarea>
+                </div>
+                <div class="col-12 col-md-12 col-sm-12  input-group-sm d-inline">
+                  <div class="input-group-sm d-inline">
+                    <label>รายละเอียดสินค้า : </label>
+                    <textarea type="text"
+                              [disabled]="isReadOnly"
+                              [(ngModel)]="product.productDetail"
+                              value="{{product.productDetail}}"
+                              class="form-control form-txt-primary"
+                              placeholder="รายละเอียดสินค้า"
+                              [cols]="50"
+                              [rows]="10"
+                              name="productDetail">
+                                        </textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row text-left">
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                <label>ติดป้ายแท็ก : </label>
+                <input type="text"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productTag"
+                       value="{{product.productTag}}"
+                       class="form-control form-txt-primary"
+                       placeholder="ติดป้ายแท็ก"
+                       name="productTag">
+              </div>
+            </div>
+            <!--// รายการสต๊อกสินค้า // -->
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+            <div class="form-group">
+              <button type="button"
+                      resetWizard
+                      (click)="modalDefault.hide()"
+                      class="btn btn-sm btn-danger waves-effect float-right">ปิด
+              </button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="รูปภาพ" navigationSymbol="&#xf1c5;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <!--//  imageUrl  //-->
+            <div class="form-group">
+              <hr class="mt-3">
+              <div class="col-sm-12 col-12 col-md-12 text-center">
+                <img class="img-120" [src]="showImg">
+              </div>
+              <hr>
+              <div class="input-group">
+                <label class="input-group-text file">เปลี่ยนรูปภาพ : </label>
+                <input type="file" multiple
+                       #Image accept="image/*"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="resetFileDefault"
+                       name="productImage"
+                       class="form-control file"
+                       (change)="handleFileInputEdit($event.target.files)">
+              </div>
+            </div>
+            <!--//  imageUrl  //-->
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+            <div class="form-group">
+              <button type="button"
+                      resetWizard
+                      (click)="modalDefault.hide()"
+                      class="btn btn-sm btn-danger waves-effect float-right">ปิด
+              </button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="ประเภท" navigationSymbol="&#xf1b3;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <div class="form-group row text-left">
+              <div class="form-radio">
+                <div class="col-12 col-md-12 col-sm-12">
+
+                  <div class="radio radio-inline">
+                    <div class="radio radio-inline">
+                      <label>ประเภทสสินค้า</label>
+                      <label class="form-radio">
+                        <input type="radio" *ngIf="product.productCategory == 'สินค้าธรรมดา'"
+                               checked
+                               [disabled]="isReadOnly"
+                               [(ngModel)]="product.productCategory"
+                               value="{{product.productCategory}}"
+                               class="form-control"
+                               name="productCategory">
+                        <!--value="สินค้าธรรมดา">-->
+                        <i class="helper"></i>สินค้าธรรมดา
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label class="form-radio">
+                        <input type="radio"
+                               *ngIf="product.productCategory == 'สินค้ามีตัวเลือก'"
+                               checked
+                               [disabled]="isReadOnly"
+                               [(ngModel)]="product.productCategory"
+                               value="{{product.productCategory}}"
+                               class="form-control"
+                               name="productCategory">
+                        <!--value="สินค้ามีตัวเลือก">-->
+                        <i class="helper"></i>สินค้ามีตัวเลือก
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label>
+                        <input type="radio" *ngIf="product.productCategory == 'สินค้าจัดเซ็ต'"
+                               checked
+                               [disabled]="isReadOnly"
+                               [(ngModel)]="product.productCategory"
+                               value="{{product.productCategory}}"
+                               class="form-control"
+                               name="productCategory">
+                        <!--value="สินค้าจัดเซ็ต">-->
+                        <i class="helper"></i>สินค้าจัดเซ็ต
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                <label>ชื่อคลังสินค้า : </label>
+                <select type="text"
+                        [disabled]="isReadOnly"
+                        [(ngModel)]="product.warehouseId"
+                        name="warehouseId"
+                        class="form-control">
+                  <option class="form-control" value="">ชื่อคลังสินค้า</option>
+                  <option
+                          *ngFor="let i of warehouses"
+                          [disabled]="!i.warehouseStatus"
+                          [ngValue]="i.warehouseId"
+                          [selected]="i.warehouseId === product.warehouseId">
+                    {{i.warehouseName}}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-12 col-md-12 col-sm-12">
+
+                <!--<label>คลังสินค้า : </label>-->
+                <!--<input type="number"-->
+                <!--[disabled]="isReadOnly"-->
+                <!--[(ngModel)]="product.productInventory"-->
+                <!--value="{{product.productInventory}}"-->
+                <!--class="form-control form-txt-primary"-->
+                <!--placeholder="9999"-->
+                <!--name="productInventory">-->
+                <label>ต้นทุน : </label>
+                <input type="number"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productCost"
+                       value="{{product.productCost}}"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==4 && event.keyCode>47 && event.keyCode < 58) return false;"
+                       name="productCost"
+                       min="0" max="99999" maxlength="5">
+                <label>ราคาต่อหน่วย : </label>
+                <input type="number"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productPiece"
+                       value="{{product.productPiece}}"
+                       class="form-control form-txt-primary"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0" max="99999" step="5.00"
+                       name="productPiece">
+                <label>จำนวนสินค้า : </label>
+                <input type="number"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productTotal"
+                       value="{{product.productTotal}}"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="100.00" step="0.5"
+                       maxlength="3"
+                       name="productTotal">
+                <label>สินค้าคงคลังขั้นต่ำ : </label>
+                <input type="number"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productMinimum"
+                       value="{{product.productMinimum}}"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="200.00" step="1.00"
+                       name="productMinimum">
+                <label>น้ำหนัก : </label>
+                <input type="number"
+                       [disabled]="isReadOnly"
+                       [(ngModel)]="product.productWeight"
+                       value="{{product.productWeight}}"
+                       class="form-control form-txt-primary"
+                       onKeyDown="if(this.value.length==2 && event.keyCode!=8) return false;"
+                       (onchange)="setTwoNumberDecimal($event)"
+                       min="0.00" max="100.00" step="0.01"
+                       maxlength="3"
+                       name="productWeight">
+              </div>
+            </div>
+
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-primary btn-sm" nextStep>ถัดไป ></button>
+            </div>
+            <div class="form-group">
+              <button type="button"
+                      resetWizard
+                      (click)="modalDefault.hide()"
+                      class="btn btn-sm btn-danger waves-effect float-right">ปิด
+              </button>
+            </div>
+          </div>
+        </wizard-step>
+        <wizard-step stepTitle="เสร็จสมบูรณ์" navigationSymbol="&#xf00c;" navigationSymbolFontFamily="FontAwesome">
+          <div class="centered-content">
+
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control"
+                       [disabled]="isReadOnly"
+                       readonly="true"
+                       name="productLastupdate"
+                       [(ngModel)]="modelPopupProductLastupdate"
+                       ngbDatepicker #ddStart="ngbDatepicker">
+                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                </div>
+              </div>
+            </div>
+            <div class="btn-group mt-10">
+              <button type="button" class="btn btn-secondary btn-sm" previousStep>< ย้อนหลัง</button>
+              <button type="button" class="btn btn-danger btn-sm" resetWizard>< ล้างค่า ></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="button"
+                    resetWizard
+                    class="btn btn-sm btn-success waves-effect float-left"
+                    *ngIf="!isReadOnly"
+                    (click)="updateProduct(productUpdateForm);">
+              บันทึก
+            </button>
+            <button type="button"
+                    resetWizard
+                    (click)="modalDefault.hide()"
+                    class="btn btn-sm btn-danger waves-effect float-right">ปิด
+            </button>
+          </div>
+
+        </wizard-step>
+      </wizard>
+
+    </form>
+    <!--</app-card>-->
+  </div>
+
+  <div class="app-modal-footer">
+    <!--<button type="button"-->
+    <!--class="btn btn-success waves-effect"-->
+    <!--*ngIf="!isReadOnly"-->
+    <!--(click)="updateProduct(productUpdateForm);">-->
+    <!--บันทึก-->
+    <!--</button>-->
+    <!--<button type="button"-->
+    <!--(click)="modalDefault.hide()"-->
+    <!--class="btn btn-danger waves-effect">ปิด-->
+    <!--</button>-->
+  </div>
+
+</app-modal-basic>
+<!--// edit && View data // -->

@@ -1,0 +1,569 @@
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->
+<app-card [title]="'ยอดขายสินค้า ' + ' [&nbsp;วันที่:&nbsp;' + bsRangeValueDefualtStr + '&nbsp;]'"
+          [blockClass]="'tab-icon'"
+          [cardOptionBlock]="true">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-xl-6 text-left">
+                    <div *ngIf="reportData.length > 0"
+                         ngbDropdown class="btn-group dropdown-split-inverse">
+                        <button type="button"
+                                [disabled]="reportData.length < 1"
+                                (click)="exportReportSaleProductsAllToExcel(reportData);"
+                                class="btn btn-sm btn-inverse light">
+                            <i class="fa fa-file-excel-o"></i>ส่งออกยอดขายตามสินค้า
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-xl-6 text-right">
+                    <div style="text-align: right;">
+                        <div class="btn-group-sm" role="group">
+                            <label class="input-group-sm text-right">จาก - ถึง
+                                <input type="text"
+                                       #rangDate
+                                       readonly="true"
+                                       placeholder="ค้นหาจากวันที่ - วันที่"
+                                       name="rangDate"
+                                       class="form-control input-sm text-sm-left full-data-search dropdown-toggle"
+                                       [bsConfig]="bsConfig"
+                                       [(ngModel)]="bsRangeValueDefualt"
+                                       bsDaterangepicker>
+                            </label>
+                            <button class="btn-sm icofont icofont-ui-search btn-primary"
+                                    (click)="fetchOrderMapProduct(rangDate.value)">
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Day');"
+                                    [ngClass]="{'active': ActiveVal === 'Day'}"
+                                    class="btn btn-sm btn-outline-primary">วันนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Tomorrow');"
+                                    [ngClass]="{'active': ActiveVal === 'Tomorrow'}"
+                                    class="btn btn-sm btn-outline-primary">เมื่อวานนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Month');"
+                                    [ngClass]="{'active': ActiveVal === 'Month'}"
+                                    class="btn btn-sm btn-outline-primary">เดือนนี้
+                            </button>
+                            <button type="button"
+                                    (click)="setRangeDateSearch(rangDate.value, 'Year');"
+                                    [ngClass]="{'active': ActiveVal === 'Year'}"
+                                    class="btn btn-sm btn-outline-primary">ปีนี้
+                            </button>
+                            <label class="input-group-sm">แสดง
+                                <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                    <option [ngValue]="25">25</option>
+                                    <option [ngValue]="50">50</option>
+                                    <option [ngValue]="100">100</option>
+                                    <option [ngValue]="200">200</option>
+                                </select>
+                                แถว
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive-sm">
+                <ngx-datatable
+                        class="data-table"
+                        [rows]="reportData"
+                        [columnMode]="'force'"
+                        [scrollbarH]="true"
+                        [headerHeight]="50"
+                        [rowHeight]="45"
+                        [limit]="rowsOnPage"
+                        [footerHeight]="30"
+                        [selected]="selected"
+                        (select)='onSelect($event)'
+                        (activate)="onActivate($event)"
+                        [selectionType]="'checkbox'">
+                    <!--<ngx-datatable-column [width]="50" [sortable]="false"-->
+                    <!--[canAutoResize]="false" [draggable]="false"-->
+                    <!--[resizeable]="false">-->
+                    <!--<ng-template class="datatable-checkbox"-->
+                    <!--ngx-datatable-header-template let-value="value"-->
+                    <!--let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">-->
+                    <!--<div class="checkbox-fade datatable-header-cell-label-->
+                    <!--border-checkbox-group border-checkbox-group-default">-->
+                    <!--<label>-->
+                    <!--<input type="checkbox"-->
+                    <!--[checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>-->
+                    <!--<span class="cr">-->
+                    <!--<i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>-->
+                    <!--</span>-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <!--</ng-template>-->
+                    <!--<ng-template class="datatable-checkbox"-->
+                    <!--ngx-datatable-cell-template let-value="value"-->
+                    <!--let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">-->
+                    <!--<div class="checkbox-fade datatable-header-cell-label-->
+                    <!--border-checkbox-group border-checkbox-group-default">-->
+                    <!--<label>-->
+                    <!--<input type="checkbox"-->
+                    <!--[checked]="isSelected"-->
+                    <!--(change)="onCheckboxChangeFn($event)">-->
+                    <!--<span class="cr">-->
+                    <!--<i class="cr-icon icofont icofont-ui-check chk-option-center txt-primary"></i>-->
+                    <!--</span>-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <!--</ng-template>-->
+                    <!--</ngx-datatable-column>-->
+                    <!--<ngx-datatable-column name="#ID" prop="productId" [width]="80">-->
+                    <!--<ng-template let-value="value" ngx-datatable-cell-template>-->
+                    <!--<label class="text-left">-->
+                    <!--<a class="text-center cursorLink"-->
+                    <!--target="_blank"-->
+                    <!--[routerLink]="['/management/products/products-edit/' + value]">-->
+                    <!--#{{value}}-->
+                    <!--</a>-->
+                    <!--</label>-->
+                    <!--</ng-template>-->
+                    <!--</ngx-datatable-column>-->
+                    <ngx-datatable-column name="SKU" prop="productCodename" [width]="120">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-left">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ชื่อสินค้า" prop="productName" [width]="250">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-left text-print"
+                               placement="auto" container="body"
+                               ngbTooltip="{{value}}">
+                                {{value}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="คงคลัง" prop="productTotal" [width]="100">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-center">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="จอง" prop="productHold" [width]="100">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-center">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="พร้อมขาย" prop="productRemain" [width]="100">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p class="text-center">{{value}}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="จำนวนชิ้น(สินค้า)" prop="productsAmount">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="จำนวนออเดอร์" prop="productsSumCount">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="ยอดรวม(สินค้า)" prop="productsTotalPrice">
+                        <ng-template let-value="value" ngx-datatable-cell-template class="text-center">
+                            <p placement="top" container="body">
+                                {{value|currency:'฿ '}}
+                            </p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <div class="row">
+                <div class='col-sm-12 selected-column text-left'>
+                    <br><b>สินค้า </b>{{reportSumAPTotal}} <b>ชิ้น</b> | <b>ยอดรวมทั้งสิ้น</b> {{reportSumPPATotal|currency:'฿ '}}
+                    <b>บาท</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-card>
+<!-- ngx-datatable start -->
+<!-- ngx-datatable start -->
+
+
+
+
+
+<!--&lt;!&ndash; step 2 &ndash;&gt;-->
+<!--&lt;!&ndash; step 2 &ndash;&gt;-->
+<!--<div class="page-body">-->
+  <!--<div class="row">-->
+    <!--<div class="col-sm-12 col-md-12 col-xl-12 text-justify">-->
+      <!--<app-card [title]="'ยอดขายสินค้า'"-->
+                <!--[cardClass]="'latest-activity-card'"-->
+                <!--[cardOptionBlock]="true"-->
+                <!--[headerClass]="'borderless'">-->
+        <!--<div class="table-responsive-sm">-->
+          <!--<table class="table table-sm table-hover table-borderless full-data-table"-->
+                 <!--[mfData]="reportData"-->
+                 <!--#mf="mfDataTable"-->
+                 <!--[mfRowsOnPage]="rowsOnPage"-->
+                 <!--[(mfSortBy)]="sortBy"-->
+                 <!--[(mfSortOrder)]="sortOrder">-->
+            <!--<thead class="table-striped">-->
+            <!--<tr class="text-center table-light">-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productId">#ID</mfDefaultSorter>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productCodename">SKU</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productName">ชื่อสินค้า</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productTotal">คงคลัง</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productHold">จอง</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productRemain">พร้อมขาย</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productsAmount">จำนวนสินค้า(ชิ้น)</mfDefaultSorter>-->
+              <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productsSumCount">จำนวนออเดอร์</mfDefaultSorter>-->
+                <!--</th>-->
+              <!--<th class="text-center">-->
+                <!--<mfDefaultSorter by="productsTotalPrice">ราคาขายรวม(สินค้า)</mfDefaultSorter>-->
+              <!--</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr *ngFor="let rp of mf.data; let i = index;">-->
+              <!--<td class="text-left">-->
+                <!--<a class="cursorLink"-->
+                   <!--target="_blank"-->
+                   <!--[routerLink]="['/management/products/products-edit/' + rp.productId]">-->
+                <!--#{{rp._id.idO}}-->
+                <!--</a>-->
+              <!--</td>-->
+              <!--<td class="text-left">{{rp._id.codeO}}</td>-->
+              <!--<td class="text-left">{{rp.productName}}</td>-->
+              <!--<td class="text-center">{{rp.productTotal}}</td>-->
+              <!--<td class="text-center">{{rp.productHold}}</td>-->
+              <!--<td class="text-center">{{rp.productRemain}}</td>-->
+              <!--<td class="text-center">{{rp.productsAmount}}</td>-->
+              <!--<td class="text-center">-->
+                <!--<label class="label label-primary">{{rp.productsSumCount}}</label>-->
+              <!--</td>-->
+              <!--<td class="text-center">-->
+                <!--<label class="label label-primary border-double">-->
+                  <!--{{rp.productsTotalPrice|currency:'฿ '}}-->
+                <!--</label>-->
+              <!--</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+            <!--<tfoot class="footer-text table-light">-->
+              <!--<tr>-->
+                <!--<td colspan="6" class="text-right text-underline">รวมทั้งสิ้น</td>-->
+                <!--<td class="text-center text-underline">{{reportSumAPTotal}}</td>-->
+                <!--<td class="text-center">&#45;&#45;</td>-->
+                <!--<td class="text-center text-underline text-primary font-weight-bold">-->
+                  <!--{{reportSumPPATotal|currency:'฿ '}}-->
+                <!--</td>-->
+              <!--</tr>-->
+            <!--</tfoot>-->
+            <!--<tfoot>-->
+            <!--<tr>-->
+              <!--<td colspan="9">-->
+                <!--<mfBootstrapPaginator-->
+                        <!--class="pagination-main f-right pull-right">-->
+                <!--</mfBootstrapPaginator>-->
+              <!--</td>-->
+            <!--</tr>-->
+            <!--</tfoot>-->
+          <!--</table>-->
+        <!--</div>-->
+
+      <!--&lt;!&ndash; add &ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="card">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="card-header">&ndash;&gt;-->
+          <!--&lt;!&ndash;<h5>รายการสั่งซื้อ</h5>&ndash;&gt;-->
+          <!--&lt;!&ndash;<div style="text-align: right">&ndash;&gt;-->
+            <!--&lt;!&ndash;<label class="input-group-sm">ค้นหา:&ndash;&gt;-->
+              <!--&lt;!&ndash;<input type="search"&ndash;&gt;-->
+                     <!--&lt;!&ndash;class="form-control input-sm full-data-search"&ndash;&gt;-->
+                     <!--&lt;!&ndash;placement="top" ngbTooltip="ค้นหาข้อมูลผู้ใช้งานระบบ"&ndash;&gt;-->
+                     <!--&lt;!&ndash;placeholder="Search name">&ndash;&gt;-->
+            <!--&lt;!&ndash;</label>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="card-block">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="bs-example grid-layout grid">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 push-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;<B>#ID </B>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 push-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;<B>SKU</B>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 push-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;<B>จำนวน (ชิ้น)</B>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 push-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;<B>จำนวนออเดอร์</B>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<ng-container *ngFor="let rep of reportData;let i = index">&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 pull-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;{{rep._id.idO}}&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 pull-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;{{rep._id.codeO}}&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 pull-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;{{rep.productsAmount}}&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="col-sm-3 pull-md-3 align-top">&ndash;&gt;-->
+                <!--&lt;!&ndash;{{rep.productsSumCount}}&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;</ng-container>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash; add &ndash;&gt;-->
+
+      <!--</app-card>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;<div class="col-sm-12 col-md-12 col-xl-12 text-justify">&ndash;&gt;-->
+      <!--&lt;!&ndash;<app-card [title]="'ยอดขายเดือนปัจจุบัน - ของผู้ขาย'"&ndash;&gt;-->
+                <!--&lt;!&ndash;[cardClass]="'latest-activity-card'"&ndash;&gt;-->
+                <!--&lt;!&ndash;[cardOptionBlock]="true"&ndash;&gt;-->
+                <!--&lt;!&ndash;[headerClass]="'borderless'">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="table-responsive-sm">&ndash;&gt;-->
+
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;</app-card>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash; step 2 &ndash;&gt;-->
+<!--&lt;!&ndash; step 2 &ndash;&gt;-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<br>-->
+<!--<p>-->
+  <!--sales-product works!-->
+  <!--<br>-->
+  <!--<br class="text-center align-content-center">-->
+<!--</p>-->
+  <!--<div class="align-content-center text-center">-->
+
+    <!--&lt;!&ndash;<table *ngFor="let i of testaaa">&ndash;&gt;-->
+      <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+        <!--&lt;!&ndash;<td>row = {{i}}</td>&ndash;&gt;-->
+    <!--&lt;!&ndash;</table>&ndash;&gt;-->
+    <!--&lt;!&ndash;<table class="text-left">&ndash;&gt;-->
+      <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+        <!--&lt;!&ndash;<td>SumCount = {{SumCount}}</td>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+      <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+        <!--&lt;!&ndash;<td>SumOrdersTotal = {{SumOrdersTotal}}</td>&ndash;&gt;-->
+      <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+    <!--&lt;!&ndash;</table>&ndash;&gt;-->
+
+    <!--&lt;!&ndash; dateRange &ndash;&gt;-->
+
+    <!--&lt;!&ndash; dateRange &ndash;&gt;-->
+
+    <!--&lt;!&ndash;<ngb-datepicker #ds [(ngModel)]="startDate" (navigate)="date = $event.next"></ngb-datepicker>&ndash;&gt;-->
+    <!--&lt;!&ndash;<ngb-datepicker #de [(ngModel)]="endDate" (navigate)="date = $event.next"></ngb-datepicker>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<hr/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash;<input type="text" ngbDatepicker [value]="now| date: 'yyyy-MM-dd'" #d="ngbDatepicker"/>&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash;<button (click)="d.toggle()">Toggle</button>&ndash;&gt;&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<pre>Model: {{ startDate | json }}</pre>&ndash;&gt;-->
+    <!--&lt;!&ndash;<pre>endDate: {{ endDate | json }}</pre>&ndash;&gt;-->
+    <!--<button class="btn btn-sm btn-outline-primary mr-2" (click)="selectToday()">Select Today</button>-->
+    <!--<button class="btn btn-sm btn-outline-primary mr-2" (click)="selectDateRange()">Select EndDate</button>-->
+
+    <!--&lt;!&ndash;// start //&ndash;&gt;-->
+    <!--<hr/>-->
+
+    <!--<form class="row form-inline">-->
+      <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+          <!--&lt;!&ndash;<input class="form-control" placeholder="yyyy-mm-dd"&ndash;&gt;-->
+                 <!--&lt;!&ndash;name="dp" [displayMonths]="displayMonths" [navigation]="navigation" [outsideDays]="outsideDays"&ndash;&gt;-->
+                 <!--&lt;!&ndash;[showWeekNumbers]="showWeekNumbers" ngbDatepicker #d="ngbDatepicker">&ndash;&gt;-->
+          <!--<div class="input-group-append">-->
+            <!--&lt;!&ndash;<button class="btn btn-sm btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>&ndash;&gt;-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</form>-->
+
+    <!--<hr/>-->
+
+    <!--<div class="d-flex flex-wrap align-content-between p-2">-->
+      <!--&lt;!&ndash;<select class="custom-select" [(ngModel)]="displayMonths">&ndash;&gt;-->
+        <!--&lt;!&ndash;<option [ngValue]="1">One month</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option [ngValue]="2">Two months</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option [ngValue]="3">Three months</option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+      <!--&lt;!&ndash;<select class="custom-select" [(ngModel)]="navigation">&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="none">Without navigation</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="select">With select boxes</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="arrows">Without select boxes</option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+      <!--&lt;!&ndash;<select class="custom-select" [(ngModel)]="showWeekNumbers">&ndash;&gt;-->
+        <!--&lt;!&ndash;<option [ngValue]="true">Week numbers</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option [ngValue]="false">No week numbers</option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+      <!--&lt;!&ndash;<select class="custom-select" [(ngModel)]="outsideDays">&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="visible">Visible outside days</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="hidden">Hidden outside days</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;<option value="collapsed">Collapsed outside days</option>&ndash;&gt;-->
+      <!--&lt;!&ndash;</select>&ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash;// end //&ndash;&gt;-->
+
+    <!--<div class="text-center">-->
+      <!--<ngb-datepicker #d></ngb-datepicker>-->
+      <!--<hr>-->
+
+      <!--<input type="text" ngbDatepicker #d="ngbDatepicker"/>-->
+      <!--<button (click)="d.toggle()">Toggle</button>-->
+      <!--<p>Example of the range selection</p>-->
+      <!--<hr>-->
+      <!--&lt;!&ndash;<ngb-datepicker #d [startDate]="{year: 1789, month: 7}"></ngb-datepicker>&ndash;&gt;-->
+      <!--&lt;!&ndash;<button (click)="d.navigateTo({year: 2048, month: 1, date: 1})">Goto JAN 2048</button>&ndash;&gt;-->
+      <!--<hr>-->
+
+      <!--<hr/>-->
+
+      <!--<form class="form-inline">-->
+        <!--<div class="form-group">-->
+          <!--<div class="input-group col-sm-12 row">-->
+
+            <!--<input class="form-control" placeholder="yyyy-mm-dd"-->
+                   <!--multiple-->
+                   <!--[(ngModel)]="fromDate"-->
+                   <!--name="dp1" [displayMonths]="displayMonths" [navigation]="navigation" [outsideDays]="outsideDays"-->
+                   <!--[showWeekNumbers]="showWeekNumbers" ngbDatepicker #d1="ngbDatepicker">-->
+            <!--&lt;!&ndash;<div class="input-group-append">&ndash;&gt;-->
+              <!--&lt;!&ndash;<button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--<input class="form-control" placeholder="yyyy-mm-dd"-->
+                   <!--multiple-->
+                   <!--[(ngModel)]="toDate"-->
+                   <!--name="dp2" [displayMonths]="displayMonths" [navigation]="navigation" [outsideDays]="outsideDays"-->
+                   <!--[showWeekNumbers]="showWeekNumbers" ngbDatepicker #d2="ngbDatepicker">-->
+            <!--&lt;!&ndash;<div class="input-group-append">&ndash;&gt;-->
+              <!--&lt;!&ndash;<button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</form>-->
+
+      <!--<hr/>-->
+      <!--<br>-->
+      <!--<ngb-datepicker #dp-->
+                      <!--[minDate]="{year: 2018, month: 1, day: 1}"-->
+                      <!--[maxDate]="{year: 2020, month: 12, day: 31}"-->
+                      <!--(select)="onDateSelection($event)"-->
+                      <!--[displayMonths]="2"-->
+                      <!--outsideDays="collapsed">-->
+      <!--</ngb-datepicker>-->
+      <!--<ng-template #t let-date let-focused="focused">-->
+          <!--&lt;!&ndash;<span class="custom-day"&ndash;&gt;-->
+                <!--&lt;!&ndash;[class.focused]="focused"&ndash;&gt;-->
+                <!--&lt;!&ndash;[class.range]="isRange(date)"&ndash;&gt;-->
+                <!--&lt;!&ndash;[class.faded]="isHovered(date) || isInside(date)"&ndash;&gt;-->
+                <!--&lt;!&ndash;(mouseenter)="hoveredDate = date"&ndash;&gt;-->
+                <!--&lt;!&ndash;(mouseleave)="hoveredDate = null">&ndash;&gt;-->
+          <!--&lt;!&ndash;</span>&ndash;&gt;-->
+        <!--{{date.day}}-->
+      <!--</ng-template>-->
+      <!--<br>-->
+      <!--<hr>-->
+      <!--<br>-->
+      <!--<div class="row text-center justify-content-sm-center ">-->
+        <!--<pre>From: {{ fromDate | json }} </pre>-->
+        <!--<pre>To: {{ toDate | json }} </pre>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <!--<timepicker [(ngModel)]="myTime" [showMeridian]="isMeridian" [showSpinners]="!showSpinners"></timepicker>-->
+    <!--<hr>-->
+    <!--<pre class="alert alert-info">Time is: {{myTime}}</pre>-->
+    <!--<div class="row">-->
+      <!--<div class="col-xs-12 col-12 col-md-4 form-group">-->
+        <!--<input type="text"-->
+               <!--placeholder="Datepicker"-->
+               <!--class="form-control"-->
+               <!--[bsConfig]="{dateInputFormat: 'DD-MM-YYYY', containerClass: 'theme-red'}"-->
+               <!--bsDatepicker>-->
+      <!--</div>-->
+      <!--<div class="col-xs-12 col-12 col-md-4 form-group">-->
+        <!--<input type="text"-->
+               <!--placeholder="Daterangepicker"-->
+               <!--class="form-control"-->
+               <!--[bsConfig]="bsConfig"-->
+               <!--bsDaterangepicker>-->
+      <!--</div>-->
+    <!--</div>-->
+
+  <!--</div>-->

@@ -1,0 +1,916 @@
+<form #OrderEditForm="ngForm" novalidate autocomplete="off">
+  <div class="col-sm-12 input-group">
+    <div class="card">
+      <!--<div class="card-header">-->
+      <!--<h5>เพิ่มข้อมูลคำสั่งซื้อ</h5>-->
+      <!--</div>-->
+      <div class="card-block">
+        <div class="row">
+          <!-- basic card start -->
+          <div class="col-md-6 col-xl-4">
+            <div class="card">
+              <!--<div class="card-header">-->
+              <!--<h5>เพิ่มข้อมูลคำสั่งซื้อ</h5>-->
+              <!--</div>-->
+              <div class="card-block form-group">
+                <!--<h4>เพิ่มข้อมูลคำสั่งซื้อ</h4>-->
+
+                <!--<div class="form-group">-->
+                <!--<div *ngFor="let i of order.customer">-->
+                <!--<label class="label text-primary">{{i.orderCustomerSocial}}</label>-->
+                <!--<label class="label text-primary">{{i.orderCustomerNameSurname}}</label>-->
+                <!--<label class="label text-primary">{{i.orderCustomerTel}}</label>-->
+                <!--<label class="label text-primary">{{i.orderCustomerAddress}}</label>-->
+                <!--<label class="label text-primary">{{i.orderCustomerZipcode}}</label>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<div *ngFor="let xx of orderProducts">-->
+                <!--<label class="label text-primary">{{xx.price}}</label>-->
+                <!--<label class="label text-primary">{{xx.amount}}</label>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<div *ngFor="let k of order.delivery">-->
+                <!--<label class="label text-primary">{{k.orderShipmentId}}</label>-->
+                <!--<label class="label text-primary">{{k.price}}</label>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                <!--<div *ngFor="let l of order.payment">-->
+                <!--<label class="label text-primary">{{l.method}}</label>-->
+                <!--<label class="label text-primary">{{l.orderShipmentId}}</label>-->
+                <!--<label class="label text-primary">{{l.orderBankId}}</label>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <div class="input-group input-group-sm">
+                  <!--<input type="text" autofocus-->
+                  <!--class="form-control form-control-round form-txt-primary input-group"-->
+                  <!--placeholder="ค้นหาชื่อ-สกุลลูกค้า"-->
+                  <!--ngModel-->
+                  <!--name="Name1">-->
+                  <input type="search"
+                         id="typeahead-template"
+                         #ordersCustomerNameSurnamexx
+                         autofocus
+                         class="form-control form-txt-primary"
+                         placeholder="ค้นหาชื่อ-สกุลลูกค้า / เบอร์โทรศัพท์"
+                         [(ngModel)]="modelCustomers"
+                         [ngbTypeahead]="searchCustomer"
+                         [inputFormatter]="formatterCustomerNameSurname"
+                         [resultTemplate]="rtName"
+                         name="ordersCustomerNameSurnamexx">
+                  <!--<pre>{{modelCustomers|json}}</pre>-->
+                  <ng-template #rtName let-r="result" let-t="term" class="input-group-sm text-sm-center text-primary">
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--class="mr-1" style="width: 16px">-->
+                    <ngb-highlight [result]="r.customerNameSurname + ' | '+ r.customerTel" [term]="t"></ngb-highlight>
+                  </ng-template>
+                  <span class="input-group-append">
+                  <label class="input-group-text">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </label>
+                  </span>
+                </div>
+                <form [formGroup]="customerForm" novalidate autocomplete="off">
+                  <!--<ng-container *ngFor="let customer of orderCustomer">-->
+                  <div class="form-group input-group-sm">
+                    <!--<label class="col-sm-4 col-lg-2 col-form-label">ช่องทาง</label>-->
+                    <select
+                            id="orderCustomerChannelId"
+                            #orderCustomerChannelId
+                            [ngModel]="order.orderChannelId"
+                            name="orderCustomerChannelId"
+                            formControlName="orderCustomerChannelId"
+                            class="form-control text-primary input-group-sm">
+                      <!--<option class="form-control" value="">เลือกช่องทาง</option>-->
+                      <option
+                              *ngFor="let i of channels;"
+                              [disabled]="!i.channelStatus"
+                              [ngValue]="i.channelId">
+                        {{i.channelName}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group input-group-sm">
+                    <input type="text" hidden
+                           id="orderCustomerId"
+                           #orderCustomerId
+                           class="form-control form-txt-primary"
+                           [ngModel]="modelCustomers"
+                           [ngbTypeahead]="searchCustomer"
+                           [inputFormatter]="formatterCustomerId"
+                           formControlName="orderCustomerId"
+                           name="orderCustomerId">
+                  </div>
+                  <div class="form-group input-group-sm">
+                    <input type="text" hidden
+                           id="orderCustomerCMId"
+                           #orderCustomerCMId
+                           class="form-control form-txt-primary"
+                           [ngModel]="modelCustomers"
+                           [ngbTypeahead]="searchCustomer"
+                           [inputFormatter]="formatterCustomerCMId"
+                           formControlName="orderCustomerCMId"
+                           name="orderCustomerCMId">
+                  </div>
+                  <ng-template #rtSocial let-r="result" let-t="term">
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--class="mr-1" style="width: 16px">-->
+                    <ngb-highlight [result]="r.customerSocial" [term]="t"></ngb-highlight>
+                  </ng-template>
+                  <div class="form-group input-group-sm">
+                    <input type="text"
+                           id="orderCustomerSocial"
+                           class="form-control form-txt-primary"
+                           placeholder="ชื่อโซลเชียล"
+                           [ngModel]="modelCustomers"
+                           [ngbTypeahead]="searchSocial"
+                           [inputFormatter]="formatterSocial"
+                           [resultTemplate]="rtSocial"
+                           #orderCustomerSocial
+                           formControlName="orderCustomerSocial"
+                           name="orderCustomerSocial">
+                  </div>
+                  <!--<pre>{{modelCustomers|json}}</pre>-->
+                  <ng-template #rtTel let-r="result" let-t="term">
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"-->
+                    <!--class="mr-1" style="width: 16px">-->
+                    <ngb-highlight [result]="r.customerTel" [term]="t"></ngb-highlight>
+                  </ng-template>
+                  <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'orderCustomerTel')">
+                    <input type="text"
+                           id="orderCustomerTel"
+                           class="form-control form-txt-primary"
+                           minlength="10"
+                           maxlength="10"
+                           placeholder="เบอร์โทรศัพท์"
+                           (keypress)="onKeypressPhone($event)"
+                           (paste)="onPastePhone($event)"
+                           [ngModel]="modelCustomers"
+                           [ngbTypeahead]="searchTel"
+                           [inputFormatter]="formatterTel"
+                           [resultTemplate]="rtTel"
+                           #orderCustomerTel
+                           formControlName="orderCustomerTel"
+                           name="orderCustomerTel">
+                  </div>
+                  <!--<ng-template #rtNameSur let-r="result" let-t="term">-->
+                  <!--&lt;!&ndash;<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"&ndash;&gt;-->
+                  <!--&lt;!&ndash;<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']"&ndash;&gt;-->
+                  <!--&lt;!&ndash;class="mr-1" style="width: 16px">&ndash;&gt;-->
+                  <!--<ngb-highlight [result]="r.customerNameSurname" [term]="t"></ngb-highlight>-->
+                  <!--</ng-template>-->
+                  <div class="form-group input-group-sm">
+                    <input type="text"
+                           id="orderCustomerNameSurname"
+                           class="form-control form-txt-primary"
+                           placeholder="ชื่อ-สกุลลูกค้า"
+                           [ngModel]="modelCustomers"
+                           [ngbTypeahead]="searchCustomer"
+                           [inputFormatter]="formatterCustomerNameSurname"
+                           [resultTemplate]="rtName"
+                           #orderCustomerNameSurname
+                           formControlName="orderCustomerNameSurname"
+                           name="orderCustomerNameSurname">
+                  </div>
+                  <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'orderCustomerIdhome')">
+                    <input id="orderCustomerIdhome"
+                           #orderCustomerIdhome
+                           class="form-control form-txt-primary"
+                           placeholder="บ้านเลขที่/อาคาร/ซอย/ถนน" type="text"
+                           [ngModel]
+                           name="orderCustomerIdhome"
+                           formControlName="orderCustomerIdhome">
+                  </div>
+                  <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'address2')">
+                    <input
+                            #address2
+                            id="address2"
+                            class="form-control form-control-sm form-txt-primary"
+                            placeholder="ตำบล/อำเภอ/จังหวัด" type="text"
+                            [ngModel] name="address2"
+                            formControlName="address2">
+                  </div>
+                  <div class="form-group input-group-sm" [class.has-danger]="isInvalid(customerForm, 'zipcode')">
+                    <input id="zipcode"
+                           #zipcode
+                           minlength="5"
+                           maxlength="5"
+                           class="form-control form-txt-primary"
+                           placeholder="รหัสไปรษณีย์" type="text"
+                           [ngModel] name="zipcode"
+                           formControlName="zipcode">
+                  </div>
+                  <!--</ng-container>-->
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- basic card end -->
+
+          <!-- card with header start -->
+          <div class="col-md-6 col-xl-4">
+            <div class="card">
+              <!--<div class="card-header">-->
+              <!--<h5>ที่พักข้อมูล</h5>-->
+              <!--</div>-->
+              <div class="card-block form-group">
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control form-control-sm input-group-sm"
+                         id="clipboard"
+                         value="{{ENVserverCustomrerLink + order.orderODId}}">
+                  <span class="input-group-append">
+                    <i id="btnCopy"
+                       data-clipboard-target="#clipboard"
+                       placement="top" container="body"
+                       ngbTooltip="Copy to Clipboard {{order.orderODId}}">
+                      &nbsp;&nbsp;<img src="assets/clippy.svg">
+                    </i>
+                  </span>&nbsp;
+                  <a target="_blank"
+                     placement="top" container="body"
+                     ngbTooltip="Link to Clipboard {{order.orderODId}}"
+                     [href]="ENVserverCustomrerLink + order.orderODId">
+                    <i class="icofont icofont-link"></i>
+                  </a>
+                </div>
+                <textarea rows="14"
+                          ngModel
+                          class="form-control form-control-sm input-group"
+                          value=""
+                          placeholder="ที่พักข้อมูล"
+                          name="stayData">
+                </textarea>
+                <button type="button"
+                        *ngIf="(checkRole === 'superadmin')"
+                        [disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"
+                        (click)="!disabled;
+                          onSubmitEditOrder(
+                          orderCustomerChannelId.value,
+                          orderCustomerId.value,
+                          orderCustomerCMId.value,
+                          orderCustomerSocial.value,
+                          orderCustomerTel.value,
+                          orderCustomerNameSurname.value,
+                          orderCustomerIdhome.value,
+                          address2.value,
+                          zipcode.value,
+                          price.value,
+                          OrderEditForm,
+                          method.value
+                          );"
+                        class="btn btn-sm btn-primary ripple light">
+                  <!--(ngSubmit)="!ngForm.invalid; onSubmitCustomer(customerForm);"-->
+                  <!--<button type="submit"-->
+                  <!--class="btn btn-sm btn-out-dashed btn-grd-success">-->
+                  บันทึก
+                </button>
+                &nbsp;
+                <button type="button"
+                        [routerLink]="['/management/orders/details']"
+                        class="btn btn-sm btn-dark ripple light">
+                  ย้อนกลับ
+                </button>
+                &nbsp;
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'waitpack')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='waitpack',-->
+                <!--statusCode=1);"-->
+                <!--class="btn btn-sm btn-out-dashed btn-grd-warning">-->
+                <!--รอแพ็ค-->
+                <!--</button>-->
+                <!--&nbsp;-->
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'print')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='print',-->
+                <!--statusCode=2);"-->
+                <!--class="btn btn-sm btn-out-dashed bg-lime-green">-->
+                <!--พิมพ์แล้ว-->
+                <!--</button>-->
+                <!--&nbsp;-->
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'pack')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='pack',-->
+                <!--statusCode=3);"-->
+                <!--class="btn btn-sm btn-out-dashed btn-grd-info">-->
+                <!--แพ็ค-->
+                <!--</button>-->
+                <!--&nbsp;-->
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'delivery')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='delivery',-->
+                <!--statusCode=4);"-->
+                <!--class="btn btn-sm btn-out-dashed bg-lime-green text-dark">-->
+                <!--จัดส่งแล้ว-->
+                <!--</button>-->
+                <!--&nbsp;-->
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'success')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='success',-->
+                <!--statusCode=5);"-->
+                <!--class="btn btn-sm btn-out-dashed btn-grd-primary">-->
+                <!--สำเร็จ-->
+                <!--</button>-->
+                <!--&nbsp;-->
+                <!--<button type="button"-->
+                <!--*ngIf="((checkEditStatus === 'fail')||(checkRole==='superadmin')-->
+                <!--||(checkRole==='user')||(checkRole==='seller'))"-->
+                <!--[disabled]="saving || orderForm.invalid || deliveryForm.invalid || (orderProducts.length === 0)"-->
+                <!--(click)="!disabled;-->
+                <!--onWaitProcess(-->
+                <!--orderCustomerChannelId.value,-->
+                <!--orderCustomerId.value,-->
+                <!--orderCustomerSocial.value,-->
+                <!--orderCustomerTel.value,-->
+                <!--orderCustomerNameSurname.value,-->
+                <!--orderCustomerIdhome.value,-->
+                <!--address2.value,-->
+                <!--zipcode.value,-->
+                <!--price.value,-->
+                <!--OrderEditForm,-->
+                <!--method.value,-->
+                <!--orderId.value,-->
+                <!--packName='fail',-->
+                <!--statusCode=6);"-->
+                <!--class="btn btn-sm btn-out-dashed btn-grd-danger">-->
+                <!--ล้มเหลว-->
+                <!--</button>-->
+              </div>
+            </div>
+          </div>
+          <!-- card with header end -->
+
+          <!-- card with header, footer start -->
+
+          <div class="col-md-6 col-xl-4">
+
+            <div class="card">
+              <!--<div class="card-header">-->
+              <!--<h5>การจัดส่ง</h5>-->
+              <!--</div>-->
+              <!--<form [formGroup]="paymentForm" novalidate autocomplete="off">-->
+              <div class="card-block form-group input-group-sm">
+                <!--<label>dada</label>-->
+                <form [formGroup]="paymentForm" novalidate autocomplete="off">
+                  <ng-container>
+                    <!--</div>-->
+                    <!--<div class="card-block input-group">-->
+                    <!--<label class="col-sm-4 col-lg-2 col-form-label">ช่องทาง</label>-->
+                    <!--formControlName="orderpaymentId"-->
+                    <label>การชำระเงิน</label>
+                    <select
+                            id="method"
+                            #method
+                            formControlName="method"
+                            name="method"
+                            [(ngModel)]="orderMethod"
+                            class="form-control text-primary input-group">
+                      <option value="cod">เก็บเงินปลายทาง</option>
+                      <option value="banktranfer">โอนเงินผ่านบัญชี</option>
+                    </select>
+                    <select type="text"
+                            #orderShipmentId
+                            name="orderShipmentId"
+                            formControlName="orderShipmentId"
+                            class="form-control text-primary input-group">
+                      <!--<option class="form-control" value="">เลือกรูปแบบการจัดส่ง</option>-->
+                      <option
+                              *ngFor="let i of shipments;"
+                              [disabled]="!i.shipmentStatus"
+                              [selected]="i.shipmentId === orderShipmentId"
+                              [ngValue]="i.shipmentId">
+                        {{i.shipmentName}}
+                      </option>
+                    </select>
+                    <!--// banks-tranfer //-->
+                    <div *ngIf="method.value === 'banktranfer'">
+                      <select id="orderBankId"
+                              #orderBankId
+                              name="orderBankId"
+                              formControlName="orderBankId"
+                              class="form-control text-primary input-group">
+                        <!--<option class="form-control" value="">เลือกรูปแบบการจัดส่ง</option>-->
+                        <option
+                                *ngFor="let i of banks;"
+                                [disabled]="!i.bankStatus"
+                                [selected]="i.bankId === orderBankIdDefualt"
+                                [ngValue]="i.bankId">
+                          {{i.bankName}}
+                        </option>
+                      </select>
+                    </div>
+                  </ng-container>
+                </form>
+                <div class="form-group input-group-sm" *ngIf="method.value === 'banktranfer'">
+                  <div class="form-group">
+                    <div class="col-sm-12 col-12 col-md-12 text-center">
+                      <img class="img-80" [src]="showImg">
+                    </div>
+                    <div class="form-group input-group">
+                      <!--<div class="input-group">-->
+                      <!--<label >อัพโหลดสลิป :</label>-->
+                      <div class="input-group-append">
+                                      <span class="input-group-text">
+                                        <i class="icofont icofont-ui-image"></i>
+                                      </span>
+                      </div>
+                      <input type="file"
+                             #Image accept="image/*"
+                             [ngModel]
+                             name="orderPaymentImage"
+                             class="form-control form-control-sm file text-primary"
+                             (change)="handleFileInputEdit($event.target.files)">
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group-sm input-group" *ngIf="method.value === 'banktranfer'">
+                  <!--<div class="col-sm-6">-->
+                  <!--<label>วันที่ </label>-->
+                  <!--<label>-->
+                  <!--<i class="fa fa-calendar" aria-hidden="true"> </i>-->
+                  <!--</label>-->
+                  <div class="input-group-append">
+                          <span class="input-group-text" (click)="ddStart.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                          </span>
+                  </div>
+                  <input class="form-control"
+                         #orderPaymentDate
+                         [readonly]="true"
+                         placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                         name="orderPaymentDate"
+                         [(ngModel)]="modelPopupOrderLastupdate"
+                         ngbDatepicker #ddStart="ngbDatepicker"
+                         (click)="ddStart.toggle()">
+
+                  <!--<div class="input-group-append">-->
+                  <!--<span class="input-group-text">-->
+                  <!--<i class="icofont icofont-ui-clock"></i>-->
+                  <!--</span>-->
+                  <!--</div>-->
+                  <!--<input type="time"-->
+                  <!--name="orderTime"-->
+                  <!--#orderTime-->
+                  <!--[textMask]="{mask: maskUsTime}"-->
+                  <!--id="orderTime"-->
+                  <!--class="form-control"-->
+                  <!--[ngModel]="checkTime(modelTime.hour)+':'+checkTime(modelTime.minute)" required="">-->
+
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
+
+                  <!--<div class="form-group input-group">-->
+                  <!--<div *ngIf="method.value === 'banktranfer'">-->
+                  <div class="input-group-append">
+                          <span class="input-group-text">
+                            <i class="icofont icofont-ui-clock"></i>
+                          </span>
+                  </div>
+                  <input type="text"
+                         *ngIf="orderPaymentTime === null"
+                         class="form-control"
+                         id="orderPaymentTime"
+                         #orderPaymentTime
+                         [textMask]="{mask: maskUsTime}"
+                         [ngModel]="checkTime(modelTime.hour)+':'+checkTime(modelTime.minute)"
+                         (onkeydown)="checkTime($event)"
+                         name="orderPaymentTime">
+                  <input type="text"
+                         *ngIf="orderPaymentTime !== null"
+                         class="form-control"
+                         id="orderPaymentTime"
+                         #orderPaymentTime
+                         [textMask]="{mask: maskUsTime}"
+                         [ngModel]="modelTime.hour+':'+modelTime.minute"
+                         (onkeydown)="checkTime($event)"
+                         name="orderPaymentTime">
+                </div>
+                <!--<input type="text"-->
+                <!--[textMask]="{mask: maskUsbank}"-->
+                <!--ngModel-->
+                <!--class="form-control"-->
+                <!--name="bankSerialNumber"-->
+                <!--placeholder="xxx-x-xxxxx-x">-->
+                <!--<input type="text" class="form-control"-->
+                <!--[value]="modelTime.hour+':'+modelTime.minute" name="orderTime2">-->
+                <!--</div>-->
+                <!--// banks-tranfer //-->
+                <!--<div class="form-group ">-->
+                <!--<label>พนักงานขาย</label>-->
+                <div>
+                  <div class="form-group">
+                        <textarea rows="3"
+                                  class="form-control form-control-sm input-group text-primary"
+                                  placeholder="หมายเหตุ"
+                                  [(ngModel)]="order.orderRemark"
+                                  name="orderRemark">
+                        </textarea>
+                  </div>
+                </div>
+                <select class="form-control text-primary" [disabled]="true" hidden>
+                  <option [selected]="true" [value]="editID">{{editName | titlecase}}</option>
+                </select>
+                <!--</div>-->
+                <!--<select class="form-control" #method formControlName="method">-->
+                <!--<option value="transfer">โอนเงิน</option>-->
+                <!--<option value="collectOnDelivery">เก็บเงินปลายทาง</option>-->
+                <!--</select>-->
+
+              </div>
+              <!--</form>-->
+              <!--<div class="card-block">-->
+              <!--<h5>Card with header</h5>-->
+              <!--<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>-->
+              <!--</div>-->
+              <!--<div class="card-footer">-->
+              <!--<p class="m-b-0"> my footer</p>-->
+              <!--</div>-->
+            </div>
+          </div>
+
+          <!-- card with header, footer end -->
+
+          <!-- card with header start -->
+          <div class="col-md-8 col-xl-8 col-sm-8">
+            <div class="card">
+              <!--<div class="card-header">-->
+              <!--<h5>รายการสินค้า</h5>-->
+              <!--</div>-->
+              <div class="card-block form-group">
+                <!--<label>ค้นหารายการสินค้า</label>-->
+                <!--<input class="form-control form-txt-primary input-group"-->
+                <!--name="searchProduct">-->
+                <!--<div class="form-group">-->
+                <div class="input-group input-group-sm">
+
+                  <input id="searchProductInput"
+                         autofocus
+                         class="form-control text-primary"
+                         placeholder="ค้นหารายการชื่อสินค้า / SKU"
+                         type="text"
+                         autocomplete="off"
+                         #product
+                         [disabled]="disabled"
+                         (keyup)="findProduct(product.value)">
+                  <div class="dropdown-menu dropdown-search show col-12 col-xl-12 col-md-12 col-sm-12"
+                       *ngIf="searchProducts?.length > 0">
+                    <!--*ngIf="searchProducts?.length > 0">-->
+                    <div *ngFor="let p of searchProducts">
+                      <div class="dropdown-item"
+                           *ngIf="searchProducts.length > 0"
+                           (click)="addProduct(p)">
+                        <img src="{{p.productImage}}" class="img-30">
+                        |
+                        <label class="label bg-pack">
+                          {{p.productCodename}}
+                        </label>
+                        |
+                        <label class="label bg-primary">
+                          {{p.productName}}
+                        </label>
+                        |
+                        <label class="label bg-success">
+                          ({{p.productTotal - p.productHold}})
+                        </label>
+                      </div>
+
+                      <!--<div class="dropdown-item" *ngIf="searchProducts.length > 0">-->
+                      <!--({{p.productTotal}}) {{p.productName}}-->
+                      <!--<div class="badge badge-default-inverted"-->
+                      <!--*ngFor="let size of p.size"-->
+                      <!--(click)="addProduct(p, size)">-->
+                      <!--{{ size.name }} ({{ size.productTotal }})-->
+                      <!--</div>-->
+                      <!--</div>-->
+                    </div>
+                  </div>
+                  <!--</div>-->
+                </div>
+                <!--<div class="dropdown-menu dropdown-search show" *ngIf="searchProducts?.length > 0">-->
+                <!--<div *ngFor="let p of searchProducts">-->
+                <!--<div class="dropdown-item" *ngIf="p.size.length === 0"-->
+                <!--(click)="addProduct(p)">-->
+                <!--({{ p.productTotal }}) {{ p.name }}-->
+                <!--</div>-->
+
+                <!--<div class="dropdown-item" *ngIf="p.size.length > 0">-->
+                <!--({{ p.productTotal }}) {{ p.name }}-->
+                <!--<div class="badge badge-default-inverted"-->
+                <!--*ngFor="let size of p.size"-->
+                <!--(click)="addProduct(p, size)">-->
+                <!--{{ size.name }} ({{ size.productTotal }})-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <div class="table-responsive table-responsive-sm form-group input-group-sm">
+                  <table class="table table-xs table-responsive-sm table-hover text-sm-center">
+                    <thead class="bg-light">
+                    <tr>
+                      <th>#ชื่อสินค้า(คงเหลือหักจอง)</th>
+                      <th>รหัส</th>
+                      <th>จำนวน</th>
+                      <th>ราคา</th>
+                      <th>ยอดรวม</th>
+                      <th *ngIf="!disabled">แก้ไข</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let product of orderProducts; let i = index;">
+                      <td class="text-sm-left">
+                        <img [src]="product.image" class="img-30">
+                        &nbsp;&nbsp;{{product.name}} ({{product.remain}})
+                      </td>
+                      <td>
+                        <a class="text-primary cursor"
+                           target="_blank"
+                           [routerLink]="['/management/products/products-edit/'+product.id]">
+                          {{ product.code }}
+                        </a>
+                      </td>
+                      <td *ngIf="!disabled">
+                        <ng-container *ngIf="!disabled">
+                          <!--<div class="form-group input-group-sm">-->
+                          <!--<div class="col-1 col-sm-1 col-md-1">-->
+                          <!--<input type="number"-->
+                          <!--class="form-control-sm text-sm-center"-->
+                          <!--[size]="5"-->
+                          <!--[min]="1" [max]="100"-->
+                          <!--[(ngModel)]="product.amount"-->
+                          <!--[value]="product.amount"-->
+                          <!--(change)="onChangeProductAmount(product)"-->
+                          <!--(click)="onChangeProductAmountCheck(product)"-->
+                          <!--(keydown)="onChangeProductAmountCheck(product)">-->
+                          <input type="number"
+                                 class="form-control-sm text-sm-center"
+                                 [size]="5"
+                                 [disabled]="checkRole!=='superadmin'"
+                                 name="amount-{{ i }}"
+                                 [min]="1" [max]="product.max"
+                                 [(ngModel)]="product.amount"
+                                 (change)="onChangeProductAmount(product)"
+                                 (click)="onChangeProductAmountCheck(product)"
+                                 (keydown)="onChangeProductAmountCheck(product)">
+                          <!--<input type="number"-->
+                          <!--class="form-control-sm text-sm-center"-->
+                          <!--name="amount_{{ i }}"-->
+                          <!--id="max_{{product.id}}"-->
+                          <!--formControlName="amount_{{ i }}"-->
+                          <!--min="1"-->
+                          <!--[max]="product.max"-->
+                          <!--[(ngModel)]="product.amount"-->
+                          <!--(change)="onChangeProductAmount(product, product.id)">-->
+                          <!--</div>-->
+                          <!--</div>-->
+                        </ng-container>
+                      </td>
+                      <td>{{product.price}}</td>
+                      <td>{{product.total}}</td>
+                      <td *ngIf="!disabled">
+                        <div class="btn-close text-center"
+                             [hidden]="(checkRole==='other' || checkRole==='user')"
+                             (click)="removeProduct(product)">
+                          <i class="fa fa-trash text-danger"></i>
+                        </div>
+                        <!--<div class="col-1 col-sm-1 col-md-1">-->
+                        <!--<input type="number" id="tentacles" name="tentacles"-->
+                        <!--class="text-sm-center"-->
+                        <!--[size]="5"-->
+                        <!--min="10" max="100" [value]="10">-->
+                        <!--</div>-->
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- card with header end -->
+          <!-- card with header start -->
+          <div class="col-md-4 col-xl-4 col-sm-4">
+            <div class="card">
+              <!--<div class="card-header">-->
+              <!--<h5>รายการสินค้า</h5>-->
+              <!--</div>-->
+              <div class="card-block">
+                <form [formGroup]="deliveryForm">
+                  <!--<ng-container *ngFor="let del of order.delivery">-->
+                  <div class="form-group row justify-content-center">
+                    <label class="col-form-label col-sm-4 col-4">ค่าจัดส่ง</label>
+                    <div class="col-sm-6 col-6 input-group-sm">
+                      <input class="form-control"
+                             id="price"
+                             #price
+                             placeholder="ค่าจัดส่ง"
+                             [ngModel]
+                             type="text"
+                             formControlName="price"
+                             name="price"
+                             (change)="calTotalOrder()">
+                    </div>
+                  </div>
+                  <!--</ng-container>-->
+                </form>
+                <form [formGroup]="orderForm" novalidate autocomplete="off" >
+                  <!--<ng-container *ngFor="let o of dataOrder">-->
+                  <div class="form-group row justify-content-center">
+                    <label class="col-form-label col-sm-4 col-4">ส่วนลด</label>
+                    <div class="col-sm-6 col-6 input-group-sm">
+                      <input class="form-control"
+                             id="discount"
+                             #discount
+                             [ngModel]="order.orderDiscount"
+                             placeholder="ส่วนลด"
+                             type="text"
+                             formControlName="discount"
+                             name="discount"
+                             (change)="calTotalOrder()">
+                    </div>
+                  </div>
+                  <div class="form-group row justify-content-center">
+                    <label class="col-form-label col-sm-4 col-4">ยอดรวม</label>
+                    <div class="col-6 col-sm-6 input-group-sm">
+                      <input class="form-control"
+                             id="total"
+                             #total
+                             placeholder="ยอดรวม"
+                             [ngModel]="order.orderTotal"
+                             name="total"
+                             type="text"
+                             formControlName="total">
+                    </div>
+                  </div>
+                  <div class="form-group input-group-sm">
+                    <input type="number" hidden
+                           disabled="readOnly"
+                           #orderId
+                           id="orderId"
+                           class="form-control form-txt-primary"
+                           [ngModel]="order.orderId"
+                           formControlName="orderId"
+                           name="orderId">
+                  </div>
+                  <!--</ng-container>-->
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- history details-->
+          <!-- card with header start -->
+          <div class="col-md-12 col-xl-12 col-sm-12">
+            <div class="card" *ngIf="orderHistorysLength > 0">
+              <!--<div class="card-header cursorLink"-->
+              <!--(click)="isCollapsed = !isCollapsed"-->
+              <!--[attr.aria-expanded]="!isCollapsed"-->
+              <!--aria-controls="tableHistory">-->
+              <div class="card-header">
+                <h5>ประวัติคำสั่งซื้อ</h5>{{orderHistorysLength}} รายการ <b><i>{{message}}</i>
+              </b>
+              </div>
+              <!--<div #tableHistory id="tableHistory"-->
+              <!--(collapsed)="collapsed()"-->
+              <!--(expanded)="expanded()"-->
+              <!--[collapse]="isCollapsed"-->
+              <!--class="card-block form-group">-->
+              <div class="card-block form-group">
+                <div class="table-responsive table-responsive-sm form-group input-group-sm">
+                  <table class="table table-xs table-responsive-sm table-hover text-sm-center">
+                    <thead class="bg-light">
+                    <tr>
+                      <th class="text-left">#</th>
+                      <th class="text-left">รายละเอียด</th>
+                      <th class="text-left">วันที่</th>
+                      <th class="text-left">ผู้ดำเนินการ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let h of order.historys; let i = index;">
+                      <td class="text-left">
+                        <!--<i class="icofont icofont-cart icon-size-22px text-details">all</i>-->
+                        <!--({{((order.historys.length - (i+1))+1)}}) {{h.hisName}}-->
+                        <i *ngIf="h.hisName"
+                           class="icofont"
+                           [ngClass]="{
+                                  'icofont-plus text-create': h.hisName === 'Create',
+                                  'icofont-ui-edit text-update': h.hisName === 'Update',
+                                  'icofont-ui-delete text-delete': h.hisName === 'Delete',
+                                  'icofont-cart text-details': h.hisName === 'Process',
+                                  'icofont-print text-print': h.hisName === 'Print',
+                                  'icofont-barcode text-scantopack': h.hisName === 'ScanToPack',
+                                  'icofont-ui-tag text-scantotracking': h.hisName === 'ScanToTracking',
+                                  'icofont-tags text-importtracking': h.hisName === 'ImportTracking',
+                                  'icofont-gift text-packs': h.hisName === 'Pack',
+                                  'icofont-truck-loaded text-deliverys': h.hisName === 'Delivery',
+                                  'icofont-check-circled text-success': h.hisName === 'Success',
+                                  'icofont-close-circled text-fails': h.hisName === 'Fail'
+                                }">
+                          <!--class="icofont icofont-cart icon-size-22px text-details">-->
+                          <!--{{h.hisName}}-->
+                        </i>
+                      </td>
+                      <td class="text-left">{{h.hisRemark}}</td>
+                      <td class="text-left">{{h.lastUpdate|date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+                      <td class="text-left">{{h.sellerName|titlecase}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- card with header end -->
+          <!-- history details-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
