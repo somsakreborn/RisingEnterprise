@@ -1,0 +1,512 @@
+<div class="row">
+  <div class="col-sm-12">
+    <form (ngSubmit)="onSubmit(CustomersCreateForm);" #CustomersCreateForm="ngForm" autocomplete="off">
+
+      <div class="card-subtitle text-right">
+        <div class="text-sm-right btn">
+          <!--<button type="submit" class="btn btn-out-dashed btn-grd-primary">-->
+          <button type="button" (click)="onSubmit(CustomersCreateForm);" class="btn btn-primary ripple light">
+            บันทึก
+          </button>
+          &nbsp;&nbsp;
+          <button type="reset" class="btn btn-danger ripple light">
+            ยกเลิก
+          </button>
+          &nbsp;&nbsp;
+          <button type="button" [routerLink]="['/management/customers']" class="btn btn-dark ripple light">
+            ย้อนกลับ
+          </button>
+        </div>
+      </div>
+      <!-- add card 1 start -->
+      <app-card [title]="'เพิ่มข้อมูลลูกค้า'" [cardOptionBlock]="true">
+        <div class="form-group row">
+          <div class="col-sm-6 mobile-inputs">
+            <h4 class="sub-title text-primary"><b>รายละเอียดลูกค้า</b></h4>
+            <!--<form action="javascript:">-->
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">ชื่อ-สกุลลูกค้า :</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="ชื่อ-สกุล ลูกค้า"
+                         ngModel
+                         name="customerNameSurname">
+                  <span class="input-group-append">
+                  <label class="input-group-text">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </label>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-lg-2 col-form-label">ชื่อโซเชียล :</label>
+              <div class="col-sm-8 col-lg-10">
+                <div class="input-group">
+                  <input type="text"
+                         class="form-control form-control form-txt-primary input-group"
+                         placeholder="ชื่อโซเชียล"
+                         ngModel
+                         name="customerSocial">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">เบอร์โทรศัพท์ :</label>
+              <div class="col-sm-10">
+                <input type="text"
+                       maxlength="10"
+                       class="form-control form-txt-primary"
+                       placeholder="เบอร์โทรศัพท์"
+                       ngModel
+                       name="customerTel">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2"> </div>
+              <label class="col-sm-10 text-info">
+                <i class="fa fa-warning text-danger"></i>
+                หมายเลขโทรศัพท์ที่ถูกต้อง ตัวอย่าง 0614207877 หรือ 0246255934
+              </label>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">อีเมลล์ :</label>
+              <div class="col-sm-10">
+                <input type="text"
+                       class="form-control form-txt-primary"
+                       placeholder="อีเมลล์"
+                       ngModel
+                       name="customerEmail">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2"> </div>
+              <label class="col-sm-10 text-info">
+                <i class="fa fa-warning text-danger"></i>
+                รูปแบบอีเมลล์ที่ถูกต้อง เช่น risingenterprise1@gmail.com
+              </label>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">เลขประจำตัวประชาชน :</label>
+              <div class="col-sm-10">
+                <input type="text"
+                       maxlength="13"
+                       class="form-control form-txt-primary"
+                       placeholder="เลขประจำตัวประชาชน ... เช่น 3200500124128"
+                       ngModel
+                       name="customerIdcard">
+              </div>
+            </div>
+            <!-- skip -->
+            <!--<hr>-->
+            <!--<div class="form-group row">-->
+              <!--<label class="col-sm-2">xxx</label>-->
+              <!--<div class="col-sm-4">-->
+                <!--<input type="number"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder="xxx"-->
+                       <!--ngModel-->
+                       <!--name="xxx1">-->
+              <!--</div>-->
+              <!--<label class="col-sm-2">xxxx</label>-->
+              <!--<div class="col-sm-4">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder="xxx"-->
+                       <!--ngModel-->
+                       <!--name="xxx2">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-txt-inverse"-->
+                       <!--ngModel-->
+                       <!--name="ordersName7">-->
+              <!--</div>-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-txt-info"-->
+                       <!--ngModel-->
+                       <!--name="ordersName8">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!-- skip -->
+            <!--</form>-->
+          </div>
+          <!-- tab 2-->
+          <div class="col-sm-6 mobile-inputs">
+            <h4 class="sub-title text-primary"><b>ที่อยู่ลูกค้า</b></h4>
+            <div class="form-group row">
+              <label class="col-sm-2">บ้านเลขที่/อาคาร/ซอย/ถนน</label>
+              <div class="col-sm-10">
+                <textarea rows="3"
+                       class="form-control form-txt-primary"
+                       placeholder="บ้านเลขที่/อาคาร/ซอย/ถนน"
+                       ngModel
+                       name="customerIdhome">
+                </textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">ที่อยู่ลูกค้า :</label>
+              <div class="col-sm-10">
+                <textarea rows="3"
+                       class="form-control form-txt-primary"
+                       placeholder="ที่อยู่ลูกค้า"
+                       ngModel
+                       name="customerAddress">
+                </textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">รหัสไปรษณีย์ :</label>
+              <div class="col-sm-10">
+                <input type="text"
+                       [maxlength]="5"
+                       class="form-control form-txt-primary"
+                       placeholder="รหัสไปรษณีย์"
+                       ngModel
+                       name="customerZipcode">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-2">สถานะ :</label>
+              <div class="col-sm-10">
+                <ui-switch
+                        [ngModel]="true"
+                        name="customerStatus">
+                </ui-switch>
+              </div>
+            </div>
+            <div class="form-group row">
+              <!--<label class="col-sm-2">รหัสลูกค้า : </label>-->
+              <div class="col-sm-10">
+              <input type="hidden"
+                     [readonly]="true"
+                     [(ngModel)]="customerCMId"
+                     value="{{customer.customerCMId}}"
+                     name="customerCMId"
+                     class="form-control text-primary">
+              </div>
+            </div>
+            <!-- skip -->
+            <!--<div class="form-group">-->
+              <!--<input type="text"-->
+                     <!--class="form-control form-txt-primary"-->
+                     <!--placeholder=".form-bg-primary"-->
+                     <!--ngModel-->
+                     <!--name="shipmentName1">-->
+            <!--</div>-->
+            <!--<div class="form-group row">-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-warning"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName2">-->
+              <!--</div>-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-default"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName3">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group row">-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-danger"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName4">-->
+              <!--</div>-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-success"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName5">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-inverse"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName6">-->
+              <!--</div>-->
+              <!--<div class="col-sm-6">-->
+                <!--<input type="text"-->
+                       <!--class="form-control form-txt-primary"-->
+                       <!--placeholder=".form-bg-info"-->
+                       <!--ngModel-->
+                       <!--name="shipmentName7">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!-- skip -->
+
+            <!--<div class="form-group row">-->
+              <!--<div class="col-sm-12">-->
+                <!--<h4 class="sub-title">Multiple Select With Icon</h4>-->
+                <!--<div class="col-sm-8">-->
+                <!--<ng-select [ngClass]="'ng-select'"-->
+                           <!--[options]="countries"-->
+                           <!--name="selectOrdersCountry"-->
+                           <!--[multiple]="true"-->
+                           <!--[allowClear]="true"-->
+                           <!--[(ngModel)]="selectedCountries">-->
+                  <!--<ng-template #optionTemplate let-option="option">-->
+                    <!--&lt;!&ndash;<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>&ndash;&gt;-->
+                    <!--<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>-->
+                    <!--{{option?.label}}-->
+                  <!--</ng-template>-->
+                <!--</ng-select>-->
+              <!--</div>-->
+
+                <!--&lt;!&ndash;<ng-select [ngClass]="'ng-select'"&ndash;&gt;-->
+                           <!--&lt;!&ndash;[options]="characters"&ndash;&gt;-->
+                           <!--&lt;!&ndash;[allowClear]="true"&ndash;&gt;-->
+                           <!--&lt;!&ndash;[multiple]="true"&ndash;&gt;-->
+                           <!--&lt;!&ndash;name="selectOrdersCharacter"&ndash;&gt;-->
+                           <!--&lt;!&ndash;(selected)="onSelected($event)"&ndash;&gt;-->
+                           <!--&lt;!&ndash;(deselected)="onDeselected($event)">&ndash;&gt;-->
+                <!--&lt;!&ndash;</ng-select>&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<ng-select [ngClass]="'ng-select'"&ndash;&gt;-->
+                           <!--&lt;!&ndash;[(ngModel)]="myOptionData"&ndash;&gt;-->
+                           <!--&lt;!&ndash;name="myOption"&ndash;&gt;-->
+                           <!--&lt;!&ndash;[options]="myOptions">&ndash;&gt;-->
+                <!--&lt;!&ndash;</ng-select>&ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!--<div class="form-group row">-->
+              <!--<div class="col-12">-->
+                <!--<select id="demo-htmlselect" [ngModel] name="selectOrdersTest">-->
+                  <!--<option value="0" data-imagesrc="http://i.imgur.com/XkuTj3B.png"-->
+                          <!--data-description="Description with Facebook">Facebook</option>-->
+                  <!--<option value="1" data-imagesrc="http://i.imgur.com/8ScLNnk.png"-->
+                          <!--data-description="Description with Twitter">Twitter</option>-->
+                  <!--<option value="2" selected="selected" data-imagesrc="http://i.imgur.com/aDNdibj.png"-->
+                          <!--data-description="Description with LinkedIn">LinkedIn</option>-->
+                  <!--<option value="3" data-imagesrc="http://i.imgur.com/kFAk2DX.png"-->
+                          <!--data-description="Description with Foursquare">Foursquare</option>-->
+                  <!--<option value="4" data-imagesrc="/assets/images/avatar-1.jpg"-->
+                          <!--data-description="test-profile">profiles</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!--<div class="form-group row">-->
+              <!--<div class="col-sm-12 col-xl-12 m-b-30">-->
+                <!--<h4 class="sub-title">Select With Icon</h4>-->
+                <!--<ng-select [ngClass]="'ng-select'" [options]="countries" name="selectOrdersShipments" [allowClear]="true" [(ngModel)]="selectedCountry">-->
+                  <!--<ng-template #optionTemplate let-option="option">-->
+                    <!--<div class="famfamfam-flags {{option?.value.toLowerCase()}}"></div>-->
+                    <!--{{option?.value}} - {{option?.label}}-->
+                  <!--</ng-template>-->
+                <!--</ng-select>-->
+              <!--</div>-->
+              <!--<div class="famfamfam-flags fr"></div>-->
+              <!--<div class="famfamfam-flags th"></div>-->
+              <!--<div class="famfamfam-flags us"></div>-->
+              <!--<img src="/assets/images/avatar-1.jpg">-->
+            <!--</div>-->
+            <!--</form>-->
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="card">
+          <div class="card-header">
+            <h4 class="sub-title text-primary"><b>ช่องทางขาย</b></h4>
+          <!--<div class="form-group row">-->
+            <!--<label class="col-sm-2 col-form-label">ช่องทางขาย</label>-->
+            <!--<div class="col-sm-4">-->
+              <!--<ng-select [ngClass]="'ng-select'"-->
+                         <!--[options]="characters"-->
+                         <!--[allowClear]="true"-->
+                         <!--[multiple]="true"-->
+                         <!--[ngModel]-->
+                         <!--name="customerchannelId"-->
+                         <!--(selected)="onSelected($event)"-->
+                         <!--(deselected)="onDeselected($event)">-->
+              <!--</ng-select>-->
+              <!--<input type="text" class="form-control">-->
+            <!--</div>-->
+            <!--<label class="col-sm-2 col-form-label"></label>-->
+            <!--<div class="col-sm-4">-->
+              <!--<select id="customerSocialselect" [ngModel] name="customerchannelId">-->
+                <!--<option value="0" data-imagesrc="http://i.imgur.com/XkuTj3B.png"-->
+                        <!--data-description="Description with Facebook">Facebook</option>-->
+                <!--<option value="1" data-imagesrc="http://i.imgur.com/8ScLNnk.png"-->
+                        <!--data-description="Description with Twitter">Twitter</option>-->
+                <!--<option value="2" selected="selected" data-imagesrc="http://i.imgur.com/aDNdibj.png"-->
+                        <!--data-description="Description with LinkedIn">LinkedIn</option>-->
+                <!--<option value="3" data-imagesrc="http://i.imgur.com/kFAk2DX.png"-->
+                        <!--data-description="Description with Foursquare">Foursquare</option>-->
+                <!--<option value="4" data-imagesrc="/assets/images/avatar-1.jpg"-->
+                        <!--data-description="test-profile">profiles</option>-->
+              <!--</select>-->
+              <!--<input type="text" class="form-control">-->
+            <!--</div>-->
+          <!--</div>-->
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">ช่องทางขาย :</label>
+            <div class="col-sm-4">
+
+              <select
+              name="customerChannelId"
+              ngModel
+              class="form-control text-primary">
+              <option class="form-control" value="">เลือกช่องทาง</option>
+                <ng-container>
+                <option *ngFor="let i of channels"
+                        [disabled]="!i.channelStatus"
+                        [ngValue]="i.channelId">{{i.channelName}}
+                </option>
+                </ng-container>
+              </select>
+
+              <!--<ng-select [ngClass]="'ng-select'"-->
+              <!--[(ngModel)]="myOptionData"-->
+              <!--name="myOption"-->
+              <!--[options]="channels">-->
+              <!--</ng-select>-->
+
+                <!--<option value="4" data-imagesrc="/assets/images/avatar-1.jpg"-->
+                        <!--data-description="test-profile">profiles</option>-->
+                <!--<option-->
+                <!--*ngFor="let i of channels"-->
+                <!--[disabled]="!i.channelStatus"-->
+                <!--[ngValue]="i.channelId">{{i.channelName}}-->
+                <!--</option>-->
+
+                <!--<option value="0" data-imagesrc="http://i.imgur.com/XkuTj3B.png"-->
+                        <!--data-description="Description with Facebook">Facebook</option>-->
+                <!--<option value="1" data-imagesrc="http://i.imgur.com/8ScLNnk.png"-->
+                        <!--data-description="Description with Twitter">Twitter</option>-->
+                <!--<option value="2" selected="selected" data-imagesrc="http://i.imgur.com/aDNdibj.png"-->
+                        <!--data-description="Description with LinkedIn">LinkedIn</option>-->
+                <!--<option value="3" data-imagesrc="http://i.imgur.com/kFAk2DX.png"-->
+                        <!--data-description="Description with Foursquare">Foursquare</option>-->
+
+              <!--</select>-->
+
+              <!--<select id="customerSocial" [ngModel] name="customerChannelId">-->
+                <!--<option value="0" data-imagesrc="http://i.imgur.com/XkuTj3B.png"-->
+                        <!--data-description="Description with Facebook">Facebook</option>-->
+                <!--<option value="1" data-imagesrc="http://i.imgur.com/8ScLNnk.png"-->
+                        <!--data-description="Description with Twitter">Twitter</option>-->
+                <!--<option value="2" selected="selected" data-imagesrc="http://i.imgur.com/aDNdibj.png"-->
+                        <!--data-description="Description with LinkedIn">LinkedIn</option>-->
+                <!--<option value="3" data-imagesrc="http://i.imgur.com/kFAk2DX.png"-->
+                        <!--data-description="Description with Foursquare">Foursquare</option>-->
+                <!--<option value="4" data-imagesrc="/assets/images/avatar-1.jpg"-->
+                        <!--data-description="test-profile">profiles</option>-->
+              <!--</select>-->
+
+              <!--<ng-select [ngClass]="'ng-select'"-->
+                         <!--[options]="characters"-->
+                         <!--[allowClear]="true"-->
+                         <!--[multiple]="true"-->
+                         <!--[ngModel]-->
+                         <!--name="customerChannelId"-->
+                         <!--(selected)="onSelected($event)"-->
+                         <!--(deselected)="onDeselected($event)">-->
+              <!--</ng-select>-->
+              <!--<input type="text" class="form-control">-->
+            </div>
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-4">
+
+            </div>
+          </div>
+          </div>
+
+          <!--<div class="form-group">-->
+            <!--<div class="col-sm-12">-->
+            <!--<label>ช่องทางขาย</label>-->
+              <!--<div class="col-sm-12">-->
+              <!--<ng-select [ngClass]="'ng-select'"-->
+                         <!--[options]="characters"-->
+                         <!--[allowClear]="true"-->
+                         <!--[multiple]="true"-->
+                         <!--name="customerChannelId"-->
+                         <!--(selected)="onSelected($event)"-->
+                         <!--(deselected)="onDeselected($event)">-->
+              <!--</ng-select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+        </div>
+
+        <hr>
+        <div class="form-group row">
+          <div class="col-sm-12 col-12">
+            <div class="card-subtitle text-sm-center">
+              <div class="text-sm-center btn">
+                <!--<button type="submit" class="btn btn-out-dashed btn-grd-primary">-->
+                <button type="button" (click)="onSubmit(CustomersCreateForm);" class="btn btn-primary ripple light">
+                  บันทึก
+                </button>
+                &nbsp;&nbsp;
+                <button type="reset" class="btn btn-danger ripple light">
+                  ยกเลิก
+                </button>
+                &nbsp;&nbsp;
+                <button type="button" [routerLink]="['/management/customers']" class="btn btn-dark ripple light">
+                  ย้อนกลับ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </app-card>
+
+      <!-- add card 1 end -->
+
+      <!--<app-card [title]="'เพิ่มข้อมูลลูกค้า xxx'" [cardOptionBlock]="false">-->
+        <!--<div class="row">-->
+          <!--<div class="col-sm-12 form-group">-->
+          <!--<label class="label-inverse-primary ">-->
+            <!--เพิ่มข้อมูลลูกค้า xxx-->
+          <!--</label>-->
+            <!--<div class="col-sm-12">-->
+              <!--<ng-select [ngClass]="'ng-select'"-->
+                         <!--[options]="characters"-->
+                         <!--[allowClear]="true"-->
+                         <!--[multiple]="true"-->
+                         <!--name="customerChannelIdxx"-->
+                         <!--(selected)="onSelected($event)"-->
+                         <!--(deselected)="onDeselected($event)">-->
+              <!--</ng-select>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</app-card>-->
+
+      <!--<app-card [title]="'เพิ่มข้อมูลลูกค้า xxx'" [cardOptionBlock]="false">-->
+        <!--<div class="col-sm-12 form-control row">-->
+          <!--<label class="label-inverse-primary">-->
+            <!--เพิ่มข้อมูลลูกค้า xxx-->
+          <!--</label>-->
+          <!--<input class="text-primary form-control" ngModel name="customerCard3">-->
+        <!--</div>-->
+      <!--</app-card>-->
+
+    </form>
+  </div>
+</div>

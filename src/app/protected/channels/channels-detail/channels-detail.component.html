@@ -1,0 +1,440 @@
+<div class="card">
+    <div class="card-header">
+        <h5>ช่องทางการขาย</h5>
+        <button type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                placement="top" ngbTooltip="เพิ่มช่องทางการขาย"
+                (click)="modalDefaultWizard.show(); setDateNow(); resetFile('add');">
+            <i class="icofont icofont-plus m-r-5"></i>
+            เพิ่มช่องทางการขาย
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-content crm-table">
+            <div class="project-table">
+                <div id="crm-contact" class="dt-responsive">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                            <div>
+                                <label class="label-control">แสดง
+                                    <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                        <option [ngValue]="10">10</option>
+                                        <option [ngValue]="25">25</option>
+                                        <option [ngValue]="50">50</option>
+                                        <option [ngValue]="100">100</option>
+                                    </select>
+                                    แถว
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <div style="text-align: right;">
+                                <label class="input-group-sm">ค้นหา:
+                                    <input type="search"
+                                           [(ngModel)]="filterQuery"
+                                           class="form-control input-sm full-data-search"
+                                           placement="top" ngbTooltip="ค้นหาช่องทางการขาย"
+                                           placeholder="Search name">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                               [mfData]="channels | dataFilterChannel : filterQuery"
+                               #mf="mfDataTable"
+                               [mfRowsOnPage]="rowsOnPage"
+                               [(mfSortBy)]="sortBy"
+                               [(mfSortOrder)]="sortOrder">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="channelImage">รูปภาพ</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="channelName">ชื่อช่องทางการขาย</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="channelComment">รายละเอียด</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="channelStatus">สถานะ</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="categoryCreated">วันที่สร้าง</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter>Action</mfDefaultSorter>
+                                </th>
+                            </tr>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of mf.data; let i = index;">
+                                <td>#{{item.index}}</td>
+                                <td class="text-center">
+                                    <img [src]="item.channelImage" class="img-40"
+                                         placement="top" ngbTooltip="{{item.channelName}}">
+                                </td>
+                                <td class="text-left">
+                                    <a class="text-info" placement="top" ngbTooltip="{{item.channelName}}">
+                                    {{item.channelName}}
+                                    </a>
+                                </td>
+                                <td class="text-left">
+                                    <a placement="top" ngbTooltip="{{item.channelComment}}">
+                                    {{item.channelComment}}
+                                    </a>
+                                </td>
+                                <td *ngIf="item.channelStatus">
+                                    <label class="label bg-lime-green"
+                                           placement="top" ngbTooltip="เปิดใช้งาน">เปิดใช้งาน</label>
+                                </td>
+                                <td *ngIf="!item.channelStatus">
+                                    <label class="label label-inverse-danger"
+                                           placement="top" ngbTooltip="ปิดใช้งาน">ปิดใช้งาน</label>
+                                </td>
+                                <td>
+                                    <label class="label bg-info"
+                                           placement="top" ngbTooltip="{{item.channelCreated | date: 'dd-MM-yyyy'}}">
+                                    <i class="fa fa-calendar" aria-hidden="true"> </i>
+                                    {{item.channelCreated | date: 'dd-MM-yyyy'}}
+                                    </label>
+                                </td>
+                                <td class="action-icon">
+                                    <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                                       (click)="viewChannel(item); modalDefault.show();resetFile();"><i
+                                            class="fa fa-book"></i></a>
+                                    <a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"
+                                       (click)="editChannel(item);modalDefault.show();resetFile();"><i
+                                            class="fa fa-edit"></i></a>
+                                    <a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"
+                                       (click)="deleteChannel(item)"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="8">
+                                    <mfBootstrapPaginator
+                                            class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--// Test add Custom Wizard //-->
+<app-modal-basic #modalDefaultWizard [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title">
+            <i class="fa fa fa-cubes cubes-icon-style" aria-hidden="true"></i>
+            เพิ่มช่องทางการขาย
+        </h4>
+        <button type="button" class="close basic-close" (click)="modalDefaultWizard.hide(); resetFile('add');">
+            <span aria-hidden="true">x</span>
+        </button>
+    </div>
+    <div class="app-modal-body">
+        <form (ngSubmit)="onSubmit(channelForm); channelForm.reset();" #channelForm="ngForm" autocomplete="off">
+            <!--<app-card [title]="'Custom Wizard'">-->
+            <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+                <wizard-step stepTitle="ช่องทางการขาย" navigationSymbol="&#xf1b2;"
+                             navigationSymbolFontFamily="FontAwesome">
+                    <div class="centered-content">
+
+                        <!--// ช่องทางการขาย // -->
+                        <!--//  imageUrl  //-->
+                        <div class="form-group">
+                            <div class="col-sm-12 col-12 col-md-12 text-center">
+                                <img [src]="imageUrl" class="img-40">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-text">เพิ่มรูปภาพ : </label>
+                                <input type="file" multiple
+                                       #Image accept="image/*"
+                                       ngModel
+                                       name="channelImage"
+                                       class="form-control file"
+                                       (change)="handleFileInputAdd($event.target.files)">
+                            </div>
+                        </div>
+                        <!--//  imageUrl  //-->
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                                <label>ชื่อช่องทางการขาย : </label>
+                                <div class="col-sm-12 input-group-sm d-inline">
+                                    <input type="text"
+                                           ngModel
+                                           class="form-control form-txt-primary"
+                                           placeholder="ชื่อช่องทางการขาย"
+                                           name="channelName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                                <label>URL (อ้างอิง) : ตัวอย่าง https://www.facebook.com/xcommerceth</label>
+                                <div class="col-sm-12 input-group-sm d-inline">
+                                    <input type="text"
+                                           ngModel
+                                           class="form-control form-txt-primary"
+                                           placeholder="https://www.facebook.com/xcommerceth"
+                                           name="channelUrl">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                                <label>รายละเอียดช่องทางการขาย : </label>
+                                <div class="col-sm-12 d-inline">
+                                    <textarea
+                                            ngModel
+                                            class="form-control form-txt-primary"
+                                            rows="3"
+                                            placeholder="รายละเอียดช่องทางการขาย"
+                                            name="channelComment">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="f-left input-group-text">สถานะการใช้งาน : </label>
+                                <ui-switch class="form-control input-group-text" [ngModel]="true"
+                                           name="channelStatus"></ui-switch>
+                            </div>
+                        </div>
+                        <!--// START skip warehouse service => not use //-->
+                        <!--<div class="input-group">-->
+                            <!--<label class="input-group-text">คลังสินค้า : </label>-->
+                            <!--<select type="text"-->
+                                    <!--name="warehouseId"-->
+                                    <!--[ngModel]-->
+                                    <!--class="form-control text-primary">-->
+                                <!--<ng-container *ngFor="let i of warehouses;">-->
+                                    <!--<option *ngIf="i.warehouseDefualt"-->
+                                            <!--[selected]="i.warehouseId == warehouse.warehouseId "-->
+                                            <!--[ngValue]="i.warehouseId">{{i.warehouseName}}-->
+                                    <!--</option>-->
+                                    <!--<option *ngIf="!i.warehouseDefualt"-->
+                                            <!--[disabled]="!i.warehouseStatus"-->
+                                            <!--[ngValue]="i.warehouseId">{{i.warehouseName}}-->
+                                    <!--</option>-->
+                                <!--</ng-container>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--// END skip warehouse service => not use //-->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-group-text">อัพเดทล่าสุด : </label>
+                                <input class="form-control"
+                                       [readonly]="true"
+                                       placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                                       name="channelLastupdate"
+                                       [(ngModel)]="modelPopup"
+                                       ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                            <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--// ช่องทางการขาย // -->
+
+                        <div class="btn-group mt-10">
+                            <button type="reset" class="btn btn-danger btn-sm" resetWizard (click)="resetFile('add');">
+                                < ล้างค่า >
+                            </button>
+                        </div>
+                        <button type="submit" resetWizard
+                                class="btn btn-primary waves-effect m--20 f-w-600 d-inline-block float-left">
+                            บันทึก
+                        </button>
+                        <button type="button" resetWizard (click)="modalDefaultWizard.hide()"
+                                class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block float-right">
+                            ปิด
+                        </button>
+
+                    </div>
+                </wizard-step>
+            </wizard>
+
+        </form>
+        <!--</app-card>-->
+    </div>
+
+    <div class="app-modal-footer">
+
+    </div>
+
+</app-modal-basic>
+<!--// Test Custom Wizard //-->
+
+<!--// edit && View data // -->
+<app-modal-basic #modalDefault [dialogClass]="'modal-lg'">
+    <div class="app-modal-header">
+        <h4 class="modal-title" *ngIf="isReadOnly">
+            <i class="fa fa fa-book book-icon-style" aria-hidden="true"></i>
+            วิวช่องทางการขาย
+        </h4>
+        <h4 class="modal-title" *ngIf="!isReadOnly">
+            <i class="fa fa fa-edit edit-icon-style" aria-hidden="true"></i>
+            แก้ไขช่องทางการขาย
+        </h4>
+        <button type="button" class="close basic-close" (click)="modalDefault.hide();">
+            <span aria-hidden="true">x</span>
+        </button>
+    </div>
+
+    <div class="app-modal-body">
+        <form #channelUpdateForm="ngForm" autocomplete="off">
+            <!--<app-card [title]="'Custom Wizard'">-->
+            <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+                <wizard-step stepTitle="ช่องทางการขาย" navigationSymbol="&#xf1b2;"
+                             navigationSymbolFontFamily="FontAwesome">
+                    <div class="centered-content">
+
+                        <!--// ช่องทางการขาย // -->
+                        <!--//  imageUrl  //-->
+                        <div class="form-group">
+                            <div class="col-sm-12 col-12 col-md-12 text-center">
+                                <img [src]="showImg" class="img-40">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-group-text file">เปลี่ยนรูปภาพ : </label>
+                                <input type="file" multiple
+                                       #Image accept="image/*"
+                                       [disabled]="isReadOnly"
+                                       [(ngModel)]="resetFileDefault"
+                                       name="channelImage"
+                                       class="form-control file"
+                                       (change)="handleFileInputEdit($event.target.files)">
+                            </div>
+                        </div>
+                        <!--//  imageUrl  //-->
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                                <label>ชื่อช่องทางการขาย : </label>
+                                <div class="col-sm-12 input-group-sm d-inline">
+                                    <input type="text"
+                                           [disabled]="isReadOnly"
+                                           [(ngModel)]="channel.channelName"
+                                           value="{{channel.channelName}}"
+                                           class="form-control form-txt-primary"
+                                           placeholder="ชื่อช่องทางการขาย"
+                                           name="channelName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm">
+                                <label>URL (อ้างอิง) : ตัวอย่าง https://www.facebook.com/xcommerceth</label>
+                                <div class="col-sm-12 input-group-sm d-inline">
+                                    <input type="text"
+                                           [disabled]="isReadOnly"
+                                           [(ngModel)]="channel.channelUrl"
+                                           value="{{channel.channelUrl}}"
+                                           class="form-control form-txt-primary"
+                                           name="channelUrl">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row text-left">
+                            <div class="col-12 col-md-12 col-sm-12 input-group-sm d-inline">
+                                <label>รายละเอียดช่องทางการขาย : </label>
+                                    <div class="col-sm-12 d-inline">
+                                    <textarea
+                                            [disabled]="isReadOnly"
+                                            [(ngModel)]="channel.channelComment"
+                                            [value]="channel.channelComment"
+                                            class="form-control form-txt-primary"
+                                            rows="3"
+                                            name="channelComment">
+                                    </textarea>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="f-left input-group-text">สถานะการใช้งาน : </label>
+                                <ui-switch class="form-control input-group-text"
+                                           [disabled]="isReadOnly"
+                                           [(ngModel)]="channel.channelStatus"
+                                           name="channelStatus">
+                                </ui-switch>
+                            </div>
+                        </div>
+                        <!--// START skip warehouse service => not use //-->
+                        <!--<div class="input-group">-->
+                            <!--<label class="input-group-text">คลังสินค้า : </label>-->
+                            <!--<select type="text"-->
+                                    <!--[disabled]="isReadOnly"-->
+                                    <!--[(ngModel)]="channel.warehouseId"-->
+                                    <!--name="warehouseId"-->
+                                    <!--class="form-control text-primary"-->
+                                    <!--autocomplete="off">-->
+                                <!--<option-->
+                                        <!--*ngFor="let i of warehouses"-->
+                                        <!--[disabled]="!i.warehouseStatus"-->
+                                        <!--[selected]="channel.warehouseId == i.warehouseId"-->
+                                        <!--[ngValue]="i.warehouseId">{{i.warehouseName}}-->
+                                <!--</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <!--// END skip warehouse service => not use //-->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="input-group-text">อัพเดทล่าสุด : </label>
+                                <input class="form-control"
+                                       [disabled]="isReadOnly"
+                                       readonly="true"
+                                       name="channelLastupdate"
+                                       [(ngModel)]="modelPopupChannelLastupdate"
+                                       ngbDatepicker #ddStart="ngbDatepicker">
+                                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--// ช่องทางการขาย // -->
+                        <div class="form-group">
+                            <button type="button"
+                                    resetWizard
+                                    class="btn btn-sm btn-success waves-effect float-left"
+                                    *ngIf="!isReadOnly"
+                                    (click)="updateChannel(channelUpdateForm);">
+                                บันทึก
+                            </button>
+                            <button type="button"
+                                    resetWizard
+                                    (click)="modalDefault.hide()"
+                                    class="btn btn-sm btn-danger waves-effect float-right">ปิด
+                            </button>
+                        </div>
+
+                    </div>
+                </wizard-step>
+            </wizard>
+
+        </form>
+        <!--</app-card>-->
+    </div>
+
+    <div class="app-modal-footer">
+    </div>
+
+</app-modal-basic>
+<!--// edit && View data // -->

@@ -1,0 +1,763 @@
+<div class="row">
+  <div class="col-sm-12">
+    <!--<app-card [title]="'ข้อมูลลูกค้าทั้งหมด'" [blockClass]="'tab-icon'">-->
+      <div class="card">
+        <!--<div class="col-md-12 col-xl-12">-->
+          <!--<div class="row">-->
+            <!--<div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">-->
+              <!--<div>-->
+                <!--<div ngbDropdown class="btn-group dropdown-split-primary">-->
+                  <!--<button type="button" [routerLink]="['customers-create']" class="btn btn-primary light"><i-->
+                          <!--class="fa fa fa-plus"></i>เพิ่มข้อมูลลูกค้า-->
+                  <!--</button>-->
+                  <!--<button ngbDropdownToggle type="button" class="btn btn-primary dropdown-toggle-split light">-->
+                    <!--<span class="sr-only">Toggle primary</span>-->
+                  <!--</button>-->
+                  <!--<div ngbDropdownMenu>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-info"><i class="fa fa-file"></i>View</a>-->
+                    <!--<div class="dropdown-divider"></div>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-success" [routerLink]="['customers-create']"><i-->
+                            <!--class="fa fa-plus"></i>add</a>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-warning" [routerLink]="['customers-edit']"><i-->
+                            <!--class="fa fa-edit"></i>edit</a>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-danger" [routerLink]="['customers-delete']"><i-->
+                            <!--class="fa fa-remove"></i>delete</a>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-xs-12 col-sm-12 col-md-6">-->
+              <!--<div style="text-align: right;">-->
+                <!--<label class="input-group-sm">ค้นหา:-->
+                  <!--<input type="search"-->
+                         <!--class="form-control input-sm full-data-search"-->
+                         <!--placeholder="Search name">-->
+                <!--</label>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!-- add datatable-->
+
+          <div class="card-body">
+            <div class="table-content crm-table">
+              <div class="project-table">
+                <div id="crm-contact" class="dt-responsive">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                      <div>
+                        <div ngbDropdown class="btn-group dropdown-split-inverse" [hidden]="true">
+                          <button type="button" class="btn btn-sm btn-inverse light">
+                            <i class="icofont icofont-exchange"></i>เลือกทำทั้งหมด</button>
+                          <button ngbDropdownToggle type="button"
+                                  class="btn btn-sm btn-inverse dropdown-toggle-split light">
+                            <span class="sr-only">Toggle primary</span>
+                          </button>
+                          <div ngbDropdownMenu>
+                            <button class="dropdown-item btn ripple light"
+                                   (click)="exportCustomersAllToExcel(customers);">
+                              <!--[disabled]="selected.length < 1"-->
+                              <i class="fa fa-file-excel-o">&nbsp;ส่งออกข้อมูลลูกค้าทั้งหมด</i>
+                              <span class="badge badge-inverse-success text-right">
+                                    </span>
+                              <!--<span *ngIf="selected.length > 0"-->
+                                    <!--class="badge badge-inverse-success text-right">-->
+                                        <!--{{selected.length}}-->
+                                    <!--</span>-->
+                            </button>
+                          </div>
+                        </div>
+                        <div *ngIf="customers.length > 0"
+                             ngbDropdown class="btn-group dropdown-split-inverse">
+                          <button type="button"
+                                  [disabled]="customers.length < 1"
+                                  (click)="exportCustomersAllToExcel(customers);"
+                                  class="btn btn-sm btn-inverse light">
+                            <i class="fa fa-file-excel-o"></i>ส่งออกข้อมูลลูกค้าทั้งหมด
+                          </button>
+                        </div>
+                        <!--&nbsp;-->
+                        <button class="btn btn-sm btn-primary ripple light"
+                                [routerLink]="['customers-create']">
+                          <i class="icofont icofont-plus-circle">&nbsp;เพิ่มคำสั่งซื้อ</i>
+                        </button>
+                        <!-- old -->
+                        <!--<div ngbDropdown class="btn-group dropdown-split-primary">-->
+                          <!--<button type="button"-->
+                                  <!--[routerLink]="['customers-create']"-->
+                                  <!--placement="top" ngbTooltip="เพิ่มข้อมูลลูกค้า"-->
+                                  <!--class="btn btn-primary light">-->
+                            <!--<i class="fa fa-plus"></i>เพิ่มข้อมูลลูกค้า-->
+                          <!--</button>-->
+                          <!--<button ngbDropdownToggle type="button" class="btn btn-primary dropdown-toggle-split light">-->
+                            <!--<span class="sr-only">Toggle primary</span>-->
+                          <!--</button>-->
+                          <!--<div ngbDropdownMenu>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-info"><i class="fa fa-file"></i>View</a>-->
+                            <!--<div class="dropdown-divider"></div>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-success" [routerLink]="['customers-create']"><i-->
+                                    <!--class="fa fa-plus"></i>เพิ่มข้อมูลลูกค้า</a>-->
+                            <!--&lt;!&ndash;<a class="dropdown-item ripple light btn-grd-warning" [routerLink]="['customers-edit']"><i&ndash;&gt;-->
+                                  <!--&lt;!&ndash;class="fa fa-edit"></i>edit</a>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<a class="dropdown-item ripple light btn-grd-danger" [routerLink]="['customers-delete']"><i&ndash;&gt;-->
+                                    <!--&lt;!&ndash;class="fa fa-remove"></i>delete</a>&ndash;&gt;-->
+                          <!--</div>-->
+                        <!--</div>-->
+                        <!-- old -->
+                        &nbsp;
+                        <label class="label-control">แสดง
+                          <select class="form-control input-sm full-data-show-entry"
+                                  [(ngModel)]="rowsOnPage">
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="25">25</option>
+                            <option [ngValue]="50">50</option>
+                            <option [ngValue]="100">100</option>
+                          </select>
+                          แถว
+                        </label>
+                        &nbsp;
+                        <label class="label-control">
+                          จำนวนลูกค้าทั้งหมด <b>{{customers.length}}</b> ราย
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- add button -->
+                    <!--<div class="col-xs-6 col-sm-6 col-sm-6 col-md-3">-->
+                      <!--<div>-->
+                        <!--<div ngbDropdown class="btn-group dropdown-split-primary">-->
+                          <!--<button type="button" [routerLink]="['customers-create']" class="btn btn-primary light"><i-->
+                                  <!--class="fa fa fa-plus"></i>เพิ่มข้อมูลลูกค้า-->
+                          <!--</button>-->
+                          <!--<button ngbDropdownToggle type="button" class="btn btn-primary dropdown-toggle-split light">-->
+                            <!--<span class="sr-only">Toggle primary</span>-->
+                          <!--</button>-->
+                          <!--<div ngbDropdownMenu>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-info"><i class="fa fa-file"></i>View</a>-->
+                            <!--<div class="dropdown-divider"></div>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-success" [routerLink]="['customers-create']"><i-->
+                                    <!--class="fa fa-plus"></i>add</a>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-warning" [routerLink]="['customers-edit']"><i-->
+                                    <!--class="fa fa-edit"></i>edit</a>-->
+                            <!--<a class="dropdown-item ripple light btn-grd-danger" [routerLink]="['customers-delete']"><i-->
+                                    <!--class="fa fa-remove"></i>delete</a>-->
+                          <!--</div>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!-- add button -->
+
+                    <div class="col-xs-12 col-sm-12 col-md-6">
+                      <div style="text-align: right;">
+                        <label class="input-group-sm">ค้นหา:
+                          <input type="search"
+                                 [(ngModel)]="filterQuery"
+                                 class="form-control input-sm full-data-search option-hover"
+                                 placement="top" ngbTooltip="ค้นหาข้อมูลที่คุณต้องการ"
+                                 placeholder="ค้นหาข้อมูลที่คุณต้องการ">
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive-sm">
+                    <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                           [mfData]="customers | dataFilterCustomer : filterQuery"
+                           #mf="mfDataTable"
+                           [mfRowsOnPage]="rowsOnPage"
+                           [(mfSortBy)]="sortBy"
+                           [(mfSortOrder)]="sortOrder">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>
+                          <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter>ช่องทาง</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="customerNameSurname">ชื่อ-สกุล</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="customerEmail">อีเมลล์</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="customerTel">เบอร์โทร</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="customerStatus">สถานะ</mfDefaultSorter>
+                        </th>
+
+                        <th>
+                          <mfDefaultSorter by="customerCreated">วันที่สร้าง</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter>Action</mfDefaultSorter>
+                        </th>
+                      </tr>
+                      <tr>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <ng-container *ngFor="let item of mf.data; let i = index;">
+                        <!--<tr *ngFor="let item of mf.data; let i = index;">-->
+                        <!--<tr routerLink="customer-edit">-->
+                        <!--<tr [routerLink]="'customers-edit'">-->
+                        <!--<tr routerLink="['customers-edit', item.customerId]">-->
+                        <tr>
+                          <ng-container>
+                            <!--<td class="cursorLink" (click)="editCustomer(item);modalDefault.show();resetFile();">#{{item.index}}</td>-->
+                            <td (click)="editCustomerId(item.customerId);" class="cursorLink">#{{item.index}}</td>
+
+                            <!--<td class="text-center"><img [src]="item.customerSocial"></td>-->
+                            <!-- image channel -->
+                            <!-- customerChannelId = 11 -->
+                            <!-- check categoryId to categoryName -->
+                            <ng-container *ngFor="let i of channels;">
+                              <!--<td *ngIf="item.customerChannelId == i.channelId"><label class="label bg-primary">{{i.channelName}}</label></td>-->
+                              <td *ngIf="item.customerChannelId == i.channelId"
+                                  class="text-center" class="cursorLink"
+                                  (click)="editCustomerId(item.customerId);">
+                                <a class="option-hover">
+                                  <img [src]="i.channelImage" class="img-40" placement="top" ngbTooltip="{{i.channelName}}">
+                                </a>
+                              </td>
+                            </ng-container>
+                            <!-- check categoryId to categoryName -->
+                            <!--<td class="text-center">-->
+                            <!--<img [src]="item.channelImage">-->
+                            <!--</td>-->
+                            <!-- image channel -->
+
+                            <td (click)="editCustomerId(item.customerId);" class="text-sm-left cursorLink">
+                              <a class="option-hover text-info"
+                                 placement="top" ngbTooltip="{{item.customerNameSurname}}">
+                              {{item.customerNameSurname}}
+                              </a>
+                            </td>
+                            <td (click)="editCustomerId(item.customerId);" class="text-sm-left cursorLink">
+                              <a class="option-hover" placement="top" ngbTooltip="{{item.customerEmail}}">
+                                <label *ngIf="item.customerEmail.length>0" class="label bg-default label-inverse-primary">
+                                  <i class="fa fa-envelope" aria-hidden="true">&nbsp;</i>
+                              {{item.customerEmail}}
+                                </label>
+                              </a>
+                            </td>
+                            <td (click)="editCustomerId(item.customerId);" class="cursorLink">
+                              <a class="option-hover" placement="top" ngbTooltip="{{item.customerTel}}">
+                                <label *ngIf="item.customerTel.length>0" class="label bg-primary">
+                                  <i class="fa fa-phone" aria-hidden="true">&nbsp;</i>
+                                  {{item.customerTel}}
+                                </label>
+                              </a>
+                            </td>
+                            <td *ngIf="item.customerStatus">
+                              <a class="option-hover" placement="top" ngbTooltip="เปิดใช้งาน">
+                                <label class="label bg-lime-green">เปิดใช้งาน</label>
+                              </a>
+                            </td>
+                            <td *ngIf="!item.customerStatus">
+                              <a class="option-hover" placement="top" ngbTooltip="ปิดใช้งาน">
+                                <label class="label label-inverse-danger">ปิดใช้งาน</label>
+                              </a>
+                            </td>
+                            <td>
+                              <label class="label bg-info" placement="top" ngbTooltip="{{item.customerCreated|date:'dd-MM-yyyy'}}">
+                              <i class="fa fa-calendar" aria-hidden="true"> </i>
+                                {{item.customerCreated|date:'dd-MM-yyyy'}}
+                              </label>
+                            </td>
+                          </ng-container>
+                          <td class="action-icon">
+                            <!--<a href="javascript:;" class="m-r-15 crm-action-view text-info"-->
+                               <!--(click)="viewCustomer(item); modalDefault.show();resetFile();" alt="view"><i-->
+                                    <!--class="fa fa-book"></i></a>-->
+                            <!--<a href="javascript:;" class="m-r-15 crm-action-edit text-primary"-->
+                               <!--(click)="editCustomer(item);modalDefault.show();resetFile();" alt="edit"><i-->
+                                    <!--class="fa fa-edit"></i></a>-->
+                            <a class="m-r-15 crm-action-edit text-primary"
+                               (click)="editCustomerId(item.customerId)">
+                              <i class="fa fa-edit"></i></a>
+                            <a class="crm-action-delete text-danger option-hover"
+                               (click)="deleteCustomer(item)" placement="top" ngbTooltip="Delete">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <td colspan="8">
+                          <mfBootstrapPaginator
+                                  class="pagination-main f-right pull-right">
+                          </mfBootstrapPaginator>
+                        </td>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- add datatable-->
+        <!--</div>-->
+      </div>
+    <!--</app-card>-->
+  </div>
+</div>
+
+
+<!-- skip data old 12-10-2018 -->
+<!-- skip data old 12-10-2018 -->
+
+<!--<div class="card">-->
+  <!--<div class="card-header">-->
+    <!--<h5>ข้อมูลลูกค้า</h5>-->
+    <!--<button type="button" class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"-->
+            <!--(click)="customerFormModal.show('customerModal'); setDateNow(); resetFile('add');">-->
+      <!--<i class="icofont icofont-plus m-r-5"></i>-->
+      <!--เพิ่มข้อมูลลูกค้า-->
+    <!--</button>-->
+  <!--</div>-->
+  <!--<div class="card-body">-->
+    <!--<div class="table-content crm-table">-->
+      <!--<div class="project-table">-->
+        <!--<div id="crm-contact" class="dt-responsive">-->
+          <!--<div class="row">-->
+            <!--<div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">-->
+              <!--<div>-->
+                <!--<label class="label-control">แสดง-->
+                  <!--<select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">-->
+                    <!--<option [ngValue]="10">10</option>-->
+                    <!--<option [ngValue]="25">25</option>-->
+                    <!--<option [ngValue]="50">50</option>-->
+                    <!--<option [ngValue]="100">100</option>-->
+                  <!--</select>-->
+                  <!--แถว-->
+                <!--</label>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-xs-12 col-sm-12 col-md-6">-->
+              <!--<div style="text-align: right;">-->
+                <!--<label class="input-group-sm">ค้นหา:-->
+                  <!--<input type="search"-->
+                         <!--[(ngModel)]="filterQuery"-->
+                         <!--class="form-control input-sm full-data-search"-->
+                         <!--placeholder="Search name">-->
+                <!--</label>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="table-responsive">-->
+            <!--<table class="table table-striped table-bordered full-data-table text-center"-->
+                   <!--[mfData]="customers | dataFilterCustomer : filterQuery"-->
+                   <!--#mf="mfDataTable"-->
+                   <!--[mfRowsOnPage]="rowsOnPage"-->
+                   <!--[(mfSortBy)]="sortBy"-->
+                   <!--[(mfSortOrder)]="sortOrder">-->
+              <!--<thead class="thead-light">-->
+              <!--<tr>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter>ช่องทาง</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="customerNameSurname">ชื่อ-สกุล</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="customerEmail">อีเมลล์</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="customerTel">เบอร์โทร</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="customerStatus">สถานะ</mfDefaultSorter>-->
+                <!--</th>-->
+
+                <!--<th>-->
+                  <!--<mfDefaultSorter by="customerLastlogin">ล็อกอินล่าสุด</mfDefaultSorter>-->
+                <!--</th>-->
+                <!--<th>-->
+                  <!--<mfDefaultSorter>Action</mfDefaultSorter>-->
+                <!--</th>-->
+              <!--</tr>-->
+              <!--<tr>-->
+              <!--</tr>-->
+              <!--</thead>-->
+              <!--<tbody>-->
+              <!--<ng-container *ngFor="let item of mf.data; let i = index;">-->
+              <!--&lt;!&ndash;<tr *ngFor="let item of mf.data; let i = index;">&ndash;&gt;-->
+              <!--&lt;!&ndash;<tr routerLink="customer-edit">&ndash;&gt;-->
+              <!--&lt;!&ndash;<tr [routerLink]="'customers-edit'">&ndash;&gt;-->
+              <!--&lt;!&ndash;<tr routerLink="['customers-edit', item.customerId]">&ndash;&gt;-->
+              <!--<tr (click)="editCustomerId(item.customerId);">-->
+                <!--<ng-container>-->
+                <!--<td class="cursorLink" (click)="editCustomer(item);modalDefault.show();resetFile();">#{{item.index}}</td>-->
+
+                <!--&lt;!&ndash;<td class="text-center"><img [src]="item.customerSocial"></td>&ndash;&gt;-->
+                <!--&lt;!&ndash; image channel &ndash;&gt;-->
+                <!--&lt;!&ndash; customerChannelId = 11 &ndash;&gt;-->
+
+                <!--&lt;!&ndash; check categoryId to categoryName &ndash;&gt;-->
+                <!--<ng-container *ngFor="let i of channels">-->
+                  <!--&lt;!&ndash;<td *ngIf="item.customerChannelId == i.channelId"><label class="label bg-primary">{{i.channelName}}</label></td>&ndash;&gt;-->
+                  <!--<td *ngIf="item.customerChannelId == i.channelId" class="text-center">-->
+                    <!--<img [src]="i.channelImage" class="img-30">-->
+                  <!--</td>-->
+                <!--</ng-container>-->
+                <!--&lt;!&ndash; check categoryId to categoryName &ndash;&gt;-->
+                <!--&lt;!&ndash;<td class="text-center">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<img [src]="item.channelImage">&ndash;&gt;-->
+                <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                <!--&lt;!&ndash; image channel &ndash;&gt;-->
+
+                <!--<td>{{item.customerNameSurname}}</td>-->
+                <!--<td>{{item.customerEmail}}</td>-->
+                <!--<td>{{item.customerTel}}</td>-->
+                <!--<td *ngIf="item.customerStatus"><label class="label bg-lime-green">เปิดใช้งาน</label></td>-->
+                <!--<td *ngIf="!item.customerStatus"><label class="label label-inverse-danger">ปิดใช้งาน</label></td>-->
+                <!--&lt;!&ndash;<td>{{item.customerLastupdate}}</td>&ndash;&gt;-->
+                <!--<td>-->
+                  <!--<i class="fa fa-calendar calendar-icon-style" aria-hidden="true"> </i>-->
+                  <!--{{item.customerLastupdate}}-->
+                <!--</td>-->
+                <!--</ng-container>-->
+                <!--<td class="action-icon">-->
+                  <!--<a href="javascript:;" class="m-r-15 crm-action-view text-info"-->
+                     <!--(click)="viewCustomer(item); modalDefault.show();resetFile();" alt="view"><i-->
+                          <!--class="fa fa-book"></i></a>-->
+                  <!--<a href="javascript:;" class="m-r-15 crm-action-edit text-primary"-->
+                     <!--(click)="editCustomer(item);modalDefault.show();resetFile();" alt="edit"><i-->
+                          <!--class="fa fa-edit"></i></a>-->
+                  <!--<a href="javascript:;" class="crm-action-delete text-danger"-->
+                     <!--(click)="deleteCustomer(item)"><i class="fa fa-trash"></i></a>-->
+                <!--</td>-->
+              <!--</tr>-->
+              <!--</ng-container>-->
+              <!--</tbody>-->
+              <!--<tfoot>-->
+              <!--<tr>-->
+                <!--<td colspan="8">-->
+                  <!--<mfBootstrapPaginator-->
+                          <!--class="pagination-main f-right pull-right"></mfBootstrapPaginator>-->
+                <!--</td>-->
+              <!--</tr>-->
+              <!--</tfoot>-->
+            <!--</table>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Add Customer Start Model &ndash;&gt;-->
+<!--<app-modal-animation [modalID]="'customerModal'" [modalClass]="'md-effect-13'" #customerFormModal>-->
+  <!--<h3 class="f-26 bg-primary">เพิ่มข้อมูลผู้ใช้งานระบบ</h3>-->
+  <!--<div class="text-center modal-body">-->
+
+    <!--&lt;!&ndash;// Start insert data  //&ndash;&gt;-->
+    <!--<form (ngSubmit)="onSubmit(customerForm);customerForm.reset();" #customerForm="ngForm" autocomplete="off">-->
+      <!--<div class="form-group">-->
+        <!--<div class="col-sm-12 col-12 col-md-12 text-center">-->
+          <!--<img [src]="imageUrl">-->
+        <!--</div>-->
+        <!--<hr>-->
+        <!--<div class="input-group">-->
+          <!--<label class="input-group-text file">เพิ่มรูปภาพ : </label>-->
+          <!--<input type="file"-->
+                 <!--#Image accept="image/*"-->
+                 <!--ngModel-->
+                 <!--name="customerImage"-->
+                 <!--class="form-control file"-->
+                 <!--(change)="handleFileInputAdd($event.target.files)">-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+          <!--<label class="input-group-text">ชื่อผู้ใช้งานระบบ : </label>-->
+          <!--<input type="text"-->
+                 <!--ngModel-->
+                 <!--class="form-control"-->
+                 <!--name="customerName"-->
+                 <!--placeholder="Customer-Name/ชื่อผู้ใช้งานระบบ" required autofocus>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+          <!--<label class="input-group-text">อีเมลล์ : </label>-->
+          <!--<input type="text"-->
+                 <!--ngModel-->
+                 <!--name="customerEmail"-->
+                 <!--class="form-control"-->
+                 <!--placeholder="Email/อีเมลล์">-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group input-group-text text-left">-->
+        <!--<label class="input-group-text">รหัสผ่าน : </label>-->
+        <!--<input type="password"-->
+               <!--ngModel-->
+               <!--name="customerPassword"-->
+               <!--class="form-control"-->
+               <!--placeholder="รหัสผ่านผู้ใช้งาน">-->
+        <!--<label class="input-group-text">ยืนยันรหัสผ่าน : </label>-->
+        <!--<input type="password"-->
+               <!--ngModel-->
+               <!--name="confirmPassword"-->
+               <!--class="form-control"-->
+               <!--placeholder="ยืนยันรหัสผ่านผู้ใช้งาน">-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<div class="input-group input-group-text text-left form-control-primary">-->
+          <!--<label class="col-sm-4">สิทธิ์ผู้ใช้งานระบบ : </label>-->
+          <!--<div class="col-sm-8">-->
+            <!--<select type="text" name="customerLevel" ngModel class="form-control">-->
+              <!--<option [disabled]="i.disabled" *ngFor="let i of itemsLevel" [ngValue]="i.level">{{i.level}}</option>-->
+            <!--</select>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="form-group">-->
+        <!--<div class="input-group">-->
+          <!--<label class="input-group-text">ล็อกอินล่าสุด : </label>-->
+          <!--<input class="form-control"-->
+                 <!--placeholder="{{today | date: 'yyyy-MM-dd'}}"-->
+                 <!--name="customerLastlogin"-->
+                 <!--readonly-->
+                 <!--[(ngModel)]="modelPopup"-->
+                 <!--ngbDatepicker #d="ngbDatepicker">-->
+          <!--<div class="input-group-append">-->
+                          <!--<span class="input-group-text" (click)="d.toggle()">-->
+                            <!--<i class="icofont icofont-ui-calendar"></i>-->
+                          <!--</span>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<button type="submit"-->
+              <!--class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block">-->
+        <!--บันทึก-->
+      <!--</button>-->
+      <!--<button type="reset" (click)="customerFormModal.close('customerModal')"-->
+              <!--class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block">-->
+        <!--ปิด-->
+      <!--</button>-->
+    <!--</form>-->
+  <!--</div>-->
+
+  <!--<button (click)="customerFormModal.close('customerModal')" aria-label="Close" class="md-close-btn">-->
+    <!--<i class="icofont icofont-ui-close"></i>-->
+  <!--</button>-->
+<!--</app-modal-animation>-->
+
+<!--<app-modal-basic #modalDefault>-->
+  <!--<div class="app-modal-header">-->
+    <!--<h4 class="modal-title">-->
+      <!--# [{{ customer.customerId }}] - {{ customer.customerNameSurname }}-->
+    <!--</h4>-->
+    <!--<button type="button" class="close basic-close" (click)="modalDefault.hide()">-->
+      <!--<span aria-hidden="true">&times;</span>-->
+    <!--</button>-->
+  <!--</div>-->
+  <!--<div class="app-modal-body text-center">-->
+    <!--<form #customerUpdateForm="ngForm" autocomplete="off">-->
+      <!--<div class="col-sm-12 col-12 text-center">-->
+        <!--&lt;!&ndash;<img [attr.src]="customer.customerImage">&ndash;&gt;-->
+        <!--<img [src]="showImg">-->
+      <!--</div>-->
+      <!--<hr>-->
+      <!--<div class="input-group">-->
+        <!--<div class="col-sm-4 col-4">แก้ไขรูปภาพ :</div>-->
+        <!--<div class="col-sm-8 col-8">-->
+          <!--<input type="file"-->
+                 <!--[disabled]="isReadOnly"-->
+                 <!--#Image-->
+                 <!--accept="image/*"-->
+                 <!--[(ngModel)]="resetFileDefault"-->
+                 <!--name="customerImage"-->
+                 <!--class="form-control file"-->
+                 <!--(change)="handleFileInputEdit($event.target.files)">-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<table class="table table-striped text-left m-t-20 table-sm table-responsive-sm">-->
+        <!--<tr>-->
+          <!--<td>ชื่อผู้ใช้งานระบบ :</td>-->
+          <!--<td>-->
+            <!--<input type="text"-->
+                   <!--[disabled]="isReadOnly"-->
+                   <!--[(ngModel)]="customer.customerNameSurname"-->
+                   <!--value="{{customer.customerNameSurname}}"-->
+                   <!--class="form-control"-->
+                   <!--name="customerName" autofocus>-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<td>อีเมลล์ :</td>-->
+          <!--<td>-->
+            <!--<input type="text"-->
+                   <!--[disabled]="isReadOnly"-->
+                   <!--[(ngModel)]="customer.customerEmail"-->
+                   <!--value="{{customer.customerEmail}}"-->
+                   <!--class="form-control"-->
+                   <!--name="customerEmail">-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<td>รหัสผ่าน : </td>-->
+          <!--<td>-->
+            <!--<input type="password"-->
+                   <!--[disabled]="isReadOnly"-->
+                   <!--readonly="true"-->
+                   <!--[(ngModel)]="customer.customerTel"-->
+                   <!--name="customerTel"-->
+                   <!--class="form-control">-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<td colspan="2">-->
+            <!--<div class="form-group form-primary">-->
+              <!--<div class="form-group row">-->
+                <!--<label class="col-sm-6 col-form-label">สิทธิ์ผู้ใช้งานระบบ : </label>-->
+                <!--<div class="col-sm-6">-->
+                  <!--<select type="text" name="customerTel" [(ngModel)]="customer.customerTel" class="form-control" [disabled]="true">-->
+                    <!--<option [disabled]="i.disabled" *ngFor="let i of itemsLevel" [ngValue]="i.level">{{i.level}}</option>-->
+                  <!--</select>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+          <!--<td>ล็อกอินล่าสุด : </td>-->
+          <!--<td>-->
+            <!--<div class="form-group">-->
+              <!--<div class="input-group">-->
+                <!--<input class="form-control"-->
+                       <!--[disabled]="isReadOnly"-->
+                       <!--readonly="true"-->
+                       <!--name="customerLastlogin"-->
+                       <!--[(ngModel)]="modelPopupCustomerStartDate"-->
+                       <!--ngbDatepicker #ddStart="ngbDatepicker">-->
+                <!--<div class="input-group-append">-->
+                                      <!--<span class="input-group-text" (click)="ddStart.toggle()">-->
+                                        <!--<i class="icofont icofont-ui-calendar"></i>-->
+                                      <!--</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</td>-->
+        <!--</tr>-->
+      <!--</table>-->
+    <!--</form>-->
+  <!--</div>-->
+  <!--<div class="app-modal-footer">-->
+    <!--<button type="button"-->
+            <!--class="btn btn-success waves-effect"-->
+            <!--*ngIf="!isReadOnly"-->
+            <!--(click)="updateCustomer(customerUpdateForm)">-->
+      <!--บันทึก-->
+    <!--</button>-->
+    <!--<button type="button"-->
+            <!--(click)="modalDefault.hide()"-->
+            <!--class="btn btn-danger waves-effect">ปิด-->
+    <!--</button>-->
+  <!--</div>-->
+<!--</app-modal-basic>-->
+
+<!-- END skip data old 12-10-2018 -->
+<!-- END skip data old 12-10-2018 -->
+
+
+
+<!--<div class="row">-->
+  <!--<div class="col-sm-12">-->
+    <!--<app-card [title]="'ข้อมูลลูกค้าทั้งหมด'" [blockClass]="'tab-icon'">-->
+      <!--<div class="row">-->
+        <!--<div class="col-md-12 col-xl-12">-->
+          <!--<div class="row">-->
+            <!--<div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">-->
+              <!--<div>-->
+                <!--<div ngbDropdown class="btn-group dropdown-split-primary">-->
+                  <!--<button type="button" [routerLink]="['customers-create']" class="btn btn-primary light"><i class="fa fa fa-plus"></i>เพิ่มข้อมูลลูกค้า</button>-->
+                  <!--<button ngbDropdownToggle type="button" class="btn btn-primary dropdown-toggle-split light">-->
+                    <!--<span class="sr-only">Toggle primary</span>-->
+                  <!--</button>-->
+                  <!--<div ngbDropdownMenu>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-info"><i class="fa fa-file"></i>View</a>-->
+                    <!--<div class="dropdown-divider"></div>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-success" [routerLink]="['customers-create']"><i class="fa fa-plus"></i>add</a>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-warning" [routerLink]="['customers-edit']"><i class="fa fa-edit"></i>edit</a>-->
+                    <!--<a class="dropdown-item ripple light btn-grd-danger" [routerLink]="['customers-delete']"><i class="fa fa-remove"></i>delete</a>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-xs-12 col-sm-12 col-md-6">-->
+              <!--<div style="text-align: right;">-->
+                <!--<label class="input-group-sm">ค้นหา:-->
+                  <!--<input type="search"-->
+                         <!--class="form-control input-sm full-data-search"-->
+                         <!--placeholder="Search name">-->
+                <!--</label>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--<app-card>-->
+          <!--<ngx-datatable-->
+                  <!--class="data-table dt-chk"-->
+                  <!--[rows]="rows"-->
+                  <!--[columnMode]="'force'"-->
+                  <!--[scrollbarH]="true"-->
+                  <!--[headerHeight]="50"-->
+                  <!--[footerHeight]="50"-->
+                  <!--[rowHeight]="'auto'"-->
+                  <!--[limit]="25"-->
+                  <!--[selected]="selected"-->
+                  <!--[selectionType]="'checkbox'"-->
+                  <!--(activate)="onActivate($event)"-->
+                  <!--(select)='onSelect($event)'>-->
+            <!--<ngx-datatable-column [width]="50" [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">-->
+              <!--&lt;!&ndash; // select all in checkbox&ndash;&gt;-->
+              <!--<ng-template class="datatable-checkbox" ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">-->
+                <!--<div class="checkbox-fade datatable-header-cell-label border-checkbox-group border-checkbox-group-default">-->
+                  <!--<label>-->
+                    <!--<input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)"/>-->
+                    <!--<span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</ng-template>-->
+              <!--<ng-template class="datatable-checkbox" ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">-->
+                <!--&lt;!&ndash;<div class="checkbox-fade fade-in-default datatable-header-cell-label">&ndash;&gt;-->
+                <!--<div class="checkbox-fade datatable-header-cell-label border-checkbox-group border-checkbox-group-default">-->
+                  <!--<label>-->
+                    <!--&lt;!&ndash; <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/> &ndash;&gt;-->
+                    <!--<input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)"/>-->
+                    <!--<span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>-->
+                  <!--</label>-->
+                <!--</div>-->
+              <!--</ng-template>-->
+            <!--</ngx-datatable-column>-->
+            <!--<ngx-datatable-column name="Name"></ngx-datatable-column>-->
+            <!--<ngx-datatable-column name="Gender"></ngx-datatable-column>-->
+            <!--<ngx-datatable-column name="Company"></ngx-datatable-column>-->
+            <!--<ngx-datatable-column name="age"></ngx-datatable-column>-->
+          <!--</ngx-datatable>-->
+          <!--&lt;!&ndash;  show data selected in checkbox&ndash;&gt;-->
+          <!--<div class="row">-->
+            <!--<div class='col-sm-12 selected-column'>-->
+              <!--<h4 class="sub-title p-t-15">Selected Row</h4>-->
+              <!--<span *ngFor='let sel of selected'>-->
+                <!--<label class="label label-primary">{{sel.name}}</label>-->
+              <!--</span>-->
+              <!--<span *ngIf="!selected.length">No Selections</span>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</app-card>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</app-card>-->
+  <!--</div>-->
+<!--</div>-->

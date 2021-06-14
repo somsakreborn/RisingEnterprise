@@ -1,0 +1,289 @@
+<div class="card">
+    <div class="card-header">
+        <h5>ข้อมูลสาขา</h5>
+        <button type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                placement="top" ngbTooltip="เพิ่มสาขา"
+                (click)="branchFormModal.show('branchModal'); setDateNow(); resetFile('add');">
+            <i class="icofont icofont-plus m-r-5"></i>
+            เพิ่มสาขา
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-content crm-table">
+            <div class="project-table">
+                <div id="crm-contact" class="dt-responsive">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                            <div>
+                                <label class="label-control">แสดง
+                                    <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                        <option [ngValue]="10">10</option>
+                                        <option [ngValue]="25">25</option>
+                                        <option [ngValue]="50">50</option>
+                                        <option [ngValue]="100">100</option>
+                                    </select>
+                                    แถว
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <div style="text-align: right;">
+                                <label class="input-group-sm">ค้นหา:
+                                    <input type="search"
+                                           [(ngModel)]="filterQuery"
+                                           class="form-control input-sm full-data-search"
+                                           placement="top" ngbTooltip="ค้นหาข้อมูลสาขา"
+                                           placeholder="Search name">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive-sm">
+                        <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                               [mfData]="branches | dataFilterBranch : filterQuery"
+                               #mf="mfDataTable"
+                               [mfRowsOnPage]="rowsOnPage"
+                               [(mfSortBy)]="sortBy"
+                               [(mfSortOrder)]="sortOrder">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter By="branchImage">รูปภาพ</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="branchName">ชื่อสาขา</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="branchComment">รายละเอียด</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="branchStartDate">อัพเดท</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter>Action</mfDefaultSorter>
+                                </th>
+                            </tr>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of mf.data; let i = index;">
+                                <!--<td><img src="{{item.image}}" class="d-inline-block img-circle " alt="tbl"></td>-->
+                                <td>#{{item.index}}</td>
+                                <td class="text-center">
+                                    <img class="img-40" [src]="item.branchImage" placement="top" ngbTooltip="{{item.branchName}}">
+                                </td>
+                                <td>
+                                    <label class="text-info" placement="top" ngbTooltip="{{item.branchName}}">
+                                    {{item.branchName}}
+                                    </label>
+                                </td>
+                                <td>
+                                    <a placement="top" ngbTooltip="{{item.branchComment}}">
+                                    {{item.branchComment}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <label class="label bg-info" placement="top" ngbTooltip="{{item.branchStartDate}}">
+                                        <i class="fa fa-calendar" aria-hidden="true"> </i>
+                                    {{item.branchStartDate}}
+                                    </label>
+                                </td>
+                                <td class="action-icon">
+                                    <a placement="top" ngbTooltip="View" class="m-r-15 crm-action-view text-info"
+                                       (click)="viewBranch(item); modalDefault.show(); resetFile();"><i
+                                            class="fa fa-book"></i></a>
+                                    <a placement="top" ngbTooltip="Edit" class="m-r-15 crm-action-edit text-primary"
+                                       (click)="editBranch(item);modalDefault.show(); resetFile();"><i
+                                            class="fa fa-edit"></i></a>
+                                    <a placement="top" ngbTooltip="Delete" class="crm-action-delete text-danger"
+                                       (click)="deleteBranch(item)"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <mfBootstrapPaginator
+                                            class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Branch Start Model -->
+<app-modal-animation [modalID]="'branchModal'" [modalClass]="'md-effect-13'" #branchFormModal>
+    <h3 class="f-26 bg-primary">เพิ่มข้อมูลสาขา</h3>
+    <div class="text-center modal-body">
+
+        <!--// Start insert data  //-->
+        <form (ngSubmit)="onSubmit(branchForm);branchForm.reset();" #branchForm="ngForm" autocomplete="off">
+            <div class="form-group">
+                <div class="col-sm-12 col-12 col-md-12 text-center">
+                    <img class="img-120" [src]="imageUrl">
+                </div>
+                <hr>
+                <div class="input-group">
+                    <label class="input-group-text file">เพิ่มรูปภาพ : </label>
+                    <input type="file"
+                           #Image accept="image/*"
+                           ngModel
+                           name="branchImage"
+                           class="form-control file"
+                           (change)="handleFileInputAdd($event.target.files)">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">ชื่อสาขา : </label>
+                    <input type="text"
+                           ngModel
+                           class="form-control"
+                           name="branchName"
+                           placeholder="Name/ชื่อสาขา" required autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">อัพเดท : </label>
+                    <input class="form-control"
+                           placeholder="{{today | date: 'yyyy-MM-dd'}}"
+                           name="branchStartDate"
+                           readonly
+                           [(ngModel)]="modelPopup"
+                           ngbDatepicker #d="ngbDatepicker">
+                    <div class="input-group-append">
+                          <span class="input-group-text" (click)="d.toggle()">
+                            <i class="icofont icofont-ui-calendar"></i>
+                          </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-float">
+                <div class="form-line text-left">
+                <label for="branchComment">รายละเอียด : </label>
+                <textarea name="branchComment"
+                    ngModel
+                    id="branchComment"
+                    cols="30"
+                    rows="5"
+                    class="form-control no-resize">
+                </textarea>
+                </div>
+            </div>
+            <button type="submit"
+                    class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block">
+                บันทึก
+            </button>
+            <button type="reset" (click)="branchFormModal.close('branchModal')"
+                    class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block">
+                ปิด
+            </button>
+        </form>
+    </div>
+
+    <button (click)="branchFormModal.close('branchModal')" aria-label="Close" class="md-close-btn">
+        <i class="icofont icofont-ui-close"></i>
+    </button>
+</app-modal-animation>
+
+<app-modal-basic #modalDefault>
+    <div class="app-modal-header">
+        <h4 class="modal-title">
+            # [{{ branch.branchId }}] - {{ branch.branchName }}
+        </h4>
+        <button type="button" class="close basic-close" (click)="modalDefault.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body text-center">
+        <form #branchUpdateForm="ngForm" autocomplete="off">
+            <div class="col-sm-12 col-12 text-center">
+                <!--<img [attr.src]="branch.branchImage">-->
+                <img class="img-120" [src]="showImg">
+            </div>
+            <hr>
+            <div class="input-group">
+                <div class="col-sm-4 col-4">แก้ไขรูปภาพ :</div>
+                <div class="col-sm-8 col-8">
+                    <input type="file"
+                           [disabled]="isReadOnly"
+                           #Image
+                           accept="image/*"
+                           [(ngModel)]="resetFileDefault"
+                           name="branchImage"
+                           class="form-control file"
+                           (change)="handleFileInputEdit($event.target.files)">
+                </div>
+            </div>
+
+            <table class="table table-striped text-left m-t-20 table-sm table-responsive-sm">
+                <tr>
+                    <td>ชื่อสาขา : </td>
+                    <td>
+                        <input type="text"
+                               [disabled]="isReadOnly"
+                               [(ngModel)]="branch.branchName"
+                               value="{{branch.branchName}}"
+                               class="form-control"
+                               name="branchName" autofocus>
+                    </td>
+                </tr>
+                <tr>
+                    <td>รายละเอียด : </td>
+                    <td>
+                        <textarea name="branchComment"
+                                  [disabled]="isReadOnly"
+                                  [(ngModel)]="branch.branchComment"
+                                  value="{{branch.branchComment}}"
+                                  cols="30"
+                                  rows="5"
+                                  class="form-control no-resize">
+                        </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>อัพเดท : </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control"
+                                       [disabled]="isReadOnly"
+                                       readonly
+                                       name="branchStartDate"
+                                       [(ngModel)]="modelPopupBranchStartDate"
+                                       ngbDatepicker #ddStart="ngbDatepicker">
+                                <div class="input-group-append">
+                                      <span class="input-group-text" (click)="ddStart.toggle()">
+                                        <i class="icofont icofont-ui-calendar"></i>
+                                      </span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <button type="button"
+                class="btn btn-success waves-effect"
+                *ngIf="!isReadOnly"
+                (click)="updateBranch(branchUpdateForm)">
+            บันทึก
+        </button>
+        <button type="button"
+                (click)="modalDefault.hide()"
+                class="btn btn-danger waves-effect">ปิด
+        </button>
+    </div>
+</app-modal-basic>

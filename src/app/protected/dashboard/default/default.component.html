@@ -1,0 +1,126 @@
+<div class="page-body">
+    <div class="row">
+        <div class="col-xl-4 col-md-12">
+            <div class="card bg-c-red text-white widget-visitor-card">
+                <div class="card-block-small text-center">
+                    <h2>{{ordersCalSumTotalByDay|currency: '฿'}}</h2>
+                    <h6>ยอดขายวันนี้</h6>
+                    <i class="feather icon-user"></i>
+                </div>
+            </div>
+            <div class="card bg-c-blue text-white widget-visitor-card">
+                <div class="card-block-small text-center">
+                    <h2>{{ordersDayNow.length}}</h2>
+                    <h6>ยอดคำสั่งซื้อประจำวัน</h6>
+                    <i class="feather icon-file-text"></i>
+                </div>
+            </div>
+            <div class="card bg-c-yellow text-white widget-visitor-card">
+                <div class="card-block-small text-center">
+                    <h2>{{ordersCalSumTotalProductAmountByDay}}</h2>
+                    <h6>ยอดขายสินค้าประจำวัน</h6>
+                    <i class="feather icon-award"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8 col-md-12">
+            <!--<app-card title="ยอดขายเดือนนี้: ({{ordersCalSumTotalByMonth|currency: '฿ '}} บาท) | คำสั่งซื้อทั้งหมด: {{ordersMonthNow.length}} ออเดอร์">-->
+            <app-card title="{{dataChart}}">
+                <div style="text-align: right;">
+                    <button class="btn btn-sm btn-primary text-right" *ngIf="stateChange !== 'Monthly'" (click)="onChangeState('Monthly');onfetchDashboardMonthly(thisYearMonthNow)">เดือนนี้</button>&nbsp;
+                    <button class="btn btn-sm btn-primary text-right" *ngIf="stateChange === 'Monthly'" (click)="onChangeState('Yearly');onfetchDashboardYearly(thisYearNow)">ปีนี้</button></div>
+                <div id="chartdiv"></div>
+                <!--<div *ngIf="selectedChartByYear" id="chartdivYearly"></div>-->
+            </app-card>
+        </div>
+        <!--<div class="col-xl-8 col-md-12" *ngIf="selectedChartByYear">-->
+        <!--<app-card  title="ยอดขายประจำปี {{now.getFullYear()}}: ({{ordersCalSumTotalByYear|currency: '฿ '}} บาท) | คำสั่งซื้อทั้งหมด: {{ordersYearNow.length}} ออเดอร์">-->
+        <!--<div  id="chartdivYearly"></div>-->
+        <!--</app-card>-->
+        <!--</div>-->
+        <div class="col-xl-6 col-md-6 col-sm-6">
+            <app-card [title]="'ยอดขายทั้งปี '+(now.getFullYear())+' - ของผู้ขาย'"
+                      [cardClass]="'latest-activity-card'"
+                      [cardOptionBlock]="true"
+                      [headerClass]="'borderless'">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover table-borderless">
+                        <thead>
+                        <tr class="text-center">
+                            <th class="text-center">ผู้ขาย</th>
+                            <th class="text-right">ยอดขาย(บาท)</th>
+                            <th class="text-center">ออเดอร์</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="saleReportsYearly.length > 0">
+                        <tr *ngFor="let srY of saleReportsYearly;">
+                            <td class="text-center">{{srY._id|titlecase}}</td>
+                            <td class="text-right">{{srY.totalPrice|currency:'฿'}}</td>
+                            <td class="text-center">
+                                <label class="label label-primary">{{srY.sumCount}}</label>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot *ngIf="sumSaleReportsYearlyTotalPrices > 0">
+                        <td class="text-center font-weight-bold text-underline">
+                            รวม
+                        </td>
+                        <td class="text-right font-weight-bold text-underline">
+                            {{sumSaleReportsYearlyTotalPrices|currency:'฿'}}
+                        </td>
+                        <td class="text-center">
+                            <!--<label class="label label-primary">-->
+                            <b class="text-underline">
+                                {{sumSaleReportsYearlyTotalOrders|number}}
+                            </b>
+                            <!--</label>-->
+                        </td>
+                        </tfoot>
+                    </table>
+                </div>
+            </app-card>
+        </div>
+        <div class="col-xl-6 col-md-6 col-sm-6">
+            <app-card [title]="'ยอดขายเดือนปัจจุบัน - ของผู้ขาย'"
+                      [cardClass]="'latest-activity-card'"
+                      [cardOptionBlock]="true"
+                      [headerClass]="'borderless'">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover table-borderless">
+                        <thead>
+                        <tr class="text-center">
+                            <th class="text-center">ผู้ขาย</th>
+                            <th class="text-right">ยอดขาย(บาท)</th>
+                            <th class="text-center">ออเดอร์</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="saleReportsMonthly.length > 0">
+                        <tr *ngFor="let srM of saleReportsMonthly;">
+                            <td class="text-center">{{srM._id|titlecase}}</td>
+                            <td class="text-right">{{srM.totalPrice|currency:'฿'}}</td>
+                            <td class="text-center">
+                                <label class="label label-primary">{{srM.sumCount}}</label>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot *ngIf="sumsaleReportsMonthlyTotalPrices > 0">
+                        <td class="text-center font-weight-bold text-underline">
+                            รวม
+                        </td>
+                        <td class="text-right font-weight-bold text-underline">
+                            {{sumsaleReportsMonthlyTotalPrices|currency:'฿'}}
+                        </td>
+                        <td class="text-center">
+                            <!--<label class="label label-primary">-->
+                            <b class="text-underline">
+                                {{sumsaleReportsMonthlyTotalOrders|number}}
+                            </b>
+                            <!--</label>-->
+                        </td>
+                        </tfoot>
+                    </table>
+                </div>
+            </app-card>
+        </div>
+    </div>
+</div>

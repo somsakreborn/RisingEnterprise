@@ -1,0 +1,472 @@
+<div class="card">
+    <div class="card-header">
+        <h5>ข้อมูลพนักงาน</h5>
+        <button type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                (click)="employeeFormModal.show('employeeModal')"><i class="icofont icofont-plus m-r-5"></i>
+            เพิ่มพนักงาน
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="table-content crm-table">
+            <div class="project-table">
+                <div id="crm-contact" clacloseMyModalss="dt-responsive">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                            <div>
+                                <label class="label-control">แสดง
+                                    <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                                        <option [ngValue]="10">10</option>
+                                        <option [ngValue]="25">25</option>
+                                        <option [ngValue]="50">50</option>
+                                        <option [ngValue]="100">100</option>
+                                    </select>
+                                    แถว
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <div style="text-align: right;">
+                                <label class="input-group-sm">ค้นหา:
+                                    <input type="search"
+                                           [(ngModel)]="filterQuery"
+                                           class="form-control input-sm full-data-search"
+                                           placeholder="Search name">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="panel-heading">User information</div>-->
+                    <div class="table-responsive-sm">
+                        <table class="table table-xs table-striped table-bordered full-data-table text-center"
+                               [mfData]="employees | dataFilterEmp : filterQuery"
+                               #mf="mfDataTable"
+                               [mfRowsOnPage]="rowsOnPage"
+                               [(mfSortBy)]="sortBy"
+                               [(mfSortOrder)]="sortOrder">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <mfDefaultSorter by="index">ลำดับ</mfDefaultSorter>
+                                </th>
+
+                                <th *ngFor="let item of headerValueArr">
+                                    <mfDefaultSorter by="{{item.head}}">{{item.value}}</mfDefaultSorter>
+                                </th>
+
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeSurname">นามสกุล</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeePosition">ตำแหน่ง</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeEmail">อีเมลล์</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeBranch">สาขา</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeAge">อายุ</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeAge">ชื่นชอบ</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeSalary">เงินเดือน</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeGender">เพศ</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeComment">รายละเอียด</mfDefaultSorter>-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                <!--<mfDefaultSorter by="employeeStartDate">เริ่มงาน</mfDefaultSorter>-->
+                                <!--</th>-->
+
+                                <th>
+                                    <mfDefaultSorter>Action</mfDefaultSorter>
+                                </th>
+                            </tr>
+                            <tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of mf.data; let i = index;">
+                                <!--<td><img src="{{item.image}}" class="d-inline-block img-circle " alt="tbl"></td>-->
+                                <td>#{{item.index}}</td>
+                                <td *ngIf="checkTableBody('employeeName') !== -1">{{item.employeeName}}</td>
+                                <td *ngIf="checkTableBody('employeeSurname') !== -1">{{item.employeeSurname}}</td>
+                                <td *ngIf="checkTableBody('employeePosition') !== -1">{{item.employeePosition}}</td>
+                                <td *ngIf="checkTableBody('employeeEmail') !== -1">{{item.employeeEmail}}</td>
+                                <td *ngIf="checkTableBody('employeeBranch') !== -1">{{item.employeeBranch}}</td>
+                                <td *ngIf="checkTableBody('employeeAge') !== -1">{{item.employeeAge}}</td>
+                                <!--<td class="text-primary text-center" *ngIf="checkTableBody('employeeName') !== -1">-->
+                                    <!--<span *ngIf="item.employeeAge > 45"><i class="fa fa-star"-->
+                                                                           <!--aria-hidden="true"></i></span>-->
+                                    <!--<span *ngIf="item.employeeAge <= 45 && item.employeeAge > 25"><i-->
+                                            <!--class="fa fa-star-half-o"-->
+                                            <!--aria-hidden="true"></i></span>-->
+                                    <!--<span *ngIf="item.employeeAge <= 25"><i class="fa fa-star-o" aria-hidden="true"></i></span>-->
+                                <!--</td>-->
+                                <td *ngIf="checkTableBody('employeeSalary') !== -1">{{item.employeeSalary | number}}
+                                </td>
+                                <td *ngIf="checkTableBody('employeeGender') !== -1">{{item.employeeGender}}</td>
+                                <td *ngIf="checkTableBody('employeeComment') !== -1">{{item.employeeComment}}</td>
+                                <td *ngIf="checkTableBody('employeeStartDate') !== -1">{{item.employeeStartDate | date:
+                                'dd-MM-yyyy'}}
+                                </td>
+                                <td *ngIf="checkTableBody('employeeCreated') !== -1">{{item.employeeCreated | date:
+                                    'dd-MM-yyyy'}}
+                                </td>
+                                <td class="action-icon">
+                                    <a href="javascript:;" class="m-r-15 crm-action-view text-info"
+                                       (click)="viewEmployee(item); modalDefault.show();" alt="view"><i
+                                            class="fa fa-book"></i></a>
+                                    <a href="javascript:;" class="m-r-15 crm-action-edit text-primary"
+                                       (click)="editEmployee(item);modalDefault.show();" alt="edit"><i
+                                            class="fa fa-edit"></i></a>
+                                    <a href="javascript:;" class="crm-action-delete text-danger"
+                                       (click)="deleteEmployee(item)"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <!--<tr>-->
+                                <!--<th>ลำดับ</th>-->
+                                <!--<th>ชื่อ</th>-->
+                                <!--<th>นามสกุล</th>-->
+                                <!--<th>ตำแหน่ง</th>-->
+                                <!--<th>อีเมลล์</th>-->
+                                <!--<th>สาขา</th>-->
+                                <!--<th>อายุ</th>-->
+                                <!--<th>ชื่นชอบ</th>-->
+                                <!--<th>เงินเดือน</th>-->
+                                <!--<th>เพศ</th>-->
+                                <!--<th>รายละเอียด</th>-->
+                                <!--<th>เริ่มงาน</th>-->
+                                <!--<th>Action</th>-->
+                            <!--</tr>-->
+                            <tr>
+                                <td colspan="13">
+                                    <mfBootstrapPaginator
+                                            class="pagination-main f-right pull-right"></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Start Model -->
+<app-modal-animation [modalID]="'employeeModal'" [modalClass]="'md-effect-13'" #employeeFormModal>
+    <h3 class="f-26 bg-primary">เพิ่มข้อมูลพนักงาน</h3>
+    <div class="text-center modal-body">
+
+        <!--// Start insert data  //-->
+        <form (ngSubmit)="onSubmit(employeeForm)" #employeeForm="ngForm">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">Name/ชื่อพนักงาน</label>
+                    <input type="text"
+                           ngModel
+                           class="form-control"
+                           name="employeeName"
+                           placeholder="Name/ชื่อพนักงาน" required autofocus>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-group-text">Surname/นามสกุล</label>
+                <input type="text"
+                       ngModel
+                       name="employeeSurname"
+                       class="form-control"
+                       placeholder="Surname/นามสกุล">
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">Email/อีเมลล์</label>
+                    <input type="text"
+                           ngModel
+                           class="form-control"
+                           name="employeeEmail"
+                           placeholder="Email/อีเมลล์">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">Position/ตำแหน่ง</label>
+                    <input type="text"
+                           ngModel
+                           class="form-control"
+                           name="employeePosition"
+                           placeholder="Position/ตำแหน่ง">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">Branch/สาขา</label>
+                    <input type="text"
+                           ngModel
+                           class="form-control"
+                           name="employeeBranch"
+                           placeholder="Branch/สาขา">
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-group-text">Age/อายุ</label>
+                <input type="number"
+                       ngModel
+                       name="employeeAge"
+                       class="form-control"
+                       placeholder="Age/อายุ">
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">Salary/เงินเดือน</label>
+                    <input type="number"
+                           ngModel
+                           class="form-control"
+                           name="employeeSalary"
+                           placeholder="Salary/เงินเดือน">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="input-group-text">StartDate/วันที่เริ่มงาน</label>
+                    <input type="date"
+                           ngModel
+                           class="form-control"
+                           name="employeeStartDate"
+                           placeholder="StartDate/วันที่เริ่มงาน">
+                </div>
+            </div>
+            <div class="form-group text-left">
+                <div class="form-radio radio radio-outline radio-inline">
+                    <input type="radio"
+                           ngModel
+                           name="employeeGender"
+                           id="male"
+                           value="ชาย" checked>
+                    <i class="helper"></i>
+                    <label for="male">ชาย </label>
+                </div>
+                <div class="form-radio radio radio-outline radio-inline">
+                    <input type="radio"
+                           ngModel
+                           name="employeeGender"
+                           id="female"
+                           value="หญิง">
+                    <i class="helper"></i>
+                    <label for="female">หญิง </label>
+                </div>
+            </div>
+            <div class="form-group form-float">
+                <div class="form-line">
+                    <textarea name="employeeComment"
+                        ngModel
+                        id="employeeComment"
+                        cols="30"
+                        rows="5"
+                        class="form-control no-resize"
+                        required>
+                    </textarea>
+                    <label for="employeeComment">Description/รายละเอียด</label>
+                </div>
+            </div>
+            <button type="submit"
+                    class="btn btn-primary waves-effect m-r-20 f-w-600 d-inline-block">
+                บันทึก
+            </button>
+            &nbsp;
+            <button type="reset" (click)="employeeFormModal.close('employeeModal')"
+                    class="btn btn-danger waves-effect m-r-20 f-w-600 md-close d-inline-block">
+                ปิด
+            </button>
+        </form>
+    </div>
+
+    <button (click)="employeeFormModal.close('employeeModal')" aria-label="Close" class="md-close-btn"><i
+            class="icofont icofont-ui-close"></i></button>
+</app-modal-animation>
+
+<app-modal-basic #modalDefault>
+    <div class="app-modal-header">
+        <h4 class="modal-title">
+            # [{{ employee.employeeId }}] - {{ employee.employeeName }} {{employee.employeeSurname }}
+        </h4>
+        <button type="button" class="close basic-close" (click)="modalDefault.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="app-modal-body text-center">
+
+        <img src="https://www.shareicon.net/data/48x48/2017/05/24/886412_user_512x512.png"
+             alt="{{employee.employeeName}}"
+             class="img-fluid img-thumbnail m-b-20">
+
+        <span class="text-primary d-block text-center">
+      <span *ngIf="employee.employeeAge > 45">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star-half-o" aria-hidden="true"></i>
+      </span>
+      <span *ngIf="employee.employeeAge <= 45 && employee.employeeAge > 25">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star-half-o" aria-hidden="true"></i>
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+      </span>
+      <span *ngIf="employee.employeeAge <= 25">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+        <i class="fa fa-star-o" aria-hidden="true"></i>
+      </span>
+    </span>
+
+        <form #employeeUpdateForm="ngForm">
+            <table class="table table-striped text-left m-t-20 table-sm table-responsive-sm">
+                <tr>
+                    <td>ชื่อ :</td>
+                    <td>
+                        <input type="text"
+                               [disabled]="isReadOnly"
+                               [ngModel]="employee.employeeName"
+                               [value]="employee.employeeName"
+                               class="form-control"
+                               [ngStyle]="{'color': isReadOnly ? 'red': 'black'}"
+                               name="employeeName" autofocus>
+                    </td>
+                </tr>
+                <tr>
+                    <td>นามสกุล :</td>
+                    <td>
+                        <input type="text"
+                               [disabled]="isReadOnly"
+                               [ngModel]="employee.employeeSurname"
+                               [value]="employee.employeeSurname"
+                               class="form-control"
+                               name="employeeSurname">
+                    </td>
+                </tr>
+                <tr>
+                    <td>ตำแหน่ง :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [ngModel]="employee.employeePosition"
+                               value="{{employee.employeePosition}}" class="form-control" name="employeePosition">
+                    </td>
+                </tr>
+                <tr>
+                    <td>อีเมลล์ :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [ngModel]="employee.employeeEmail"
+                               value="{{employee.employeeEmail}}" class="form-control" name="employeeEmail">
+                    </td>
+                </tr>
+                <tr>
+                    <td>อายุ :</td>
+                    <td>
+                        <input type="number" [disabled]="isReadOnly" [ngModel]="employee.employeeAge"
+                               value="{{employee.employeeAge}}" class="form-control" name="employeeAge">
+                    </td>
+                </tr>
+                <tr>
+                    <td>สาขา :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [ngModel]="employee.employeeBranch"
+                               value="{{employee.employeeBranch}}" class="form-control" name="employeeBranch">
+                    </td>
+                </tr>
+                <tr>
+                    <td>เงินเดือน :</td>
+                    <td>
+                        <input type="number" [disabled]="isReadOnly" [ngModel]="employee.employeeSalary"
+                               value="{{employee.employeeSalary}}" class="form-control" name="employeeSalary">
+                    </td>
+                </tr>
+                <tr>
+                    <td>เพศ :</td>
+                    <!--<td>{{ employee.employeeGender }}</td>-->
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [ngModel]="employee.employeeGender"
+                               value="{{employee.employeeGender}}" class="form-control" name="employeeGender">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<div class="form-group text-left">-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="form-control">-->
+                                <!--<div class="form-radioradio-inline">-->
+                                    <!--<input type="radio"-->
+                                           <!--ngModel-->
+                                           <!--name="employeeGender"-->
+                                           <!--value="ชาย">-->
+                                    <!--<i class="helper"></i>-->
+                                    <!--<label for="male">ชาย {{employee.employeeGender}}</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="form-control">-->
+                                <!--<div class="radio-inline">-->
+                                    <!--<input type="radio"-->
+                                           <!--ngModel-->
+                                           <!--name="employeeGender"-->
+                                           <!--value="หญิง">-->
+                                    <!--<i class="helper"></i>-->
+                                    <!--<label for="female">หญิง </label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</tr>-->
+                <tr>
+                    <td>รายละเอียด :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [ngModel]="employee.employeeComment"
+                               value="{{employee.employeeComment}}" class="form-control" name="employeeComment">
+                    </td>
+                </tr>
+                <tr>
+                    <td>เริ่มงาน :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [(ngModel)]="employee.employeeStartDate"
+                               value="{{employee.employeeStartDate}}" class="form-control" name="employeeStartDate">
+                    </td>
+                </tr>
+                <tr>
+                    <td>สร้างเมื่อ :</td>
+                    <td>
+                        <input type="text" [disabled]="isReadOnly" [(ngModel)]="employee.employeeCreated"
+                               value="{{employee.employeeCreated}}" class="form-control" name="employeeCreated">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="app-modal-footer">
+        <!--<button type="submit"-->
+        <!--class="btn btn-primary waves-effect waves-light">บันทึก</button>-->
+        <button type="button"
+                class="btn btn-success waves-effect"
+                (click)="updateEmployee(employeeUpdateForm)"
+                *ngIf="!isReadOnly">
+            บันทึก
+        </button>
+        &nbsp;
+        <button type="button"
+                (click)="modalDefault.hide()"
+                class="btn btn-danger waves-effect">ปิด
+        </button>
+    </div>
+</app-modal-basic>
